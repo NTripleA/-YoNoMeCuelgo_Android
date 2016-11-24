@@ -1,0 +1,22 @@
+<md-content ng-controller="SettingsController" style="overflow-x:hidden;" layout="column">
+    <h3 class="text-center">Settings</h3>
+    <md-input-container class="md-icon-float md-block col-xs-6 col-xs-push-3">
+        <!-- Use floating label instead of placeholder -->
+        <label>Name</label>
+        <md-icon style="font-size:20px;" class="fa fa-user"></md-icon>
+        <input ng-model="userName" type="text">
+    </md-input-container>
+    <md-input-container class="md-icon-float md-block col-xs-6 col-xs-push-3">
+        <!-- Use floating label instead of placeholder -->
+        <label>Status Message</label>
+        <md-icon style="font-size:20px;" class="fa fa-comment-o"></md-icon>
+        <input ng-model="status" type="text">
+    </md-input-container>
+
+    <md-content class="col-xs-4 col-xs-push-4">
+        <h4 class="col-md-4 col-push-4" style="padding-left:5%;">Profile Image</h4>
+        <input type="file" id="file" name="file"/>
+        <button ng-click="add()">Add</button>
+    </md-content>
+    <button style="margin-top:10%" class="btn btn-success col-xs-4 col-xs-push-4">Save Settings</button>
+</md-content>

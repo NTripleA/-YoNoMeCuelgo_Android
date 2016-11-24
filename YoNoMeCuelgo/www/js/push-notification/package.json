@@ -1,0 +1,57 @@
+{
+  "name": "push-notification",
+  "version": "0.1.8",
+  "description": "push notification for apple push notification (APN) and google cloud messaging (GCM)",
+  "author": {
+    "name": "Dongwon Lim",
+    "email": "idw111@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/idw111/push-notification.git"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "push-notification",
+    "push notification",
+    "push",
+    "notification",
+    "apn",
+    "gcm",
+    "apple",
+    "google",
+    "nodejs"
+  ],
+  "dependencies": {
+    "apn": "^1.7.4",
+    "node-gcm": "^0.11.0"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-cli": "^1.12.0",
+    "jshint-stylish": "^1.0.1",
+    "load-grunt-tasks": "^3.1.0",
+    "time-grunt": "^1.1.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "readme": "#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]\n\n> push notification for apple push notification (APN) and google cloud messaging (GCM)\n\n\n## Install\n\n```sh\n$ npm install --save push-notification\n```\n\n\n## Usage\n\n```js\nvar PushNotification = require('push-notification');\nvar DeviceType = PushNotification.DeviceType;\nvar path = require('path');\n\n// APN: cert.pem, key.pem should be configured\n// GCM: configure console to generate gcm.sender\nPushNotification.init({\n\tapn: {\n\t\tcert: path.resolve('./keys/cert.pem'),\n\t\tkey: path.resolve('./keys/key.pem')\n\t},\n\tgcm: {\n\t\tapiKey: 'gcm-api-key'\n\t}\n});\n\nvar iosToken = 'iphone-device-token';\nvar androidToken = 'android-device-token';\nvar message = 'some text to push...';\nvar badge = null;\nvar sound = null;\nvar payload = null;\n\n// send a notification to a single device\nPushNotification.pushSingle(DeviceType.IOS, iosToken, message, badge, sound, payload);\nPushNotification.pushSingle(DeviceType.ANDROID, androidToken, message, badge, sound, payload);\n\n// send a notification to multiple devices\nPushNotification.prepare(message, badge, sound, payload);\nPushNotification.addTarget(DeviceType.IOS, iosToken);\nPushNotification.addTarget(DeviceType.ANDROID, androidToken);\nPushNotification.addTarget(DeviceType.ANDROID, anotherToken);\nPushNotification.push();\n```\n\n\n## Configuring APN and GCM\n\n### APN\n- <https://github.com/argon/node-apn/wiki/Preparing-Certificates>\n\n### GCM\n- <https://developers.google.com/cloud-messaging/gcm#senderid>\n\n\n## License\n\nMIT © [Dongwon Lim](./LICENSE)\n\n\n[npm-image]: https://badge.fury.io/js/push-notification.svg\n[npm-url]: https://npmjs.org/package/push-notification\n[travis-image]: https://travis-ci.org/idw111/push-notification.svg?branch=master\n[travis-url]: https://travis-ci.org/idw111/push-notification\n[daviddm-image]: https://david-dm.org/idw111/push-notification.svg?theme=shields.io\n[daviddm-url]: https://david-dm.org/idw111/push-notification\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/idw111/push-notification/issues"
+  },
+  "_id": "push-notification@0.1.8",
+  "dist": {
+    "shasum": "a07d600287ee2a76b9b4fc533456def4810c0f18"
+  },
+  "_from": "push-notification@",
+  "_resolved": "https://registry.npmjs.org/push-notification/-/push-notification-0.1.8.tgz"
+}

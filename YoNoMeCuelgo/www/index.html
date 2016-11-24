@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <title>DB</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+      <style>
+          html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          }
+          #map {
+          height: 100%;
+          }
+      </style>
+      <script src="socket.io.js"></script>
+      <script>
+        // Tell Socket.IO where to find the Flash component if the browser needs it.
+        WEB_SOCKET_SWF_LOCATION = 'http://localhost/socket.io/WebSocketMain.swf';
+      </script>
+    <link rel='stylesheet' href='css/Roboto.css'>
+    <link rel='stylesheet' href='bower_components/bootstrap-sweetalert/dist/sweetalert.css'>
+    <link rel="stylesheet" href="css/angular-material.css"/>
+    <link rel="stylesheet" href="assets/app.css"/>
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/sweetalert2/dist/sweetalert2.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/material.css">
+    <link href='css/didact_gothic.css' rel='stylesheet' type='text/css'>
+    <script rel='stylesheet' src='bower_components/bootstrap-sweetalert/dist/sweetalert.js'></script>
+    <script src="bower_components/cropper/cropper.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+
+    <style type="text/css">
+        /**
+         * Hide when Angular is not yet loaded and initialized
+         */
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+          display: none !important;
+        }
+    </style>
+  </head>
+
+  <body style="overflow-x:hidden;" ng-app="myApp" layout="column" ng-controller="UserController as user" ng-cloak>
+  <navbar ng-hide="isNavBarHide()"></navbar>
+    <div style="width:100%; height:100%;" flex layout="row">
+      <left-sidebar></left-sidebar>
+
+      <md-content style="position:relative; overflow-x:hidden; width:100%; height:100%;" flex="100" id="main-content">
+        <div style="width:100%; height:50%;" ng-view> </div>
+        <!-- <div id="publisher" style="margin-top:-40%; height:30%; border:1px solid black;"></div> -->
+        <!-- <script src="https://static.opentok.com/v2/js/opentok.js" charset="utf-8"></script>
+        <script charset="utf-8">
+          var apiKey = '45706852';
+          var sessionId = '1_MX40NTcwNjg1Mn5-MTQ3NzE3NDYzNTQ0N35DMTY4c1ViUVh6b2VkbExSUjdCQmNyVm1-fg';
+          var token = 'T1==cGFydG5lcl9pZD00NTcwNjg1MiZzaWc9OTkxOWU1Y2E1YWQyMDJiZDY0N2EyNGQ0ZDNhMmVhMzZiOWUyNmQ5NjpzZXNzaW9uX2lkPTFfTVg0ME5UY3dOamcxTW41LU1UUTNOekUzTkRZek5UUTBOMzVETVRZNGMxVmlVVmg2YjJWa2JFeFNVamRDUW1OeVZtMS1mZyZjcmVhdGVfdGltZT0xNDc3MTc4NTM2Jm5vbmNlPTAuMTIzMTA0NDYxOTM0NDE3NDkmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTQ3NzI2NDkzNQ==';
+          var session = OT.initSession(apiKey, sessionId)
+          .on('streamCreated', function(event) {
+            session.subscribe(event.stream, 'subscriber', {
+              insertMode: 'append',
+              width: '100%',
+              height: '100%'
+            });
+          })
+          .connect(token, function(error) {
+            var publisher = OT.initPublisher('publisher', {
+              insertMode: 'append',
+              width: '100%',
+              height: '100%'
+            });
+            session.publish(publisher);
+          });
+        </script> -->
+
+
+      </md-content>
+    </div>
+
+    <!-- <h1>Socket.IO Demo</h1> -->
+
+    <!-- A log for messages -->
+    <!-- <div id="messages" style="border: 1px solid #000; width: 100%; color: #0F0; background: #000; font-family: monospace;">
+      Connecting to server...<br/>
+    </div>
+
+    <div id="colorsquare" style="border: 1px solid #000; width: 32px; height: 32px; background: #F00; margin-top: 10px;"></div>
+
+    <script>
+      // Make the output visible
+      var messages = document.getElementById('messages');
+
+      // Connect to our app.js, which is listeninging on port 1080
+      // var socket = io.connect('https://fast-taiga-91272.herokuapp.com:3000');
+      var socket = io('https://fast-taiga-91272.herokuapp.com:3000');
+      socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+      });
+      socket.on('connect',
+        function() {
+          messages.innerHTML += 'Connected<br/>';
+        });
+
+      socket.on('myMessageType',
+         function(data) {
+           messages.innerHTML += 'Server says: "' + data.toString() + '"<br/>';
+
+           // Respond to the server
+           socket.emit('myResponseType', { my: 'data' });
+        });
+
+      socket.on('colorMessage',
+         function(data) {
+            document.getElementById('colorsquare').style.background = data.color;
+         });
+    </script> -->
+  </body>
+  <script type="text/javascript" src="cordova.js"></script>
+
+  <!-- <script src="lib/ionic/ionic.bundle.js"></script>
+  <script src="lib/ionic-platform-web-client/dist/ionic.io.bundle.js"></script> -->
+  <!-- <script type="text/javascript" src="js/push.js"></script> -->
+  <script src="js/angular/angular.js"></script>
+  <script src="js/angular-animate/angular-animate.js"></script>
+  <script src="js/angular-aria/angular-aria.js"></script>
+  <script src="js/angular/spin.js"></script>
+  <script type="text/javascript" src="js/angular-material/angular-material.js"></script>
+  <script src="./src/users/Users.js"></script>
+  <script src="./src/users/UserController.js"></script>
+  <script src="./src/services/service.js"></script>
+  <script src="./src/users/UserService.js"></script>
+  <script src="./src/userProvider.js"></script>
+  <script src="./src/leftSidebarDirective.js"></script>
+  <script src="./src/rightSidebarDirective.js"></script>
+  <script src="./src/navBarDirective.js"></script>
+
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/sweetalert2/dist/sweetalert2.js"></script>
+  <script src="bower_components/spin.js/spin.js"></script>
+  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+  <script src="bower_components/angular-loading-spinner/angular-loading-spinner.js"></script>
+  <script src="js/submitController.js"></script>
+  <script src="js/coursesController.js"></script>
+  <script src="js/settingsController.js"></script>
+  <script src="js/searchBarController.js"></script>
+  <script src="js/searchBarDirective.js"></script>
+  <script src="js/groupController.js"></script>
+  <script src="js/inboxController.js"></script>
+  <script src="js/home_pageController.js"></script>
+  <script src = "js/services/studentService.js"></script>
+  <script src = "js/services/tutorsService.js"></script>
+  <script src = "js/services/accountsService.js"></script>
+  <script src="bower_components/jquery.countdown/dist/jquery.countdown.js"></script>
+  <script src="js/angular-messages/angular-messages.min.js"></script>
+  <script src="assets/ng-material.js"></script>
+  <script src="dirPagination.js"></script>
+  <script src="js/svg-assets-cache.js"></script>
+  <script type="text/javascript">
+
+          angular
+              .module('myApp', ['ngMaterial', 'users','angularSpinner','angularUtils.directives.dirPagination'])
+              .config(function($mdThemingProvider, $mdIconProvider){
+
+                  $mdIconProvider
+                      .defaultIconSet("./assets/svg/avatars.svg", 128)
+                      .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+                      .icon("share"      , "./assets/svg/share.svg"       , 24)
+                      .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+                      .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+                      .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+                      .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+
+                      $mdThemingProvider.theme('default')
+                          .primaryPalette('blue')
+                          .accentPalette('red');
+
+              });
+
+  </script>
+  </script>
+
+
+<script src="js/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAWvAAPHMsE07gEndv9Orm-C5hSAplyaY8",
+    authDomain: "dictio-5b329.firebaseapp.com",
+    databaseURL: "https://dictio-5b329.firebaseio.com",
+    storageBucket: "dictio-5b329.appspot.com",
+    messagingSenderId: "911672082483"
+  };
+  firebase.initializeApp(config);
+</script>
+
+
+</html>

@@ -1,0 +1,78 @@
+<!--<div ng-controller="UserController as ctrl" layout="column" ng-cloak="" class="chipsdemoContactChips" ng-app="MyApp">-->
+
+    <!--<md-content style="background-color: #fff;min-height: 0;" class="md-padding autocomplete" layout="column">-->
+        <!--<br>-->
+        <!--<h2 ng-if="message.length>1" class="md-title">{{ message }}</h2>-->
+        <!--<md-chips ng-model="ctrl.tempCourses" readonly="ctrl.readonly" md-removable="ctrl.removable" md-transform-chip="ctrl.newCourse($chip)" md-require-match="true" md-on-remove="ctrl.removeChip($chip)">-->
+            <!--<md-autocomplete-->
+                    <!--ng-disabled="ctrl.isDisabled"-->
+                    <!--md-no-cache="true"-->
+                    <!--md-selected-item="ctrl.selectedItem"-->
+                    <!--md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"-->
+                    <!--md-search-text="ctrl.searchText"-->
+                    <!--md-selected-item-change="!isFire && selectedItemChange(item)"-->
+                    <!--md-items="item in ctrl.querySearch(ctrl.searchText)"-->
+                    <!--md-item-text="item"-->
+                    <!--md-min-length="1"-->
+                    <!--placeholder="{{placeholder}}"-->
+                    <!--md-menu-class="autocomplete-custom-template">-->
+                <!--<md-item-template>-->
+                  <!--<span class="item-title">-->
+                    <!--<md-icon></md-icon>-->
+                    <!--<span> {{item.Code+' - '}} </span>-->
+                  <!--</span>-->
+                    <!--<span class="item-metastat">-->
+                      <!--<strong>{{item.Title}}</strong>-->
+                    <!--</span>-->
+                    <!--</span>-->
+                <!--</md-item-template>-->
+            <!--</md-autocomplete>-->
+            <!--<md-chip-template>-->
+                <!--<span>-->
+                   <!--{{$chip.Code+' - '+$chip.Title}}-->
+                <!--</span>-->
+            <!--</md-chip-template>-->
+        <!--</md-chips>-->
+    <!--</md-content>-->
+<!--</div>-->
+
+<div ng-controller="UserController as ctrl" layout="column" ng-cloak="" class="chipsdemoContactChips" ng-app="MyApp">
+
+    <md-content style="background-color: #fff;min-height: 0;" class="md-padding autocomplete" layout="column">
+        <br>
+        <h2 class="md-title">{{ message }}</h2>
+        <md-chips ng-model="ctrl.tempCourses" readonly="ctrl.readonly" md-removable="ctrl.removable" md-transform-chip="ctrl.newCourse($chip)" md-require-match="true" md-on-remove="ctrl.removeChip($chip)">
+            <md-autocomplete
+                    ng-disabled="ctrl.isDisabled"
+                    md-no-cache="true"
+                    md-selected-item="ctrl.selectedItem"
+                    md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                    md-search-text="ctrl.searchText"
+                    md-selected-item-change="!isFire && ctrl.selectedItemChange(item)"
+                    md-items="item in ctrl.querySearch(ctrl.searchText)"
+                    md-item-text="item"
+                    md-min-length="1"
+                    placeholder="Ex: ICOM5016 - Databases"
+                    md-menu-class="autocomplete-custom-template">
+                <md-item-template>
+                  <span class="item-title">
+                    <md-icon></md-icon>
+                    <span> {{item.Code+' - '}} </span>
+                  </span>
+                    <span class="item-metastat">
+                      <strong>{{item.Title}}</strong>
+                    </span>
+                    </span>
+                </md-item-template>
+            </md-autocomplete>
+            <md-chip-template>
+                <span>
+                   {{$chip.Code+' - '+$chip.Title}}
+                </span>
+            </md-chip-template>
+        </md-chips>
+    </md-content>
+</div>
+
+
+

@@ -1,0 +1,31 @@
+{
+  "name": "ionic-push-notification",
+  "version": "1.0.0",
+  "main": "dist/ionic-pushNotification.js",
+  "private": false,
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/ArnaudSpanneut/ionic-pushNotification/blob/master/LICENSE"
+  }],
+  "repository": {
+    "url": "https://github.com/ArnaudSpanneut/ionic-pushNotification.git"
+  },
+  "author": {
+    "name": "Arnaud Spanneut <arnaud.spanneut@gmail.com>"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.13",
+    "karma": "^0.12.31",
+    "karma-coverage": "^0.3.1",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon-chai": "^0.3.0",
+    "mocha": "^2.2.4",
+    "mocha-lcov-reporter": "0.0.2"
+  },
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start",
+    "coveralls": "./node_modules/karma/bin/karma start && cat ./coverage/report-lcov/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  }
+}

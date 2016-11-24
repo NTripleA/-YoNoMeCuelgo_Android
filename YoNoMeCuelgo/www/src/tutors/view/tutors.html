@@ -1,0 +1,116 @@
+<div>
+  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
+      <h1>My Inbox</h1>
+      <md-divider></md-divider>
+
+      <md-content class="md-padding" layout="row">
+       <md-list flex>
+       <!-- <md-subheader class="md-no-sticky">3 line item (with hover)</md-subheader> -->
+       <md-list-item ng-if="messages.length > 0" class="md-3-line" ng-repeat="message in messages">
+         <div>
+           <img ng-src="{{message.userImage}}" class="md-avatar" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{ message.userFirstName }} {{message.userLastName}}</h3>
+             <h4>{{ message.title }}</h4>
+             <p>{{ message.body }}</p>
+           </div>
+           <md-button class="md-secondary">Respond</md-button>
+           <md-divider ng-if="!$last"></md-divider>
+         </div>
+       </md-list-item>
+       <md-list-item ng-if="message.length == 0" class="md-3-line">
+         <div>
+           <md-subheader>No messages. Sorry!</md-subheader>
+         </div>
+       </md-list-item>
+      </md-list>
+    </md-content>
+</md-content>
+</div>
+
+<div>
+  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
+      <h1>My Courses
+        <md-button ng-click="showAdvanced($event,tempCourses)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
+            <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
+        </md-button>
+      </h1>
+      <md-divider></md-divider>
+
+      <md-content class="md-padding" layout-xs="column" layout="row">
+        <div flex-xs flex-gt-xs="50" layout="column">
+          <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2==0">
+            <md-card-title style="background-color: #00BF96">
+              <span class="md-headline" style="color: white;">{{course.code}} -
+                <span class="md-subhead">{{course.name}}</span>
+              </span>
+            </md-card-title>
+            <md-card-content md-scroll-y style="height: 70px;">
+              <div style="float: left">
+                  <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" aria-label="Available" style ="font-size:175%;" >
+                      {{course.availability}}
+                  </md-switch>
+              </div>
+              <md-card-actions layout="row" layout-align="end center">
+                <md-button>Remove</md-button>
+              </md-card-actions>
+          </md-card-content>
+        </md-card>
+      </div>
+
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2!=0">
+          <md-card-title style="background-color: #00BF96">
+            <span class="md-headline" style="color: white;">{{course.code}} -
+              <span class="md-subhead">{{course.name}}</span>
+            </span>
+          </md-card-title>
+          <md-card-content md-scroll-y style="height: 70px; overflow: hidden;">
+            <div style="float: left">
+                <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" aria-label="Available" style ="font-size:175%;" >
+                    {{course.availability}}
+                </md-switch>
+            </div>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Remove</md-button>
+            </md-card-actions>
+          </md-card-content>
+
+        </div>
+      </md-content>
+    </md-content>
+</div>
+
+<div ng-controller="UserController">
+    <script type="text/ng-template" id="addCourses.html">
+        <md-dialog aria-label="Add New Courses">
+            <form ng-cloak>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Please search for the courses you wish to add</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="cancel()">
+                            <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+
+                <md-dialog-content>
+                    <div class="md-dialog-content">
+                        <searchbar></searchbar>
+                    </div>
+                </md-dialog-content>
+
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="answer('Cancel')">
+                        Cancel
+                    </md-button>
+                    <md-button ng-click="answer('Done'); saveCourses();">
+                        Submit
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </script>
+</div>

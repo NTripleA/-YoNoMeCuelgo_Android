@@ -1,0 +1,38 @@
+<md-dialog aria-label="Mango (Fruit)" ng-controller="UserController">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Sign Up</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="min-width:500px;max-height:810px; padding:7%">
+          <md-input-container class="md-icon-float md-block">
+              <!-- Use floating label instead of placeholder -->
+              <label>New Email</label>
+              <md-icon style="font-size:20px;" class="fa fa-envelope"></md-icon>
+              <input ng-model="newEmail" type="email" value="">
+          </md-input-container>
+          <md-input-container class="md-icon-float md-block">
+              <!-- Use floating label instead of placeholder -->
+              <label>New Password</label>
+              <md-icon style="font-size:25px;" class="fa fa-lock"></md-icon>
+              <input type="password" ng-model="newPassword">
+          </md-input-container>
+          {{signFeedback}}
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('not useful')" >
+                Cancel
+            </md-button>
+            <md-button ng-click="signUp(); answer('not useful')" style="margin-right:20px;" >
+                Sign Up
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

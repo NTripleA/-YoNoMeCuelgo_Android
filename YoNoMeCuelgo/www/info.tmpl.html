@@ -1,0 +1,34 @@
+<md-dialog aria-label="Mango (Fruit)" ng-controller="UserController">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Basic Information</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="min-width:500px;max-height:810px; padding:7%">
+          <md-input-container class="md-icon-float md-block">
+              <!-- Use floating label instead of placeholder -->
+              <label>DisplayName</label>
+              <md-icon style="font-size:20px;" class="fa fa-user"></md-icon>
+              <input ng-model="displayName" type="text" value="">
+          </md-input-container>
+          <md-input-container class="md-icon-float md-block">
+
+          </md-input-container>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('not useful')" >
+                Cancel
+            </md-button>
+            <md-button ng-click="submitData(); answer('not useful')" style="margin-right:20px;" >
+                Submit
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

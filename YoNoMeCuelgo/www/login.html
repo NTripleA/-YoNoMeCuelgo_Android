@@ -1,0 +1,33 @@
+<div ng-controller="UserController" layout="column" ng-cloak class="contentdemoBasicUsage">
+    <md-content flex="">
+        <md-toolbar style="background-color:#2D5F99" class="md-info" layout="row">
+            <div class="md-toolbar-tools">
+              <h2 class="md-flex">#YoNoMeCuelgo</h2>
+            </div>
+            <a style="color:white; margin-right:1%" layout="row" href="https://console.firebase.google.com/project/yonomecuelgo/authentication/users" style="margin-right:1%;"><h3 class="pull-right" >Admin</h3><i style="line-height: 64px;font-size: 25px;vertical-align: middle;" class="fa fa-lock"></i></a>
+        </md-toolbar>
+
+        <md-content flex="40" flex-offset="30" style="margin-top:7%;">
+            <md-input-container class="md-icon-float md-block">
+                <!-- Use floating label instead of placeholder -->
+                <label>Email</label>
+                <md-icon style="font-size:20px;" class="fa fa-envelope"></md-icon>
+                <input ng-model="userEmail" type="text" value="">
+            </md-input-container>
+            <md-input-container class="md-icon-float md-block">
+                <!-- Use floating label instead of placeholder -->
+                <label>Password</label>
+                <md-icon style="font-size:25px;" class="fa fa-lock"></md-icon>
+                <input type="password" ng-model="userPassword" type="text">
+                <h4 style="color:rgb(30,136,229); padding-top:5%;" ng-click="forgotPassword()">Forgot Password?</h4>
+                {{feedback}}
+            </md-input-container>
+            <md-content layout="row">
+                <h4 style="color:rgb(30,136,229); cursor:pointer;" flex="50"
+                    class="md-primary" ng-click="showSignUp($event)" >Sign Up</h4>
+                <md-button ng-click="logIn()" flex="50" class="md-raised md-primary">Log In</md-button>
+            </md-content>
+        </md-content>
+        <span ng-show="loading" us-spinner="{radius:30, width:8, length: 16}"></span>
+    </md-content>
+</div>

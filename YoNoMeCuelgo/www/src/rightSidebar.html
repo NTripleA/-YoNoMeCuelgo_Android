@@ -1,0 +1,40 @@
+
+<md-sidenav id="sidenav" ng-click="toggleRightList()" md-component-id="right" class="md-whiteframe-z2" >
+    <md-list>
+      <md-content style="height: 600px;" md-theme="altTheme">
+
+        <section>
+          <md-subheader class="md-primary">Direct Messages</md-subheader>
+          <md-list layout-padding>
+            <md-list-item class="md-3-line" ng-repeat="message in messages">
+                <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
+                <div class="md-list-item-text">
+                  <h3>{{message.title}}</h3>
+                  <h4>{{message.userFirstName}} {{message.userLastName}}</h4>
+                  <p>
+                    {{message.body}}
+                  </p>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+          </md-list>
+        </section>
+
+        <section ng-if="userRole!='tutors'">
+          <md-subheader class="md-warn">Group Messages</md-subheader>
+          <md-list layout="column" layout-padding>
+            <md-list-item class="md-3-line" ng-repeat="message in groupMessages">
+              <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
+              <div class="md-list-item-text">
+                <h3>{{message.groupName}}</h3>
+                <h4>{{message.userFirstName}} {{message.userLastName}}</h4>
+                <p>
+                  {{message.body}}
+                </p>
+              </div>
+            </md-list-item>
+          </md-list>
+        </section>
+      </md-content>
+    </md-list>
+</md-sidenav>

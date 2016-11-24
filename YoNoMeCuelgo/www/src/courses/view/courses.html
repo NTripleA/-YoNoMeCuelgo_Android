@@ -1,0 +1,96 @@
+<div ng-controller="coursesController as courses">
+  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
+      <h1>My Courses</h1>
+      <md-divider></md-divider>
+      <md-content class="md-padding" layout-xs="column" layout="row">
+        <div flex-xs flex-gt-xs="50" layout="column">
+          <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2==0">
+            <md-card-title style="background-color: #00BF96">
+              <span class="md-headline" style="color: white;">{{course.code}} -
+                <span class="md-subhead">{{course.name}}</span>
+              </span>
+            </md-card-title>
+            <md-card-title>
+              <span flex="40" ng-if="course.tutors[0].first" class="md-subhead">Available Tutors:</span>
+              <!-- <span style="text-align:center; color:#2D5F99; font-size:25px;" flex="20" ng-click="previousTutors();" aria-label="Send Message" class="md-secondary md-hue-3 fa fa-arrow-circle-left fa-lg" ></span>
+              <span style="text-align:center; color:#2D5F99; font-size:25px;" flex="20" ng-click="nextTutors()" aria-label="Send Message" class="md-secondary md-hue-3 fa fa-arrow-circle-right fa-lg" ></span> -->
+              <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" ng-if="course.tutors[0].first" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="course.code"></dir-pagination-controls>
+              <span ng-if="!course.tutors[0].first" class="md-subhead">We are sorry</span>
+            </md-card-title>
+            <md-card-content md-scroll-y style="height: 150px; overflow-x:hidden;">
+            <md-list ng-if="!course.tutors[0].first">
+              <md-list-item>
+                <!-- <img ng-src="{{tutor.image}}" class="md-avatar" /> -->
+                <!--<div class="md-list-item-text" layout="row">-->
+                <h4 class="text-center">There are no tutors for this course.</h4>
+                <!-- </div> -->
+                <md-divider ></md-divider>
+              </md-list-item>
+            </md-list>
+              <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
+                <md-list-item>
+                  <img ng-src="{{tutor.image}}" class="md-avatar" />
+                  <!--<div class="md-list-item-text" layout="row">-->
+                  <p>{{tutor.first}} {{tutor.last}}</p>
+                  <!-- </div> -->
+                  <md-icon ng-click="" aria-label="Send Message" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
+                  <md-icon ng-click="" aria-label="Send Gift" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-divider ></md-divider>
+              </md-list-item>
+            </div>
+          </md-card-content>
+
+          <!-- <md-card-actions layout="row" layout-align="end center">
+            <md-button>Message</md-button>
+            <md-button>Leave</md-button>
+          </md-card-actions> -->
+        </md-card>
+      </div>
+
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2!=0">
+          <md-card-title style="background-color: #00BF96">
+            <span class="md-headline" style="color: white;">{{course.code}} -
+              <span class="md-subhead">{{course.name}}</span>
+            </span>
+          </md-card-title>
+          <md-card-title layout="row">
+            <span ng-if="course.tutors[0].first" flex="40" class="md-subhead">Available Tutors:</span>
+            <!-- <span style="text-align:center; color:#2D5F99; font-size:25px;" flex="20" ng-click="previousTutors();" aria-label="Send Message" class="md-secondary md-hue-3 fa fa-arrow-circle-left fa-lg" ></span>
+            <span style="text-align:center; color:#2D5F99; font-size:25px;" flex="20" ng-click="nextTutors()" aria-label="Send Message" class="md-secondary md-hue-3 fa fa-arrow-circle-right fa-lg" ></span> -->
+            <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" ng-if="course.tutors[0].first" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="course.code"></dir-pagination-controls>
+            <span ng-if="!course.tutors[0].first" class="md-subhead">We are sorry</span>
+          </md-card-title>
+          <md-card-content md-scroll-y style="height: 150px; overflow-x: hidden;">
+            <md-list ng-if="!course.tutors[0].first">
+              <md-list-item>
+                <!-- <img ng-src="{{tutor.image}}" class="md-avatar" /> -->
+                <!--<div class="md-list-item-text" layout="row">-->
+                <h4 class="text-center">There are no tutors for this course.</h4>
+                <!-- </div> -->
+                <md-divider ></md-divider>
+              </md-list-item>
+            </md-list>
+            <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
+                <md-list-item>
+                  <img ng-src="{{tutor.image}}" class="md-avatar" />
+                  <!--<div class="md-list-item-text" layout="row">-->
+                      <p>{{tutor.first}} {{tutor.last}}</p>
+                  <!-- </div> -->
+                  <md-icon ng-click="" aria-label="Send Message" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
+                  <md-icon ng-click="" aria-label="Send Gift" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-divider ></md-divider>
+                </md-list-item>
+            </div>
+          </md-card-content>
+
+
+            <!-- <md-card-actions layout="row" layout-align="end center">
+              <md-button>Message</md-button>
+              <md-button>Leave</md-button>
+            </md-card-actions> -->
+          </md-card>
+        </div>
+      </md-content>
+    </md-content>
+</div>

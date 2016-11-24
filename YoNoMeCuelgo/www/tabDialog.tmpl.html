@@ -1,0 +1,67 @@
+<md-dialog aria-label="Mango (Fruit)" ng-controller="groupController">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add more groups</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="min-width:500px;max-height:810px; ">
+            <md-tabs style="width:100%;" md-dynamic-height md-border-bottom>
+                <md-tab style="width:50%;" label="Join">
+                    <md-content class="md-padding">
+                        <h4 class="md-display-2">Join</h4>
+                        <select class="form-control" ng-model="selectedCourse" ng-change="courseGroups(selectedCourse)">
+                            <option disabled selected value>Select a course</option>
+                            <option ng-repeat="course in courseList"> {{ course.code }}-{{ course.title }} </option>
+                        </select>
+                        <div style="min-height: 300px;">
+                            <md-list ng-repeat="item in items" ng-model="selectedCourse" ng-change="courseGroups(selectedCourse)">
+                                <md-list-item>
+                                    <div class="md-list-item-text">
+                                        <md-checkbox ng-checked="exists(item, list)" ng-click="toggle(item, list)">
+                                            {{item.name}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab style="width:50%;" label="Create">
+                    <md-content class="md-padding">
+                        <h4 class="md-display-2">Create</h4>
+                        <md-input-container class="md-icon-float md-block" style="margin-top: 5%;">
+                            <label>Name</label>
+                            <md-icon class="fa fa-users"></md-icon>
+                            <input ng-model="group.name" type="text" ng-blur="update(group.name, 'name')">
+                        </md-input-container>
+                        <md-input-container class="md-icon-float md-block" style="margin-top: -2%;">
+                            <label>Capacity</label>
+                            <md-icon class="fa fa-users"></md-icon>
+                            <input ng-model="group.limit" type="text" ng-blur="update(group.limit, 'limit')">
+                        </md-input-container>
+                        <md-input-container class="md-icon-float md-block" style="margin-top: -2%;">
+                            <label>Course</label>
+                            <md-icon class="fa fa-list-alt"></md-icon>
+                            <input ng-model="group.course" type="text" ng-blur="update(group.course, 'course')">
+                        </md-input-container>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="answer('not useful')" >
+                Cancel
+            </md-button>
+            <md-button ng-click="answer('useful')" style="margin-right:20px;" >
+                Submit
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

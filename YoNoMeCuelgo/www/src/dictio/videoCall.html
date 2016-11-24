@@ -1,0 +1,53 @@
+<div ng-controller="videoCallCtrl as ctrl" ng-cloak="" class="carddemoBasicUsage; row" style="height:100%; width:100%;">
+
+    <md-content flex class="md-padding" layout-xl="column" layout="row" layout-align="center center" style="margin-bottom: 30%" >
+        <md-card flex md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch="" >
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Video call</span>
+                    <span class="md-subhead">*other contact name*</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content layout="row" layout-align="space-between" style="height: 620px">
+                <div class="md-media-xl card-media" id="aquiVa"></div>
+
+
+                <md-card-actions layout="column">
+                    <md-button class="md-icon-button" aria-label="Favorite" onclick="disconnect()">
+                        <md-icon class="fa fa-phone"></md-icon>
+                    </md-button>
+                    <!--<md-button class="md-icon-button" aria-label="Settings">
+                        <md-icon class="fa fa-arrows-alt"></md-icon>
+                    </md-button>-->
+                </md-card-actions>
+            </md-card-content>
+
+        </md-card>
+    </md-content>
+</div>
+
+<script charset="utf-8">
+          var apiKey = '45706852';
+          var sessionId = '1_MX40NTcwNjg1Mn5-MTQ3NzE3NDYzNTQ0N35DMTY4c1ViUVh6b2VkbExSUjdCQmNyVm1-fg';
+          var token = 'T1==cGFydG5lcl9pZD00NTcwNjg1MiZzaWc9OTkxOWU1Y2E1YWQyMDJiZDY0N2EyNGQ0ZDNhMmVhMzZiOWUyNmQ5NjpzZXNzaW9uX2lkPTFfTVg0ME5UY3dOamcxTW41LU1UUTNOekUzTkRZek5UUTBOMzVETVRZNGMxVmlVVmg2YjJWa2JFeFNVamRDUW1OeVZtMS1mZyZjcmVhdGVfdGltZT0xNDc3MTc4NTM2Jm5vbmNlPTAuMTIzMTA0NDYxOTM0NDE3NDkmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTQ3NzI2NDkzNQ==';
+          var session = OT.initSession(apiKey, sessionId)
+          .on('streamCreated', function(event) {
+            session.subscribe(event.stream, 'aquiVa', {
+            insertMode: 'append',
+            width: '250%',
+            height: '250%'
+          });
+          session.connect(aquiVa);
+          })
+          .connect(token, function(error) {
+            var publisher = OT.initPublisher('publisher', {
+              insertMode: 'append',
+              width: '25%',
+              height: '25%'});
+            session.publish(publisher);
+          });
+        function disconnect() {
+            console.log('made it');
+          session.disconnect();
+        }
+</script>
