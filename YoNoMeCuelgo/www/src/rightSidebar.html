@@ -6,7 +6,7 @@
         <section>
           <md-subheader class="md-primary">Direct Messages</md-subheader>
           <md-list layout-padding>
-            <md-list-item class="md-3-line" ng-repeat="message in messages">
+            <md-list-item class="md-3-line" ng-repeat="message in messages" ng-click="replyMessage()">
                 <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
                 <div class="md-list-item-text">
                   <h3>{{message.title}}</h3>
@@ -23,10 +23,10 @@
         <section ng-if="userRole!='tutors'">
           <md-subheader class="md-warn">Group Messages</md-subheader>
           <md-list layout="column" layout-padding>
-            <md-list-item class="md-3-line" ng-repeat="message in groupMessages">
+            <md-list-item class="md-3-line" ng-repeat="message in groupMessages" ng-click="replyMessage()">
               <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
               <div class="md-list-item-text">
-                <h3>{{message.groupName}}</h3>
+                <h3>{{message.title}}</h3>
                 <h4>{{message.userFirstName}} {{message.userLastName}}</h4>
                 <p>
                   {{message.body}}

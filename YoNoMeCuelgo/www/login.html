@@ -1,4 +1,4 @@
-<div ng-controller="UserController" layout="column" ng-cloak class="contentdemoBasicUsage">
+<!-- <div ng-controller="UserController" layout="column" ng-cloak class="contentdemoBasicUsage">
     <md-content flex="">
         <md-toolbar style="background-color:#2D5F99" class="md-info" layout="row">
             <div class="md-toolbar-tools">
@@ -10,13 +10,13 @@
         <md-content flex="40" flex-offset="30" style="margin-top:7%;">
             <md-input-container class="md-icon-float md-block">
                 <!-- Use floating label instead of placeholder -->
-                <label>Email</label>
+                <!-- <label>Email</label>
                 <md-icon style="font-size:20px;" class="fa fa-envelope"></md-icon>
                 <input ng-model="userEmail" type="text" value="">
             </md-input-container>
             <md-input-container class="md-icon-float md-block">
                 <!-- Use floating label instead of placeholder -->
-                <label>Password</label>
+                <!-- <label>Password</label>
                 <md-icon style="font-size:25px;" class="fa fa-lock"></md-icon>
                 <input type="password" ng-model="userPassword" type="text">
                 <h4 style="color:rgb(30,136,229); padding-top:5%;" ng-click="forgotPassword()">Forgot Password?</h4>
@@ -30,4 +30,75 @@
         </md-content>
         <span ng-show="loading" us-spinner="{radius:30, width:8, length: 16}"></span>
     </md-content>
+</div> -->
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+  <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+  <link rel="stylesheet" href="assets/login.css">
+
+
+</head>
+
+<body>
+
+<!-- Mixins-->
+<!-- Pen Title-->
+
+<div class="md-padding"></div>
+<div class="container" ng-controller="UserController">
+  <div class="card"></div>
+  <div class="card">
+    <h1 class="title">#yonomecuelgo</h1>
+    <form>
+      <div class="input-container">
+        <input ng-model="userEmail" type="text" id="Username" />
+        <label for="Username">Email</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" ng-model="userPassword" id="Password" />
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button ng-click="logIn()"><span>Go</span></button>
+      </div>
+      <div class="footer"><a ng-click="forgotPassword()">Forgot your password?</a></div>
+    </form>
+  </div>
+  <div class="card alt">
+    <div class="toggle"></div>
+    <h1 class="title">Register
+      <div class="close"></div>
+    </h1>
+    <form>
+      <div class="input-container">
+        <input ng-model="newEmail" type="text" id="Username"/>
+        <label for="Username">Email</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input ng-model="newPassword" type="password" id="Password"/>
+        <label for="Password">Password</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button ng-click="signUp()"><span>Next</span></button>
+      </div>
+    </form>
+  </div>
 </div>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src="src/login/loginController.js"></script>
+    <script src="bower_components/jquery.countdown/dist/jquery.countdown.js"></script>
+
+</body>
+</html>

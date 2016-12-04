@@ -47,7 +47,7 @@ function($http) {
         }
 
     studentService.getDirectMessages = function (id) {
-    		return $http.get("http://glacial-journey-85518.herokuapp.com/studentMessages/"+id)
+    		return $http.get("https://glacial-journey-85518.herokuapp.com/studentMessages/"+id)
     		.then(function (response) {
     			return response.data;
     		})
@@ -79,7 +79,7 @@ function($http) {
     }
 
      studentService.getGroupMessages = function (id) {
-        		return $http.get("http://glacial-journey-85518.herokuapp.com/groupMessages/"+id)
+        		return $http.get("https://glacial-journey-85518.herokuapp.com/groupMessages/"+id)
         		.then(function (response) {
         			return response.data;
         		})

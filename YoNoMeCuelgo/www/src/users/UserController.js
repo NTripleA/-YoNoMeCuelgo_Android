@@ -10,6 +10,8 @@ var app = angular.module("users")
    * @constructor
    */
 
+    $scope.currentPage=1;
+    $scope.pageSize=3;
     var self = this;
     $scope.statusMessage = 'El ser humano es vago por naturaleza';
     self.loggedIn = false;
@@ -22,12 +24,13 @@ var app = angular.module("users")
     $scope.isFire=false;
     $scope.showName=false;
     self.courseList=[];
+    $scope.countdown = "";
 
     function getSettings(){
       // GET User Information
       var id;
       var email = firebase.auth().currentUser.email;
-      if(email==='israel.figueroa@upr.edu'){
+      if(email==='israel.figueroa1@upr.edu'){
         id=1;
         $scope.userRole='tutors'
         $scope.route('/tutors');
@@ -47,6 +50,9 @@ var app = angular.module("users")
           });
       }
 
+      $scope.currentPath = function(){
+        return $location.path();
+      }
 
     $scope.route = function(path){
         $location.path(path);
@@ -86,6 +92,7 @@ var app = angular.module("users")
               swal("Please type a password", "", "warning");
               validated = false;
             }
+            console.log(validated);
             if(validated){
               $scope.loading=true;
               firebase.auth().signInWithEmailAndPassword(email, password)
@@ -132,35 +139,64 @@ var app = angular.module("users")
                 firebase.auth().currentUser.sendEmailVerification();
                 swal('Verification email sent.', "", "success");
                 $route.reload();
-                //
+                //DO NOT DELETE FOLLOWING CODE
                 swal.setDefaults({
-                  input: 'text',
+                  title: 'Set Up your info.',
                   confirmButtonText: 'Next &rarr;',
-                  showCancelButton: true,
+                  showCancelButton: false,
                   animation: false,
-                  progressSteps: ['1', '2', '3']
+                  progressSteps: ['1', '2', '3'],
+                  allowOutsideClick: false,
+                  allowEscapeKey: false
                 })
 
                 var steps = [
                   {
-                    title: 'Set Up your info.',
+                    input:'text',
+                    inputPlaceholder:'Your Name Here',
                     text: 'What is your name?'
                   },
-                  'Question 2',
-                  'Question 3'
+                  {
+                    input: 'checkbox',
+                    inputValue: 0,
+                    inputPlaceholder:'Check if you are a tutor.',
+                  },
+                  {
+                    input: 'file',
+                    inputAttributes: {
+                      accept: 'image/*'
+                    }
+                  }
                 ]
 
                 swal.queue(steps).then(function (result) {
+                  $scope.url = [];
+                  var reader = new FileReader
+                  reader.onload = function (e) {
+                    $scope.url.push(e);
+                    $scope.url.push(e.target.result);
+                    $scope.settings= result.slice();
+                    if($scope.url.length>1){
+                        $scope.settings[2] = $scope.url[1];
+                    }
+
+                    swal({
+                      imageUrl: e.target.result
+
+                    })
+                  }
+                  reader.readAsDataURL(result[2]);
                   swal.resetDefaults()
                   swal({
                     title: 'All done!',
-                    html:'Welcome: <h4>' + JSON.stringify(result[0]) + '</h4>',
+                    html:'Welcome: <h4>' + JSON.stringify(result) + '</h4>',
                     confirmButtonText: 'Lovely!',
                     showCancelButton: false
                   })
                 }, function () {
                   swal.resetDefaults()
                 })
+
                 //
               }).catch(function(error) {
                 // Handle Errors here.
@@ -182,7 +218,7 @@ var app = angular.module("users")
 
         $scope.forgotPassword = function(){
           var email=$scope.userEmail;
-          if(typeof email === 'undefined' || !emailsorry){
+          if(typeof email === 'undefined' || !email){
             swal('Please type your email.', "", "info");
           }
           else{
@@ -514,7 +550,15 @@ var app = angular.module("users")
       };
 
       $scope.answer = function(answer) {
-        $mdDialog.hide(answer);
+        if (answer==="useful"){
+          swal(
+            'Joined!',
+            'Course(s) added.',
+            'success'
+          )
+          $mdDialog.hide(answer);
+        }
+        else $mdDialog.hide(answer);
       };
     }
 
@@ -708,14 +752,18 @@ var app = angular.module("users")
                                     $scope.lastName = student.userLastName;
                                     $scope.profilePicture = student.userImage;
                                     id = response[0].studentId;
-                                    console.log(JSON.stringify(response));
                                 })
                                 .then(function(){
                                     studentService.getCountdown(id)
                                         .then(function(response2){
 //                                            console.log(JSON.stringify(response2));
+
+                                              if($scope.countdown.length>0){
+                                                $timeout(location.reload());
+                                              }
                                             $scope.countdown = response2[0].title;
                                             $scope.setDate(new Date(response2[0].time));
+                                            $scope.saveCountdown();
                                         });
                                    studentService.getDirectMessages(id)
                                        .then(function(response){
@@ -737,9 +785,8 @@ var app = angular.module("users")
                                           $scope.groupMessages = [];
                                           for(var i = 0; i < response.length; i++)
                                           {
-                                                console.log(JSON.stringify(response));
                                               var object = {'userImage': response[i].userImage,
-                                                              'groupName': response[i].groupName,
+                                                              'title': response[i].title,
                                                               'userFirstName': response[i].userFirstName,
                                                               'userLastName': response[i].userLastName,
                                                               'body': response[i].body};
@@ -852,11 +899,40 @@ var app = angular.module("users")
                     event.strftime('%S')
                   );
                 });
-                $scope.saveCountdown();
+
 
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
           }
 
+          $scope.replyMessage = function(){
+            swal({
+              title: 'Reply',
+              input: 'text',
+              showCancelButton: true,
+              confirmButtonText: 'Send'
+            }).then(function () {
+              swal(
+                'Sent!',
+                '',
+                'success'
+              )
+            })
+          }
+
+          $scope.exit = function(){
+            swal({
+              title: 'Are you sure?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, remove!'
+            }).then(function () {
+              swal(
+                'Removed!',
+                'You are no longer teaching the course.',
+                'success'
+              )
+            })
+          }
 
 
   }]);

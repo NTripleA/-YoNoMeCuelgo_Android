@@ -28,13 +28,13 @@
               </md-list-item>
             </md-list>
               <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
-                <md-list-item>
-                  <img ng-src="{{tutor.image}}" class="md-avatar" />
+                <md-list-item layout="row">
+                  <img flex="10" ng-src="{{tutor.image}}" class="md-avatar" />
                   <!--<div class="md-list-item-text" layout="row">-->
-                  <p>{{tutor.first}} {{tutor.last}}</p>
+                  <p flex="40">{{tutor.first}} {{tutor.last}}</p>
                   <!-- </div> -->
-                  <md-icon ng-click="" aria-label="Send Message" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
-                  <md-icon ng-click="" aria-label="Send Gift" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="message()" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="donate(userName)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
                   <md-divider ></md-divider>
               </md-list-item>
             </div>
@@ -72,13 +72,13 @@
               </md-list-item>
             </md-list>
             <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
-                <md-list-item>
-                  <img ng-src="{{tutor.image}}" class="md-avatar" />
+                <md-list-item layout="row">
+                  <img flex="10" ng-src="{{tutor.image}}" class="md-avatar" />
                   <!--<div class="md-list-item-text" layout="row">-->
-                      <p>{{tutor.first}} {{tutor.last}}</p>
+                  <p flex="40">{{tutor.first}} {{tutor.last}}</p>
                   <!-- </div> -->
-                  <md-icon ng-click="" aria-label="Send Message" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
-                  <md-icon ng-click="" aria-label="Send Gift" style="position: absolute; right: 0;" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="message()" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="donate(userName)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
                   <md-divider ></md-divider>
                 </md-list-item>
             </div>

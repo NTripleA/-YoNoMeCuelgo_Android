@@ -33,7 +33,7 @@ function($http) {
                     });
             };
     tutorsService.getDirectMessages = function (id) {
-        		return $http.get("http://glacial-journey-85518.herokuapp.com/tutorMessages/"+id)
+        		return $http.get("https://glacial-journey-85518.herokuapp.com/tutorMessages/"+id)
         		.then(function (response) {
         			return response.data;
         		})

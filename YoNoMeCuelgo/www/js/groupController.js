@@ -77,7 +77,7 @@ var app = angular.module("users")
                                }
                                membersToAdd.push(object);
                            }
-                           
+
                    //        console.log(membersToAdd);
                            return membersToAdd;
                        }
@@ -395,7 +395,46 @@ var app = angular.module("users")
          };
 
          $scope.answer = function(answer) {
-           $mdDialog.hide(answer);
+           if (answer==="useful"){
+             swal(
+               'Joined!',
+               'Group(s) added.',
+               'success'
+             )
+             $mdDialog.hide(answer);
+           }
+           else $mdDialog.hide(answer);
          };
        }
+
+    $scope.message = function(){
+      swal({
+        title: 'Group Post',
+        input: 'text',
+        showCancelButton: true,
+        confirmButtonText: 'Send'
+      }).then(function () {
+        swal(
+          'Sent!',
+          'Your group has been notified.',
+          'success'
+        )
+      })
+    }
+
+    $scope.exit = function(){
+      swal({
+        title: 'Are you sure?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, leave!'
+      }).then(function () {
+        swal(
+          'Removed!',
+          'You are no longer in the group.',
+          'success'
+        )
+      })
+    }
+
 }]);

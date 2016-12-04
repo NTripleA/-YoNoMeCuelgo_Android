@@ -1,23 +1,29 @@
-<div>
-  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
-      <h1>My Inbox</h1>
-      <md-divider></md-divider>
+<div ng-controller="tutorsController">
+  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10" layout="column">
+    <md-content layout="row">
+      <h1 flex="40">My Inbox</h1>
+      <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+    </md-content>
+    <md-divider></md-divider>
 
       <md-content class="md-padding" layout="row">
-       <md-list flex>
+       <md-list style="height:255px" flex>
        <!-- <md-subheader class="md-no-sticky">3 line item (with hover)</md-subheader> -->
-       <md-list-item ng-if="messages.length > 0" class="md-3-line" ng-repeat="message in messages">
-         <div>
-           <img ng-src="{{message.userImage}}" class="md-avatar" />
-           <div class="md-list-item-text" layout="column">
-             <h3>{{ message.userFirstName }} {{message.userLastName}}</h3>
-             <h4>{{ message.title }}</h4>
-             <p>{{ message.body }}</p>
+       <div dir-paginate="message in messages| itemsPerPage: pageSize" current-page="currentPage" layout="column">
+       <!-- <div ng-repeat="message in messages track by $index"> -->
+         <md-list-item ng-if="messages.length > 0" class="md-3-line" layout="row">
+           <div layout="row">
+             <img ng-src="{{message.userImage}}" class="md-avatar" />
+             <div class="md-list-item-text" layout="column">
+               <h3>{{ message.userFirstName }} {{message.userLastName}}</h3>
+               <h4>{{ message.title }}</h4>
+               <p>{{ message.body }}</p>
+             </div>
+             <md-button ng-click="replyMessage()" class="md-secondary">Respond</md-button>
            </div>
-           <md-button class="md-secondary">Respond</md-button>
-           <md-divider ng-if="!$last"></md-divider>
-         </div>
-       </md-list-item>
+         </md-list-item>
+         <md-divider></md-divider>
+       </div>
        <md-list-item ng-if="message.length == 0" class="md-3-line">
          <div>
            <md-subheader>No messages. Sorry!</md-subheader>
@@ -45,15 +51,16 @@
                 <span class="md-subhead">{{course.name}}</span>
               </span>
             </md-card-title>
-            <md-card-content md-scroll-y style="height: 70px;">
-              <div style="float: left">
-                  <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" aria-label="Available" style ="font-size:175%;" >
+            <md-card-content class="row" md-scroll-y style="height: 70px;">
+              <div class="col-xs-8" >
+                  <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
                       {{course.availability}}
                   </md-switch>
               </div>
-              <md-card-actions layout="row" layout-align="end center">
-                <md-button>Remove</md-button>
-              </md-card-actions>
+              <div class="col-xs-4">
+                <i ng-click="exit()" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
+              </div>
+
           </md-card-content>
         </md-card>
       </div>
@@ -65,16 +72,17 @@
               <span class="md-subhead">{{course.name}}</span>
             </span>
           </md-card-title>
-          <md-card-content md-scroll-y style="height: 70px; overflow: hidden;">
-            <div style="float: left">
-                <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" aria-label="Available" style ="font-size:175%;" >
+          <md-card-content class="row" md-scroll-y style="height: 70px;">
+            <div class="col-xs-8" >
+                <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
                     {{course.availability}}
                 </md-switch>
             </div>
-            <md-card-actions layout="row" layout-align="end center">
-              <md-button>Remove</md-button>
-            </md-card-actions>
-          </md-card-content>
+            <div class="col-xs-4">
+              <i ng-click="exit()" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
+            </div>
+
+        </md-card-content>
 
         </div>
       </md-content>
@@ -106,7 +114,7 @@
                     <md-button ng-click="answer('Cancel')">
                         Cancel
                     </md-button>
-                    <md-button ng-click="answer('Done'); saveCourses();">
+                    <md-button ng-click="answer('useful'); saveCourses();">
                         Submit
                     </md-button>
                 </md-dialog-actions>
