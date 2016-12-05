@@ -267,13 +267,14 @@ var app = angular.module("users")
            $mdDialog.cancel();
          };
 
-         $scope.answer = function(answer) {
+         $scope.answer = function(answer,items) {
            if (answer==="useful"){
              swal(
                'Joined!',
                'Group(s) added.',
                'success'
              )
+
              $mdDialog.hide(answer);
            }
            else $mdDialog.hide(answer);
@@ -308,7 +309,7 @@ var app = angular.module("users")
           'success'
         )
 
-        groupToLeave = {"studentId": $scope.sid,
+        var groupToLeave = {"studentId": $scope.sid,
                         "groupsId": group.id}
 
         console.log(groupToLeave);

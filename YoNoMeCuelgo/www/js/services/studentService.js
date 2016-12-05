@@ -115,13 +115,26 @@ function($http) {
 
      studentService.leaveGroup = function(data)
      {
-              return $http.delete(host+"/leave", data)
+              return $http.post(host+"/leave", data)
                      .then(function(response) {
                          return response.data;
                      })
                      .then(null, function(err) {
                          console.error(err);
                      });
+     }
+
+     studentService.setCountdown = function(data)
+     {
+              return $http.put(host+"/newCountdown", data)
+                      .then(function(response) {
+                          console.log(response);
+                          return response.data;
+                      })
+                      .then(null, function(err) {
+                          console.error(err);
+                      });
+
      }
 
 

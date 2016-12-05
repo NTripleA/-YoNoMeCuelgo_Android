@@ -627,7 +627,9 @@ var app = angular.module("users")
                                              $scope.userName = student.userFirstName;
                                              $scope.lastName = student.userLastName;
                                              $scope.profilePicture = student.userImage;
+                                             $scope.countdownId = response[0].countdownId;
                                              id = response[0].studentId;
+                                             $scope.uid = id;
                                        })
                                        .then(function(response){
 
@@ -732,125 +734,12 @@ var app = angular.module("users")
                               }
 
                               return userRole;
-    //                if(users[i].userEmail === email)
-    //                {
-    //
-    //                    if(users[i].isTutor === 0)
-    //                    {
-    //                        var student = users[i];
-    //                        var id;
-    //                        studentService.getStudentInfo(users[i].userId)
-    //                                .then(function(response){
-    //                                    $scope.userRole = 'student';
-    //                                    $scope.statusMessage = student.userStatus;
-    //                                    $scope.userName = student.userFirstName;
-    //                                    $scope.lastName = student.userLastName;
-    //                                    $scope.profilePicture = student.userImage;
-    //                                    id = response[0].studentId;
-    //                                })
-    //                                .then(function(){
-    //                                    studentService.getCountdown(id)
-    //                                        .then(function(response2){
-    //
-    //                                              if($scope.countdown.length>0){
-    //                                                $timeout(location.reload());
-    //                                              }
-    //                                            $scope.countdown = response2[0].title;
-    //                                            $scope.setDate(new Date(response2[0].time));
-    //                                            $scope.saveCountdown();
-    //                                        });
-    //                                   studentService.getDirectMessages(id)
-    //                                       .then(function(response){
-    //                                           for(var i = 0; i < response.length; i++)
-    //                                           {
-    //                                               var object = {'userImage': response[i].userImage,
-    //                                                               'title': response[i].title,
-    //                                                               'userFirstName': response[i].userFirstName,
-    //                                                               'userLastName': response[i].userLastName,
-    //                                                               'body': response[i].body};
-    //
-    //                                               $scope.messages.push(object);
-    //                                           }
-    //
-    //                                       });
-    //                                    studentService.getGroupMessages(id)
-    //                                      .then(function(response){
-    //
-    //                                          $scope.groupMessages = [];
-    //                                          for(var i = 0; i < response.length; i++)
-    //                                          {
-    //                                              var object = {'userImage': response[i].userImage,
-    //                                                              'title': response[i].title,
-    //                                                              'userFirstName': response[i].userFirstName,
-    //                                                              'userLastName': response[i].userLastName,
-    //                                                              'body': response[i].body};
-    //
-    //                                              $scope.groupMessages.push(object);
-    //                                          }
-    //
-    //                                      });
-    //
-    //                                });
-    //                    }
-    //
-    //                    else
-    //                    {
-    //                        $scope.userRole = 'tutors';
-    //                        $scope.statusMessage = users[i].userStatus;
-    //                        $scope.profilePicture = users[i].userImage;
-    //                        $scope.userName = users[i].userFirstName;
-    //                        tutorsService.getTutorInfo(users[i].userId)
-    //                            .then(function(response){
-    //                                $scope.tutorID = response[0].tutorId;
-    //
-    //                            })
-    //                            .then(function(){
-    //                                tutorsService.getTutorCourses($scope.tutorID)
-    //                                    .then(function(response){
-    //
-    //                                        function setAvailability(av)
-    //                                        {
-    //                                            if(av === 0)
-    //                                                return 'Unavailable';
-    //                                            else
-    //                                                return 'Available';
-    //                                        }
-    //
-    //                                        for(var i = 0; i < response.length; i++)
-    //                                        {
-    //                                            var object = {'id': response[i].courseId,
-    //                                                        'code': response[i].courseCode,
-    //                                                        'name': response[i].courseName,
-    //                                                        'availability': setAvailability(response[i].available)};
-    //                                            $scope.courseList.push(object);
-    //                                        }
-    //                                    });
-    //
-    //                                tutorsService.getDirectMessages($scope.tutorID)
-    //                                    .then(function(response){
-    //                                        for(var i = 0; i < response.length; i++)
-    //                                        {
-    //                                            var object = {'userImage': response[i].userImage,
-    //                                                            'title': response[i].title,
-    //                                                            'userFirstName': response[i].userFirstName,
-    //                                                            'userLastName': response[i].userLastName,
-    //                                                            'body': response[i].body};
-    //
-    //                                            $scope.messages.push(object);
-    //                                        }
-    //
-    //                                    });
-    //
-    //                            });
-    //                    }
-    //
-    //                    break;
-                    }
+                      }
 
+
+                }
 
             }
-
-        }
         }
 
         $scope.setCalendar = function(){
@@ -859,6 +748,8 @@ var app = angular.module("users")
 
           $scope.saveCountdown = function(){
               $scope.showName = false;
+              $scope.newCountdown.newTitle = '\''+$scope.countdown+'\'';
+              studentService.setCountdown($scope.newCountdown);
           }
 
           $scope.setDate = function(date){
@@ -901,6 +792,11 @@ var app = angular.module("users")
 
 
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
+
+                $scope.newCountdown = {'countdownId': '\''+$scope.countdownId+'\'',
+                                    'newTime': date,
+                                    'newTitle': '\''+$scope.countdown+'\''}
+
           }
 
           $scope.replyMessage = function(){
