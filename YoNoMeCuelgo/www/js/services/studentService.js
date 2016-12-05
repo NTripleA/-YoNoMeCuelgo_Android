@@ -87,6 +87,29 @@ function($http) {
         			console.error(err);
         		});
         	}
+    studentService.getID = function(email)
+    {
+            em = [{'email': email}];
+            return $http.post("https://glacial-journey-85518.herokuapp.com/getId", em)
+            .then(function(response) {
+                console.log(response);
+                return response.data;
+            })
+            .then(null, function(err) {
+                console.error(err);
+            });
+    }
+
+//     studentService.getID = function(data)
+//        {
+//                return $http.post("https://glacial-journey-85518.herokuapp.com/groupMessages/messageTutor", data)
+//                .then(function(response) {
+//                    return response.data;
+//                })
+//                .then(null, function(err) {
+//                    console.error(err);
+//                });
+//        }
 
 
 	return studentService;

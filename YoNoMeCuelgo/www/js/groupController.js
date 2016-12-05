@@ -7,24 +7,38 @@ var app = angular.module("users")
 
     $scope.currentPage = 1;
     $scope.pageSize = 2;
+    $scope.sid;
 
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
-    studentService.getStudentCourses(1)
-                    .then(function(response){
 
-                        var courses = response;
+    if($location.path() === '/groups')
+    {
+        studentService.getStudentCourses(1)
+                            .then(function(response){
 
-                        $scope.courseList = [];
-                    /*list of the courses the student has*/
-                        for(var i = 0; i < courses.length; i++)
-                        {
-                            $scope.courseList.push({'idc' : courses[i].courseId,
-                                'code': courses[i].courseCode,
-                                'title' : courses[i].courseName
-                            })
-                        }
+                                var courses = response;
 
-                    });
+                                $scope.courseList = courses.map(function(course){
+                                      var obj = {'idc': course.courseId,
+                                                 'code': course.courseCode,
+                                                 'title': course.courseName
+                                                }
+                                      return obj;
+
+                                });
+
+                            /*list of the courses the student has*/
+//                                for(var i = 0; i < courses.length; i++)
+//                                {
+//                                    $scope.courseList.push({'idc' : courses[i].courseId,
+//                                        'code': courses[i].courseCode,
+//                                        'title' : courses[i].courseName
+//                                    })
+//                                }
+//
+                            });
+    }
+
 //    var courses = [
 //                     {
 //                       "courseId": "1",
@@ -65,35 +79,53 @@ var app = angular.module("users")
                    .then(function(response) {
 
                    var groups = response;
-                   /*Returns the list of members for a group*/
-                       function getMembers(members)
-                       {
-                           var membersToAdd = [];
-                           for(var i = 0; i < members.length; i++)
-                           {
-                               var object = {'first': members[i].userFirstName,
-                                   'last' : members[i].userLastName,
-                                   'image' : members[i].userImage
-                               }
-                               membersToAdd.push(object);
-                           }
+//                   /*Returns the list of members for a group*/
+//                       function getMembers(members)
+//                       {
+//                           var membersToAdd = [];
+//                           for(var i = 0; i < members.length; i++)
+//                           {
+//                               var object = {'first': members[i].userFirstName,
+//                                   'last' : members[i].userLastName,
+//                                   'image' : members[i].userImage
+//                               }
+//                               membersToAdd.push(object);
+//                           }
+//
+//                   //        console.log(membersToAdd);
+//                           return membersToAdd;
+//                       }
+//                   /*List of personal groups*/
+//                       for(var i = 0; i < groups.length; i++)
+//                       {
+//                           $scope.myGroupsList.push({'id': groups[i].groupId,
+//                               'idc': groups[i].courseId,
+//                               'name': groups[i].groupName,
+//                               'size': groups[i].groupSize,
+//                               'limit': groups[i].groupCapacity,
+//                               'arrowIcon': arrowLeftIcon,
+//                               'members': getMembers(groups[i].members)
+//                           });
+//
+//                       }
 
-                   //        console.log(membersToAdd);
-                           return membersToAdd;
-                       }
-                   /*List of personal groups*/
-                       for(var i = 0; i < groups.length; i++)
-                       {
-                           $scope.myGroupsList.push({'id': groups[i].groupId,
-                               'idc': groups[i].courseId,
-                               'name': groups[i].groupName,
-                               'size': groups[i].groupSize,
-                               'limit': groups[i].groupCapacity,
-                               'arrowIcon': arrowLeftIcon,
-                               'members': getMembers(groups[i].members)
-                           });
+                        $scope.myGroupsList = groups.map(function(group){
+                                          var g = {'id': group.groupId,
+                                                       'idc': group.courseId,
+                                                       'name': group.groupName,
+                                                       'size': group.groupSize,
+                                                       'limit': group.groupCapacity,
+                                                       'members': group.members.map(function(member){
+                                                                                        var mem = {'first': member.userFirstName,
+                                                                                                   'last': member.userLastName,
+                                                                                                   'image': member.userImage
+                                                                                                  }
+                                                                                        return mem;
+                                                                                    })
+                                                      }
+                                          return g;
 
-                       }
+                                    });
 
 
                    })
@@ -107,11 +139,12 @@ var app = angular.module("users")
                                               /*verifies if the group is already on the personal groupList*/
                     //                          function groupExist(group)
                     //
+
                                                 for(var i = 0; i < allGroups.length; i++)
                                                 {
                                                     $scope.myGroupsList.map(function(group)
                                                     {
-                                                        if(group.id === allGroups[i].groupsId)
+                                                        if(group.id === allGroups[i].groupsId && group.groupSize === group.groupCapacity)
                                                         {
                                                             allGroups.splice(i,1);
                                                         }
@@ -119,22 +152,30 @@ var app = angular.module("users")
                                                     });
 
                                                 }
-                                                console.log("My groups: "+JSON.stringify($scope.myGroupsList));
-                                                console.log("Others: "+ JSON.stringify(allGroups));
-                                                $scope.groupList = [];
-                                                for(var i = 0; i < allGroups.length; i++)
-                                                {
-                    //                                if(!groupExist(allGroups[i]))
-                    //                                {
-                                                        $scope.groupList.push({'id': allGroups[i].groupsId,
-                                                                    'idc': allGroups[i].courseId,
-                                                                    'name': allGroups[i].groupName,
-                                                                    'size': allGroups[i].groupSize,
-                                                                    'limit': allGroups[i].groupCapacity,
-                                                                    'arrowIcon': arrowLeftIcon
-                                                                });
-                    //                                }
-                                                }
+//                                                $scope.groupList = [];
+//                                                for(var i = 0; i < allGroups.length; i++)
+//                                                {
+//                    //                                if(!groupExist(allGroups[i]))
+//                    //                                {
+//                                                        $scope.groupList.push({'id': allGroups[i].groupsId,
+//                                                                    'idc': allGroups[i].courseId,
+//                                                                    'name': allGroups[i].groupName,
+//                                                                    'size': allGroups[i].groupSize,
+//                                                                    'limit': allGroups[i].groupCapacity,
+//                                                                    'arrowIcon': arrowLeftIcon
+//                                                                });
+//                    //                                }
+//                                                }
+
+                                                $scope.groupList = allGroups.map(function(group){
+                                                        var obj = {'id': group.groupsId,
+                                                                   'idc': group.courseId,
+                                                                   'name': group.groupName,
+                                                                   'size': group.groupSize,
+                                                                   'limit': group.groupCapacity,
+                                                                  }
+                                                        return obj;
+                                                });
 
 
 
