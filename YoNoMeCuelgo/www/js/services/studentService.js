@@ -100,16 +100,16 @@ function($http) {
             });
     }
 
-//     studentService.getID = function(data)
-//        {
-//                return $http.post("https://glacial-journey-85518.herokuapp.com/groupMessages/messageTutor", data)
-//                .then(function(response) {
-//                    return response.data;
-//                })
-//                .then(null, function(err) {
-//                    console.error(err);
-//                });
-//        }
+     studentService.newGroup = function(data)
+        {
+                return $http.post("https://glacial-journey-85518.herokuapp.com/createGroup", data)
+                .then(function(response) {
+                    return response.data;
+                })
+                .then(null, function(err) {
+                    console.error(err);
+                });
+        }
 
 
 	return studentService;

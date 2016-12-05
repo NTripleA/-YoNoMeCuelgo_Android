@@ -25,7 +25,7 @@ var app = angular.module("users")
     $scope.showName=false;
     self.courseList=[];
     $scope.countdown = "";
-
+    console.log("HALLO");
     function getSettings(){
       // GET User Information
       var id;
@@ -561,12 +561,12 @@ var app = angular.module("users")
     self.isDisabled    = false;
 
     /*Get all courses*/
-    accountsService.allCourses()
-        .then(function(response){
-
-            self.repos = loadAll(response);
-
-        });
+//    accountsService.allCourses()
+//        .then(function(response){
+//
+//            self.repos = loadAll(response);
+//
+//        });
 //    self.repos         = loadAll();
     self.querySearch   = querySearch;
     self.selectedItemChange = selectedItemChange;
