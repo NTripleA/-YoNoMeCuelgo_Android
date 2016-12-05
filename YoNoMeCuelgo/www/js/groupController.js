@@ -209,40 +209,6 @@ var app = angular.module("users")
     $scope.createGroup = false;
 
 
-
-
-
-//    $scope.groupList = [
-//    {'id' : '1','idc' : '1', 'name' : 'Project', 'size' : '3', 'limit' : '4', 'arrowIcon' : arrowLeftIcon, 'members' : members},
-//    {'id' : '2', 'idc' : '2', 'name' : 'Exam 1', 'size' : '3', 'limit' : '3', 'arrowIcon' : arrowLeftIcon, 'members' : members},
-//    {'id' : '3', 'idc' : '3', 'name' : 'Chilea', 'size' : '3', 'limit' : '5', 'arrowIcon' : arrowLeftIcon, 'members': members},
-//    {'id' : '4', 'idc' : '4', 'name' : 'Study Group', 'size' : '3', 'limit' : '8', 'arrowIcon' : arrowLeftIcon, 'members': members},
-//    {'id' : '5', 'idc' : '5', 'name' : 'Final Project', 'size' : '3', 'limit' : '3', 'arrowIcon' : arrowLeftIcon, 'members': members},
-//    {'id' : '6', 'idc' : '1', 'name' : 'Final Exam', 'size' : '3', 'limit' : '4', 'arrowIcon' : arrowLeftIcon, 'members': members},
-//    {'id' : '7', 'idc' : '3', 'name' : 'Exam 3', 'size' : '3', 'limit' : '5', 'arrowIcon' : arrowLeftIcon, 'members': members}
-//    ]
-
-
-
-
-
-//    $scope.myGroupsList = [
-//        {'id' : '1', 'idc' : '1', 'name' : 'Project', 'size' : '3', 'limit' : '4', 'arrowIcon' : arrowLeftIcon, 'members' : members},
-//        {'id' : '2', 'idc' : '2', 'name' : 'Exam 1', 'size' : '3', 'limit' : '3', 'arrowIcon' : arrowLeftIcon, 'members' : members}
-//        ]
-
-//    $scope.courseList = [
-//    {'id' : '1', 'idc' : '1', 'code' : 'ICOM4035', 'title' : 'Data Structures'},
-//    {'id' : '2', 'idc' : '2', 'code' : 'ICOM4075', 'title' : 'Foundations of Computing'},
-//    {'id' : '3', 'idc' : '3', 'code' : 'ICOM4015', 'title' : 'Advanced Programming'},
-//    {'id' : '4', 'idc' : '4', 'code' : 'ICOM4009', 'title' : 'Software Engineering'},
-//    {'id' : '5', 'idc' : '5', 'code' : 'MATE0666', 'title' : 'Mate der Diablou'}
-//    ]
-
-
-
-
-
     $scope.toggleGroups = function(i){
         if ($scope.myGroupsList[i].arrowIcon.search(arrowDownIcon)>-1){
             $scope.myGroupsList[i].arrowIcon = arrowLeftIcon;
@@ -307,6 +273,9 @@ var app = angular.module("users")
             object = $scope.myGroupsList[length4-1];
             $scope.newObject.id = object.id + 1;
             $scope.myGroupsList.push($scope.newObject);
+
+
+
         }
     }
 

@@ -25,29 +25,40 @@ var app = angular.module("users")
     $scope.showName=false;
     self.courseList=[];
     $scope.countdown = "";
-    console.log("HALLO");
+    $scope.userRole;
+
     function getSettings(){
-      // GET User Information
-      var id;
-      var email = firebase.auth().currentUser.email;
+        // GET User Information
+        var id;
+        var userRole;
+        if(firebase.auth().currentUser != null)
+        {
+            console.log(firebase.auth().currentUser.email);
+            accountsService.getUsers()
+                .then(function(response){
 
-      if($scope.userRole === 'tutors'){
-        id=1;
-        $scope.route('/tutors');
-//        $route.reload();
-      }
-      else{
-        id=2;
-        $scope.route('/home');
-//        $route.reload();
-      }
-      accountsService.getUsers()
-          .then(function(response){
+                    userRole = assignUserInfo(response);
+                    console.log($scope.userRole);
+                })
+                .then(function(){
+                      if(userRole === 'tutors'){
+                        id=1;
+                        $scope.route('/tutors');
+                  //        $route.reload();
+                      }
+                      else{
 
-              assignUserInfo(response);
+                        id=2;
+                        $scope.route('/home');
+                  //        $route.reload();
+                      }
 
-          });
-      }
+                });
+
+        }
+    }
+
+
 
       $scope.currentPath = function(){
         return $location.path();
@@ -441,7 +452,6 @@ var app = angular.module("users")
          //$scope.currentCourses.push({'code': $scope.item.Code, 'arrowIcon': arrowLeftIcon});
 
 
-         //console.log($scope.currentCourses);
    //      $scope.tempCourses.push(item);
         $timeout(function() {
             $scope.isb = false;
@@ -455,10 +465,6 @@ var app = angular.module("users")
             //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
         }
 
-//        console.log(tempCourses);
-//        console.log($scope.currentCourses);
-//        console.log(self.tempCourses.length);
-//        console.log(self.tempCourses[0]);
 //
 //        while(tempCourses.length > 0)
 //        {
@@ -672,7 +678,6 @@ var app = angular.module("users")
     function removeChip(chip) {
 //        var data = JSON.parse($scope.tempCourses);
 //        var index = data.map(function(d) { return d['Code']; }).indexOf(chip.Code);
-        //console.log(self.tempCourses);
     }
 
     function requestInfo(ev) {
@@ -725,12 +730,12 @@ var app = angular.module("users")
         function assignUserInfo(users)
         {
             var email = firebase.auth().currentUser.email;
+            var userRole;
 
             if($location.path === '/home' || $location.path === '/tutors')
             {
                 for(var i = 0; i < users.length; i++)
                 {
-
 
                       if(user.userEmail === email)
                       {
@@ -741,7 +746,7 @@ var app = angular.module("users")
 
                               studentService.getStudentInfo(user.userId)
                                        .then(function(response){
-                                             $scope.userRole = 'student';
+                                             userRole = 'student';
                                              $scope.statusMessage = student.userStatus;
                                              $scope.userName = student.userFirstName;
                                              $scope.lastName = student.userLastName;
@@ -795,7 +800,7 @@ var app = angular.module("users")
 
                           else
                           {
-                              $scope.userRole = 'tutors';
+                              userRole = 'tutors';
                               $scope.statusMessage = users[i].userStatus;
                               $scope.profilePicture = users[i].userImage;
                               $scope.userName = users[i].userFirstName;
@@ -847,7 +852,9 @@ var app = angular.module("users")
 
 
 
-                                                }
+                              }
+
+                              return userRole;
     //                if(users[i].userEmail === email)
     //                {
     //
@@ -867,7 +874,6 @@ var app = angular.module("users")
     //                                .then(function(){
     //                                    studentService.getCountdown(id)
     //                                        .then(function(response2){
-    ////                                            console.log(JSON.stringify(response2));
     //
     //                                              if($scope.countdown.length>0){
     //                                                $timeout(location.reload());
