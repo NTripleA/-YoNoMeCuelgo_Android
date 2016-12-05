@@ -3,8 +3,10 @@ angular.module('users')
 '$http',
 function($http) {
 	var settingsService = {};
+	  var host = "http://localhost:8080";
+  //  var host = "https://glacial-journey-85518.herokuapp.com";
 	settingsService.getUserInfo = function (id) {
-		return $http.get("https://glacial-journey-85518.herokuapp.com/userInfo/"+id)
+		return $http.get(host+"/userInfo/"+id)
 		.then(function (response) {
 			return response.data;
 		})

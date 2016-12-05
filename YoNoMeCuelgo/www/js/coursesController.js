@@ -8,39 +8,21 @@ var app = angular.module("users")
    $scope.currentPage2=1;
    $scope.pageSize2=2;
 
-  //  var tutors = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
-   //
-   //
-  //  $scope.courseList=[
-  //   {'code' : 'ICOM5016', 'name' : 'Database Systems', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4035', 'name' : 'Data Structures', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4075', 'name' : 'Foundations of Computing', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4009', 'name' : 'Software Engineering', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //    }
-  //  ];
 
    $scope.courseList = [];
 
    //Get Student Courses
    $scope.sid;
 
-//   var email = firebase.auth().currentUser.email;
-//
-//   studentService.getID(email)
-//          .then(function(response) {
-//               console.log(firebase.auth().currentUser.email);
-//               $scope.sid = response[0].studentId;
-//          })
-//          .then(function(){
-//               getStudentInfo($scope.sid);
-//          });
+   var email = firebase.auth().currentUser.email;
+
+   studentService.getID(email)
+          .then(function(response) {
+               $scope.sid = response[0].studentId;
+          })
+          .then(function(){
+               getStudentInfo($scope.sid);
+          });
 
    function getStudentInfo(id)
    {
@@ -156,6 +138,6 @@ var app = angular.module("users")
         })
    }
 
-   getStudentInfo(1);
+//   getStudentInfo(1);
 
 }]);

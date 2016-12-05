@@ -33,12 +33,10 @@ var app = angular.module("users")
         var userRole;
         if(firebase.auth().currentUser != null)
         {
-            console.log(firebase.auth().currentUser.email);
             accountsService.getUsers()
                 .then(function(response){
 
                     userRole = assignUserInfo(response);
-                    console.log($scope.userRole);
                 })
                 .then(function(){
                       if(userRole === 'tutors'){
@@ -271,88 +269,6 @@ var app = angular.module("users")
 
 
 
-    //
-    var imagePath = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xtf1/v/t1.0-1/13912618_10154625059185827_4804033282118954744_n.jpg?oh=71c307466a6f3cf85ffc580d1a588c02&oe=58C703DB&__gda__=1485738904_e299d10033dcc5340dcf7c055ddfd831";
-//    $scope.messages = [
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//      ];
-    //
 
     $scope.messages = [];
 
@@ -414,24 +330,6 @@ var app = angular.module("users")
 
    $scope.tempCourses = [];
 
-//   $scope.courseList=[
-//       {'id' :0,
-//        'code' : 'ICOM5016',
-//        'class': 'selectedButton'
-//       },
-//       {'id' :1,
-//        'code' : 'ICOM4035',
-//        'class': 'unselectedButton'
-//       },
-//       {'id' :2,
-//        'code' : 'ICOM4075',
-//        'class': 'unselectedButton'
-//       },
-//       {'id' :3,
-//        'code' : 'ICOM4009',
-//        'class': 'unselectedButton'
-//        }
-//      ];
 
    $scope.courseList = [];
 
@@ -610,28 +508,6 @@ var app = angular.module("users")
      * Build `components` list of key/value pairs
      */
     function loadAll(courses) {
-//      var repos = [
-//        {
-//          'Code': 'ICOM4035',
-//          'Title': 'Data Structures'
-//        },
-//        {
-//          'Code': 'ICOM4075',
-//          'Title': 'Foundations of Computing'
-//        },
-//        {
-//          'Code': 'ICOM4015',
-//          'Title': 'Advanced Programming'
-//        },
-//        {
-//          'Code': 'ICOM4009',
-//          'Title': 'Software Engineering'
-//        },
-//        {
-//          'Code': 'MATE666',
-//          'Title': 'Mate der Diablou'
-//        }
-//      ];
       var repos = [];
       for(var i = 0; i < courses.length; i++)
       {
@@ -732,19 +608,19 @@ var app = angular.module("users")
             var email = firebase.auth().currentUser.email;
             var userRole;
 
-            if($location.path === '/home' || $location.path === '/tutors')
+            if($location.path() === '/home' || $location.path() === '/tutors')
             {
                 for(var i = 0; i < users.length; i++)
                 {
 
-                      if(user.userEmail === email)
+                      if(users[i].userEmail === email)
                       {
-                          if(user.isTutor === 0)
+                          if(users[i].isTutor === 0)
                           {
-                              var student = user;
+                              var student = users[i];
                               var id;
 
-                              studentService.getStudentInfo(user.userId)
+                              studentService.getStudentInfo(users[i].userId)
                                        .then(function(response){
                                              userRole = 'student';
                                              $scope.statusMessage = student.userStatus;
@@ -757,6 +633,7 @@ var app = angular.module("users")
 
                                               studentService.getCountdown(id)
                                                     .then(function(response2){
+
                                                           if($scope.countdown.length>0){
                                                             $timeout(location.reload());
                                                           }

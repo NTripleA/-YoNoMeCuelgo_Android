@@ -3,8 +3,10 @@ angular.module('users')
 '$http',
 function($http) {
 	var tutorsService = {};
+	  var host = "http://localhost:8080";
+  //  var host = "https://glacial-journey-85518.herokuapp.com";
 	tutorsService.getTutors = function () {
-		return $http.get("https://glacial-journey-85518.herokuapp.com/alltutors")
+		return $http.get(host+"/alltutors")
 		.then(function (response) {
 			return response.data;
 		})
@@ -14,7 +16,7 @@ function($http) {
 	};
 
 	tutorsService.getTutorCourses = function (tutorID) {
-    		return $http.get("https://glacial-journey-85518.herokuapp.com/tutorCourses/"+tutorID)
+    		return $http.get(host+"/tutorCourses/"+tutorID)
     		.then(function (response) {
     			return response.data;
     		})
@@ -24,7 +26,7 @@ function($http) {
     	};
 
     tutorsService.getTutorInfo = function(userID){
-                 return $http.get("https://glacial-journey-85518.herokuapp.com/tutorInfo/"+userID)
+                 return $http.get(host+"/tutorInfo/"+userID)
                     .then(function(response) {
                         return response.data;
                     })
@@ -33,7 +35,7 @@ function($http) {
                     });
             };
     tutorsService.getDirectMessages = function (id) {
-        		return $http.get("https://glacial-journey-85518.herokuapp.com/tutorMessages/"+id)
+        		return $http.get(host+"/tutorMessages/"+id)
         		.then(function (response) {
         			return response.data;
         		})

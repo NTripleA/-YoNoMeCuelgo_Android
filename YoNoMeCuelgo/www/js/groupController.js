@@ -11,183 +11,116 @@ var app = angular.module("users")
 
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
 
-    if($location.path() === '/groups')
+
+
+    var email = firebase.auth().currentUser.email;
+
+    studentService.getID(email)
+          .then(function(response){
+                $scope.sid = response[0].studentId;
+                getGroupInfo();
+          });
+
+    function getGroupInfo()
     {
-        studentService.getStudentCourses(1)
-                            .then(function(response){
+        if($location.path() === '/groups')
+          {
+              studentService.getStudentCourses($scope.sid)
+                                  .then(function(response){
 
-                                var courses = response;
+                                      var courses = response;
 
-                                $scope.courseList = courses.map(function(course){
-                                      var obj = {'idc': course.courseId,
-                                                 'code': course.courseCode,
-                                                 'title': course.courseName
-                                                }
-                                      return obj;
-
-                                });
-
-                            /*list of the courses the student has*/
-//                                for(var i = 0; i < courses.length; i++)
-//                                {
-//                                    $scope.courseList.push({'idc' : courses[i].courseId,
-//                                        'code': courses[i].courseCode,
-//                                        'title' : courses[i].courseName
-//                                    })
-//                                }
-//
-                            });
-    }
-
-    studentService.getStudentGroups(1)
-                   .then(function(response) {
-
-                   var groups = response;
-
-                        $scope.myGroupsList = groups.map(function(group){
-                                          var g = {'id': group.groupId,
-                                                       'idc': group.courseId,
-                                                       'name': group.groupName,
-                                                       'size': group.groupSize,
-                                                       'limit': group.groupCapacity,
-                                                       'members': group.members.map(function(member){
-                                                                                        var mem = {'first': member.userFirstName,
-                                                                                                   'last': member.userLastName,
-                                                                                                   'image': member.userImage
-                                                                                                  }
-                                                                                        return mem;
-                                                                                    })
+                                      $scope.courseList = courses.map(function(course){
+                                            var obj = {'idc': course.courseId,
+                                                       'code': course.courseCode,
+                                                       'title': course.courseName
                                                       }
-                                          return g;
+                                            return obj;
 
-                                    });
+                                      });
 
+                                  });
+          }
 
-                   })
-                   .then(function(){
-                     studentService.getAllGroups()
-                                            .then(function(response3) {
+      studentService.getStudentGroups($scope.sid)
+             .then(function(response) {
 
-                                            var allGroups = response3;
-                                            /*list of groups that the user is NOT part of */
+             var groups = response;
 
-                                              /*verifies if the group is already on the personal groupList*/
-                    //                          function groupExist(group)
-                    //
-                                                function isStudentCourse()
-                                                {
-                                                     return $scope.myGroupsList.some(function(group){
-                                                             return group.groupsId === group.id;
-                                                     });
+                  $scope.myGroupsList = groups.map(function(group){
+                                    var g = {'id': group.groupId,
+                                                 'idc': group.courseId,
+                                                 'name': group.groupName,
+                                                 'size': group.groupSize,
+                                                 'limit': group.groupCapacity,
+                                                 'members': group.members.map(function(member){
+                                                                                  var mem = {'first': member.userFirstName,
+                                                                                             'last': member.userLastName,
+                                                                                             'image': member.userImage
+                                                                                            }
+                                                                                  return mem;
+                                                                              })
                                                 }
+                                    return g;
 
-                                                for(var i = 0; i < allGroups.length; i++)
-                                                {
-                                                    $scope.myGroupsList.map(function(group)
-                                                    {
-                                                        //If group id = a group id of a group the user is already in, if the group is full
-                                                        //or the group is not part of the
-                                                        if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
-                                                        {
-                                                            allGroups.splice(i,1);
-                                                        }
-
-                                                    });
-                                                }
-
-                                                allGroups.filter(isStudentCourse);
-
-                                                $scope.groupList = allGroups.map(function(group){
-                                                        var obj = {'id': group.groupsId,
-                                                                   'idc': group.courseId,
-                                                                   'name': group.groupName,
-                                                                   'size': group.groupSize,
-                                                                   'limit': group.groupCapacity,
-                                                                  }
-                                                        return obj;
-                                                });
+                              });
 
 
+             })
+             .then(function(){
+               studentService.getAllGroups()
+                    .then(function(response3) {
 
-                                            });
+                    var allGroups = response3;
+                    /*list of groups that the user is NOT part of */
 
+                      /*verifies if the group is already on the personal groupList*/
+//                          function groupExist(group)
+//
+                        function isStudentCourse()
+                        {
+                             return $scope.myGroupsList.some(function(group){
+                                     return group.groupsId === group.id;
+                             });
+                        }
 
+                        for(var i = 0; i < allGroups.length; i++)
+                        {
+                            $scope.myGroupsList.map(function(group)
+                            {
+                                //If group id = a group id of a group the user is already in, if the group is full
+                                //or the group is not part of the
+                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
+                                {
+                                    allGroups.splice(i,1);
+                                }
 
+                            });
+                        }
 
+                        allGroups.filter(isStudentCourse);
 
-                   });
-//      var groups = [
-//                      {
-//                        "groupId": "1",
-//                        "courseId": "1",
-//                        "groupName": "DB Project",
-//                        "groupSize": 3,
-//                        "groupCapacity": 3,
-//                        "members": [
-//                          {
-//                            "userFirstName": "Nelson",
-//                            "userLastName": "Alemar",
-//                            "userImage": "https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xtf1\/v\/t1.0-1\/13912618_10154625059185827_4804033282118954744_n.jpg?oh=71c307466a6f3cf85ffc580d1a588c02&oe=58C703DB&_gda_=1485738904_e299d10033dcc5340dcf7c055ddfd831"
-//                          }
-//                        ]
-//                      },
-//                      {
-//                        "groupId": "2",
-//                        "courseId" : "2",
-//                        "groupName": "Study Group",
-//                        "groupSize": 4,
-//                        "groupCapacity": 5,
-//                        "members": [
-//                          {
-//                            "userFirstName": "Nelson",
-//                            "userLastName": "Alemar",
-//                            "userImage": "https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xtf1\/v\/t1.0-1\/13912618_10154625059185827_4804033282118954744_n.jpg?oh=71c307466a6f3cf85ffc580d1a588c02&oe=58C703DB&_gda_=1485738904_e299d10033dcc5340dcf7c055ddfd831"
-//                          }
-//                        ]
-//                      },
-//                      {
-//                        "groupId": "3",
-//                        "courseId" : "3",
-//                        "groupName": "Chill",
-//                        "groupSize": 5,
-//                        "groupCapacity": 10,
-//                        "members": [
-//                          {
-//                            "userFirstName": "Nelson",
-//                            "userLastName": "Alemar",
-//                            "userImage": "https:\/\/fbcdn-profile-a.akamaihd.net\/hprofile-ak-xtf1\/v\/t1.0-1\/13912618_10154625059185827_4804033282118954744_n.jpg?oh=71c307466a6f3cf85ffc580d1a588c02&oe=58C703DB&_gda_=1485738904_e299d10033dcc5340dcf7c055ddfd831"
-//                          }
-//                        ]
-//                      }
-//                    ];
+                        $scope.groupList = allGroups.map(function(group){
+                                var obj = {'id': group.groupsId,
+                                           'idc': group.courseId,
+                                           'name': group.groupName,
+                                           'size': group.groupSize,
+                                           'limit': group.groupCapacity,
+                                          }
+                                return obj;
+                        });
 
 
-//        var allGroups = [
-//                          {
-//                            "groupsId": "1",
-//                            "courseId": "1",
-//                            "groupName": "DB Project",
-//                            "groupSize": 3,
-//                            "groupCapacity": 3,
-//                            "senderId": "1"
-//                          },
-//                          {
-//                            "groupsId": "2",
-//                            "courseId": "2",
-//                            "groupName": "Study Group",
-//                            "groupSize": 4,
-//                            "groupCapacity": 5,
-//                            "senderId": "1"
-//                          },
-//                          {
-//                            "groupsId": "3",
-//                            "courseId": "3",
-//                            "groupName": "Chill",
-//                            "groupSize": 5,
-//                            "groupCapacity": 10,
-//                            "senderId": "1"
-//                          }
-//                        ];
+
+                    });
+
+
+
+
+
+             });
+
+    }
 
 
 
@@ -362,7 +295,7 @@ var app = angular.module("users")
       })
     }
 
-    $scope.exit = function(){
+    $scope.exit = function(group){
       swal({
         title: 'Are you sure?',
         type: 'warning',
@@ -374,6 +307,17 @@ var app = angular.module("users")
           'You are no longer in the group.',
           'success'
         )
+
+        groupToLeave = {"studentId": $scope.sid,
+                        "groupsId": group.id}
+
+        console.log(groupToLeave);
+        studentService.leaveGroup(groupToLeave)
+              .then(function(){
+                    getGroupInfo();
+              })
+
+
       })
     }
 

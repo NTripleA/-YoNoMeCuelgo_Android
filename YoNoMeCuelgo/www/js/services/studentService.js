@@ -2,9 +2,12 @@ angular.module('users')
 .factory('studentService', [
 '$http',
 function($http) {
+
+  var host = "http://localhost:8080";
+//  var host = "https://glacial-journey-85518.herokuapp.com";
 	var studentService = {};
 	studentService.getStudents = function () {
-		return $http.get("https://glacial-journey-85518.herokuapp.com/allstudents")
+		return $http.get(host+"/allstudents")
 		.then(function (response) {
 			return response.data;
 		})
@@ -14,7 +17,7 @@ function($http) {
 	};
 
 	studentService.getStudentCourses = function(studentID){
-	    return $http.get("https://glacial-journey-85518.herokuapp.com/studentCourses/"+studentID)
+	    return $http.get(host+"/studentCourses/"+studentID)
 	    .then(function(response) {
 	        return response.data;
 	    })
@@ -25,7 +28,7 @@ function($http) {
 	}
 
 	studentService.getStudentGroups = function(studentID){
-    	    return $http.get("https://glacial-journey-85518.herokuapp.com/studentGroups/"+studentID)
+    	    return $http.get(host+"/studentGroups/"+studentID)
     	    .then(function(response) {
     	        return response.data;
     	    })
@@ -36,7 +39,7 @@ function($http) {
     }
 
     studentService.getAllGroups = function(){
-        	    return $http.get("https://glacial-journey-85518.herokuapp.com/allgroups")
+        	    return $http.get(host+"/allgroups")
         	    .then(function(response) {
         	        return response.data;
         	    })
@@ -47,7 +50,7 @@ function($http) {
         }
 
     studentService.getDirectMessages = function (id) {
-    		return $http.get("https://glacial-journey-85518.herokuapp.com/studentMessages/"+id)
+    		return $http.get(host+"/studentMessages/"+id)
     		.then(function (response) {
     			return response.data;
     		})
@@ -57,7 +60,7 @@ function($http) {
     	}
 
     studentService.getCountdown = function(studentID){
-            return $http.get("https://glacial-journey-85518.herokuapp.com/countdown/"+studentID)
+            return $http.get(host+"/countdown/"+studentID)
                             .then(function(response) {
                                 return response.data;
                             })
@@ -68,7 +71,7 @@ function($http) {
     }
 
     studentService.getStudentInfo = function(userID){
-            return $http.get("https://glacial-journey-85518.herokuapp.com/studentInfo/"+userID)
+            return $http.get(host+"/studentInfo/"+userID)
                             .then(function(response) {
                                 return response.data;
                             })
@@ -79,7 +82,7 @@ function($http) {
     }
 
      studentService.getGroupMessages = function (id) {
-        		return $http.get("https://glacial-journey-85518.herokuapp.com/groupMessages/"+id)
+        		return $http.get(host+"/groupMessages/"+id)
         		.then(function (response) {
         			return response.data;
         		})
@@ -89,10 +92,9 @@ function($http) {
         	}
     studentService.getID = function(email)
     {
-            em = [{'email': email}];
-            return $http.post("https://glacial-journey-85518.herokuapp.com/getId", em)
+            em = {"userEmail": '\''+email+'\''};
+            return $http.post(host+"/getId", em)
             .then(function(response) {
-                console.log(response);
                 return response.data;
             })
             .then(null, function(err) {
@@ -102,7 +104,7 @@ function($http) {
 
      studentService.newGroup = function(data)
         {
-                return $http.post("https://glacial-journey-85518.herokuapp.com/createGroup", data)
+                return $http.post(host+"/createGroup", data)
                 .then(function(response) {
                     return response.data;
                 })
@@ -110,6 +112,17 @@ function($http) {
                     console.error(err);
                 });
         }
+
+     studentService.leaveGroup = function(data)
+     {
+              return $http.delete(host+"/leave", data)
+                     .then(function(response) {
+                         return response.data;
+                     })
+                     .then(null, function(err) {
+                         console.error(err);
+                     });
+     }
 
 
 	return studentService;
