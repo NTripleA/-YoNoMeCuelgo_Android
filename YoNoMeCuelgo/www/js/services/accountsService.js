@@ -2,9 +2,11 @@ angular.module('users')
 .factory('accountsService', [
 '$http',
 function($http) {
+    var host = "http://localhost:8080";
+  //  var host = "https://glacial-journey-85518.herokuapp.com";
 	var accountsService = {};
 	accountsService.getUsers = function () {
-		return $http.get("https://glacial-journey-85518.herokuapp.com/users")
+		return $http.get(host+"/users")
 		.then(function (response) {
 			return response.data;
 		})
@@ -13,7 +15,7 @@ function($http) {
 		});
 	};
 	accountsService.getUserById = function (userID) {
-    		return $http.get("https://glacial-journey-85518.herokuapp.com/userInfo/"+userID)
+    		return $http.get(host+"/userInfo/"+userID)
     		.then(function (response) {
     			return response.data;
     		})
@@ -23,7 +25,7 @@ function($http) {
     	};
 
     accountsService.allCourses = function() {
-        return $http.get("https://glacial-journey-85518.herokuapp.com/allCourses")
+        return $http.get(host+"/allCourses")
             		.then(function (response) {
             			return response.data;
             		})

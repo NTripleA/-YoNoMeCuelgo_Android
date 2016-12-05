@@ -8,50 +8,44 @@ var app = angular.module("users")
    $scope.currentPage2=1;
    $scope.pageSize2=2;
 
-  //  var tutors = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
-   //
-   //
-  //  $scope.courseList=[
-  //   {'code' : 'ICOM5016', 'name' : 'Database Systems', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4035', 'name' : 'Data Structures', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4075', 'name' : 'Foundations of Computing', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //   },
-  //   {'code' : 'ICOM4009', 'name' : 'Software Engineering', 'tutors' : tutors,
-  //    'arrowIcon':arrowLeftIcon
-  //    }
-  //  ];
 
    $scope.courseList = [];
 
    //Get Student Courses
-   studentService.getStudentCourses(1)
-   .then(function(response){
-      var studentInfo;
-      studentInfo = response;
-      function getTutors(tutors){
-          var tutorsToAdd = [];
-          for(var i = 0; i < tutors.length; i++){
-            tutorsToAdd.push({'first': tutors[i].userFirstName,
-                              'last': tutors[i].userLastName,
-                              'image': tutors[i].userImage
-                            });
-          }
-          return tutorsToAdd;
-       }
+   $scope.sid;
 
-       for(var i = 0; i < studentInfo.length; i++){
-         var object = {'code' : studentInfo[i].courseCode,
-                       'name' : studentInfo[i].courseName,
-                       'tutors': getTutors(studentInfo[i].tutors)
-                      };
-         $scope.courseList.push(object);
-       }
-   });
+   var email = firebase.auth().currentUser.email;
+
+   studentService.getID(email)
+          .then(function(response) {
+               $scope.sid = response[0].studentId;
+          })
+          .then(function(){
+               getStudentInfo($scope.sid);
+          });
+
+   function getStudentInfo(id)
+   {
+      studentService.getStudentCourses(id)
+         .then(function(response){
+
+             $scope.courseList = response.map(function(course){
+                  var obj = {'code': course.courseCode,
+                             'name': course.courseName,
+                             'tutors': course.tutors.map(function(tutor){
+                                              var tut = {'first': tutor.userFirstName,
+                                                         'last': tutor.userLastName,
+                                                         'image': tutor.userImage
+                                                        }
+                                              return tut;F
+                                        })
+                            }
+
+                  return obj;
+             });
+         });
+
+   }
 
    $scope.route = function(path){
        $location.path(path);
@@ -96,7 +90,6 @@ var app = angular.module("users")
          $scope.end=2;
        }
      }
-     console.log($scope.start+" "+$scope.end);
      return tutors;
    }
 
@@ -144,5 +137,7 @@ var app = angular.module("users")
           showConfirmButton : false
         })
    }
+
+//   getStudentInfo(1);
 
 }]);

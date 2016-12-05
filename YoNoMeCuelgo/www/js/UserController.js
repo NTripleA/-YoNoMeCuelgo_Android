@@ -25,30 +25,38 @@ var app = angular.module("users")
     $scope.showName=false;
     self.courseList=[];
     $scope.countdown = "";
+    $scope.userRole;
 
     function getSettings(){
-      // GET User Information
-      var id;
-      var email = firebase.auth().currentUser.email;
-      if(email==='israel.figueroa1@upr.edu'){
-        id=1;
-        $scope.userRole='tutors'
-        $scope.route('/tutors');
-//        $route.reload();
-      }
-      else{
-        id=2;
-        $scope.userRole='student';
-        $scope.route('/home');
-//        $route.reload();
-      }
-      accountsService.getUsers()
-          .then(function(response){
+        // GET User Information
+        var id;
+        var userRole;
+        if(firebase.auth().currentUser != null)
+        {
+            accountsService.getUsers()
+                .then(function(response){
 
-              assignUserInfo(response);
+                    userRole = assignUserInfo(response);
+                })
+                .then(function(){
+                      if(userRole === 'tutors'){
+                        id=1;
+                        $scope.route('/tutors');
+                  //        $route.reload();
+                      }
+                      else{
 
-          });
-      }
+                        id=2;
+                        $scope.route('/home');
+                  //        $route.reload();
+                      }
+
+                });
+
+        }
+    }
+
+
 
       $scope.currentPath = function(){
         return $location.path();
@@ -92,7 +100,6 @@ var app = angular.module("users")
               swal("Please type a password", "", "warning");
               validated = false;
             }
-            console.log(validated);
             if(validated){
               $scope.loading=true;
               firebase.auth().signInWithEmailAndPassword(email, password)
@@ -262,88 +269,6 @@ var app = angular.module("users")
 
 
 
-    //
-    var imagePath = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xtf1/v/t1.0-1/13912618_10154625059185827_4804033282118954744_n.jpg?oh=71c307466a6f3cf85ffc580d1a588c02&oe=58C703DB&__gda__=1485738904_e299d10033dcc5340dcf7c055ddfd831";
-//    $scope.messages = [
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//        {
-//          face : imagePath,
-//          what: 'Brunch this weekend?',
-//          who: 'Min Li Chan',
-//          when: '3:08PM',
-//          notes: " I'll be in your neighborhood doing errands"
-//        },
-//      ];
-    //
 
     $scope.messages = [];
 
@@ -405,24 +330,6 @@ var app = angular.module("users")
 
    $scope.tempCourses = [];
 
-//   $scope.courseList=[
-//       {'id' :0,
-//        'code' : 'ICOM5016',
-//        'class': 'selectedButton'
-//       },
-//       {'id' :1,
-//        'code' : 'ICOM4035',
-//        'class': 'unselectedButton'
-//       },
-//       {'id' :2,
-//        'code' : 'ICOM4075',
-//        'class': 'unselectedButton'
-//       },
-//       {'id' :3,
-//        'code' : 'ICOM4009',
-//        'class': 'unselectedButton'
-//        }
-//      ];
 
    $scope.courseList = [];
 
@@ -437,16 +344,12 @@ var app = angular.module("users")
    //$scope.newObject = {'code' : '','arrowIcon': arrowLeftIcon};
 
    function selectedItemChange(item) {
-         //console.log(self.tempCourses);
-         //console.log(item);
-         //console.log(item.Code);
          $scope.isFire=true;
          $scope.item = item;
          $scope.tempCourses.push({'code': $scope.item.Code, 'arrowIcon': arrowLeftIcon});
          //$scope.currentCourses.push({'code': $scope.item.Code, 'arrowIcon': arrowLeftIcon});
 
 
-         //console.log($scope.currentCourses);
    //      $scope.tempCourses.push(item);
         $timeout(function() {
             $scope.isb = false;
@@ -457,14 +360,9 @@ var app = angular.module("users")
         var length = $scope.tempCourses.length;
         for (var i = 0; i < length; i++) {
             $scope.courseList.push($scope.tempCourses[i]);
-            console.log($scope.tempCourses[i]);
             //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
         }
 
-//        console.log(tempCourses);
-//        console.log($scope.currentCourses);
-//        console.log(self.tempCourses.length);
-//        console.log(self.tempCourses[0]);
 //
 //        while(tempCourses.length > 0)
 //        {
@@ -477,7 +375,6 @@ var app = angular.module("users")
 
    function removeCourse() {
            $scope.courseList.splice(courseToDelete,1);
-           console.log($scope.courseList);
 
       }
 
@@ -497,7 +394,6 @@ var app = angular.module("users")
     function deleteCourse(course){
         var index = $scope.courseList.indexOf(course);
         courseToDelete = index;
-        //console.log(courseToDelete);
     }
 
 
@@ -569,12 +465,12 @@ var app = angular.module("users")
     self.isDisabled    = false;
 
     /*Get all courses*/
-    accountsService.allCourses()
-        .then(function(response){
-
-            self.repos = loadAll(response);
-
-        });
+//    accountsService.allCourses()
+//        .then(function(response){
+//
+//            self.repos = loadAll(response);
+//
+//        });
 //    self.repos         = loadAll();
     self.querySearch   = querySearch;
     self.selectedItemChange = selectedItemChange;
@@ -612,28 +508,6 @@ var app = angular.module("users")
      * Build `components` list of key/value pairs
      */
     function loadAll(courses) {
-//      var repos = [
-//        {
-//          'Code': 'ICOM4035',
-//          'Title': 'Data Structures'
-//        },
-//        {
-//          'Code': 'ICOM4075',
-//          'Title': 'Foundations of Computing'
-//        },
-//        {
-//          'Code': 'ICOM4015',
-//          'Title': 'Advanced Programming'
-//        },
-//        {
-//          'Code': 'ICOM4009',
-//          'Title': 'Software Engineering'
-//        },
-//        {
-//          'Code': 'MATE666',
-//          'Title': 'Mate der Diablou'
-//        }
-//      ];
       var repos = [];
       for(var i = 0; i < courses.length; i++)
       {
@@ -680,11 +554,9 @@ var app = angular.module("users")
     function removeChip(chip) {
 //        var data = JSON.parse($scope.tempCourses);
 //        var index = data.map(function(d) { return d['Code']; }).indexOf(chip.Code);
-        //console.log(self.tempCourses);
     }
 
     function requestInfo(ev) {
-      console.log('requesting...')
         $mdDialog.show({
           controller: DialogController,
           templateUrl: 'info.tmpl.html',
@@ -700,7 +572,6 @@ var app = angular.module("users")
       };
 
     $scope.showSignUp = function(ev) {
-      console.log(ev);
         $mdDialog.show({
           controller: DialogController,
           templateUrl: 'signup.tmpl.html',
@@ -735,123 +606,251 @@ var app = angular.module("users")
         function assignUserInfo(users)
         {
             var email = firebase.auth().currentUser.email;
-            for(var i = 0; i < users.length; i++)
+            var userRole;
+
+            if($location.path() === '/home' || $location.path() === '/tutors')
             {
-                if(users[i].userEmail === email)
+                for(var i = 0; i < users.length; i++)
                 {
 
-                    if(users[i].isTutor === 0)
-                    {
-                        var student = users[i];
-                        var id;
-                        studentService.getStudentInfo(users[i].userId)
-                                .then(function(response){
-                                    $scope.userRole = 'student';
-                                    $scope.statusMessage = student.userStatus;
-                                    $scope.userName = student.userFirstName;
-                                    $scope.lastName = student.userLastName;
-                                    $scope.profilePicture = student.userImage;
-                                    id = response[0].studentId;
-                                })
-                                .then(function(){
-                                    studentService.getCountdown(id)
-                                        .then(function(response2){
-//                                            console.log(JSON.stringify(response2));
+                      if(users[i].userEmail === email)
+                      {
+                          if(users[i].isTutor === 0)
+                          {
+                              var student = users[i];
+                              var id;
 
-                                              if($scope.countdown.length>0){
-                                                $timeout(location.reload());
-                                              }
-                                            $scope.countdown = response2[0].title;
-                                            $scope.setDate(new Date(response2[0].time));
-                                            $scope.saveCountdown();
-                                        });
-                                   studentService.getDirectMessages(id)
+                              studentService.getStudentInfo(users[i].userId)
                                        .then(function(response){
-                                           for(var i = 0; i < response.length; i++)
-                                           {
-                                               var object = {'userImage': response[i].userImage,
-                                                               'title': response[i].title,
-                                                               'userFirstName': response[i].userFirstName,
-                                                               'userLastName': response[i].userLastName,
-                                                               'body': response[i].body};
+                                             userRole = 'student';
+                                             $scope.statusMessage = student.userStatus;
+                                             $scope.userName = student.userFirstName;
+                                             $scope.lastName = student.userLastName;
+                                             $scope.profilePicture = student.userImage;
+                                             id = response[0].studentId;
+                                       })
+                                       .then(function(response){
 
-                                               $scope.messages.push(object);
-                                           }
+                                              studentService.getCountdown(id)
+                                                    .then(function(response2){
 
-                                       });
-                                    studentService.getGroupMessages(id)
-                                      .then(function(response){
+                                                          if($scope.countdown.length>0){
+                                                            $timeout(location.reload());
+                                                          }
+                                                        $scope.countdown = response2[0].title;
+                                                        $scope.setDate(new Date(response2[0].time));
+                                                        $scope.saveCountdown();
+                                                    });
+                                              studentService.getDirectMessages(id)
+                                                   .then(function(response){
 
-                                          $scope.groupMessages = [];
-                                          for(var i = 0; i < response.length; i++)
-                                          {
-                                              var object = {'userImage': response[i].userImage,
-                                                              'title': response[i].title,
-                                                              'userFirstName': response[i].userFirstName,
-                                                              'userLastName': response[i].userLastName,
-                                                              'body': response[i].body};
+                                                       $scope.messages = response.map(function(message){
+                                                                                          var obj = {'userImage': message.userImage,
+                                                                                                     'title': message.title,
+                                                                                                     'userFirstName': message.userFirstName,
+                                                                                                     'userLastName': message.userLastName,
+                                                                                                     'body': message.body
+                                                                                                    }
+                                                                                          return obj;
 
-                                              $scope.groupMessages.push(object);
-                                          }
+                                                                                      });
 
-                                      });
+                                                   });
+                                                studentService.getGroupMessages(id)
+                                                  .then(function(response){
 
-                                });
+                                                      $scope.groupMessages = response.map(function(message){
+                                                                                              var obj = {'userImage': message.userImage,
+                                                                                                         'title': message.title,
+                                                                                                         'userFirstName': message.userFirstName,
+                                                                                                         'userLastName': message.userLastName,
+                                                                                                         'body': message.body
+                                                                                                        }
+                                                                                              return obj;
+
+                                                                                          });
+
+                                                  });
+
+                                       })
+                          }
+
+                          else
+                          {
+                              userRole = 'tutors';
+                              $scope.statusMessage = users[i].userStatus;
+                              $scope.profilePicture = users[i].userImage;
+                              $scope.userName = users[i].userFirstName;
+                              tutorsService.getTutorInfo(users[i].userId)
+                                  .then(function(response){
+                                      $scope.tutorID = response[0].tutorId;
+
+                                  })
+                                  .then(function(){
+                                      tutorsService.getTutorCourses($scope.tutorID)
+                                          .then(function(response){
+
+                                              $scope.courseList = response.map(function(course){
+                                                  var obj = {'id': course.courseId,
+                                                             'code': course.courseCode,
+                                                             'name': course.courseName,
+                                                             'availability': function(){
+                                                                                          if(course.available === 0)
+                                                                                          {
+                                                                                              return 'Unavailable'
+                                                                                          }
+                                                                                          else
+                                                                                              return 'Available'
+                                                                                       }
+                                                            }
+                                                  return obj;
+
+                                              });
+
+                                          });
+
+                                      tutorsService.getDirectMessages($scope.tutorID)
+                                          .then(function(response){
+
+                                              $scope.messages = response.map(function(message){
+                                                    var obj = {'userImage': message.userImage,
+                                                               'title': message.title,
+                                                               'userFirstName': message.userFirstName,
+                                                               'userLastName': message.userLastName,
+                                                               'body': message.body
+                                                              }
+                                                    return obj;
+
+                                              });
+
+                                          });
+
+                                  });
+
+
+
+                              }
+
+                              return userRole;
+    //                if(users[i].userEmail === email)
+    //                {
+    //
+    //                    if(users[i].isTutor === 0)
+    //                    {
+    //                        var student = users[i];
+    //                        var id;
+    //                        studentService.getStudentInfo(users[i].userId)
+    //                                .then(function(response){
+    //                                    $scope.userRole = 'student';
+    //                                    $scope.statusMessage = student.userStatus;
+    //                                    $scope.userName = student.userFirstName;
+    //                                    $scope.lastName = student.userLastName;
+    //                                    $scope.profilePicture = student.userImage;
+    //                                    id = response[0].studentId;
+    //                                })
+    //                                .then(function(){
+    //                                    studentService.getCountdown(id)
+    //                                        .then(function(response2){
+    //
+    //                                              if($scope.countdown.length>0){
+    //                                                $timeout(location.reload());
+    //                                              }
+    //                                            $scope.countdown = response2[0].title;
+    //                                            $scope.setDate(new Date(response2[0].time));
+    //                                            $scope.saveCountdown();
+    //                                        });
+    //                                   studentService.getDirectMessages(id)
+    //                                       .then(function(response){
+    //                                           for(var i = 0; i < response.length; i++)
+    //                                           {
+    //                                               var object = {'userImage': response[i].userImage,
+    //                                                               'title': response[i].title,
+    //                                                               'userFirstName': response[i].userFirstName,
+    //                                                               'userLastName': response[i].userLastName,
+    //                                                               'body': response[i].body};
+    //
+    //                                               $scope.messages.push(object);
+    //                                           }
+    //
+    //                                       });
+    //                                    studentService.getGroupMessages(id)
+    //                                      .then(function(response){
+    //
+    //                                          $scope.groupMessages = [];
+    //                                          for(var i = 0; i < response.length; i++)
+    //                                          {
+    //                                              var object = {'userImage': response[i].userImage,
+    //                                                              'title': response[i].title,
+    //                                                              'userFirstName': response[i].userFirstName,
+    //                                                              'userLastName': response[i].userLastName,
+    //                                                              'body': response[i].body};
+    //
+    //                                              $scope.groupMessages.push(object);
+    //                                          }
+    //
+    //                                      });
+    //
+    //                                });
+    //                    }
+    //
+    //                    else
+    //                    {
+    //                        $scope.userRole = 'tutors';
+    //                        $scope.statusMessage = users[i].userStatus;
+    //                        $scope.profilePicture = users[i].userImage;
+    //                        $scope.userName = users[i].userFirstName;
+    //                        tutorsService.getTutorInfo(users[i].userId)
+    //                            .then(function(response){
+    //                                $scope.tutorID = response[0].tutorId;
+    //
+    //                            })
+    //                            .then(function(){
+    //                                tutorsService.getTutorCourses($scope.tutorID)
+    //                                    .then(function(response){
+    //
+    //                                        function setAvailability(av)
+    //                                        {
+    //                                            if(av === 0)
+    //                                                return 'Unavailable';
+    //                                            else
+    //                                                return 'Available';
+    //                                        }
+    //
+    //                                        for(var i = 0; i < response.length; i++)
+    //                                        {
+    //                                            var object = {'id': response[i].courseId,
+    //                                                        'code': response[i].courseCode,
+    //                                                        'name': response[i].courseName,
+    //                                                        'availability': setAvailability(response[i].available)};
+    //                                            $scope.courseList.push(object);
+    //                                        }
+    //                                    });
+    //
+    //                                tutorsService.getDirectMessages($scope.tutorID)
+    //                                    .then(function(response){
+    //                                        for(var i = 0; i < response.length; i++)
+    //                                        {
+    //                                            var object = {'userImage': response[i].userImage,
+    //                                                            'title': response[i].title,
+    //                                                            'userFirstName': response[i].userFirstName,
+    //                                                            'userLastName': response[i].userLastName,
+    //                                                            'body': response[i].body};
+    //
+    //                                            $scope.messages.push(object);
+    //                                        }
+    //
+    //                                    });
+    //
+    //                            });
+    //                    }
+    //
+    //                    break;
                     }
 
-                    else
-                    {
-                        $scope.userRole = 'tutors';
-                        $scope.statusMessage = users[i].userStatus;
-                        $scope.profilePicture = users[i].userImage;
-                        $scope.userName = users[i].userFirstName;
-                        tutorsService.getTutorInfo(users[i].userId)
-                            .then(function(response){
-                                $scope.tutorID = response[0].tutorId;
 
-                            })
-                            .then(function(){
-                                tutorsService.getTutorCourses($scope.tutorID)
-                                    .then(function(response){
-
-                                        function setAvailability(av)
-                                        {
-                                            if(av === 0)
-                                                return 'Unavailable';
-                                            else
-                                                return 'Available';
-                                        }
-
-                                        for(var i = 0; i < response.length; i++)
-                                        {
-                                            var object = {'id': response[i].courseId,
-                                                        'code': response[i].courseCode,
-                                                        'name': response[i].courseName,
-                                                        'availability': setAvailability(response[i].available)};
-                                            $scope.courseList.push(object);
-                                        }
-                                    });
-
-                                tutorsService.getDirectMessages($scope.tutorID)
-                                    .then(function(response){
-                                        console.log(JSON.stringify(response));
-                                        for(var i = 0; i < response.length; i++)
-                                        {
-                                            var object = {'userImage': response[i].userImage,
-                                                            'title': response[i].title,
-                                                            'userFirstName': response[i].userFirstName,
-                                                            'userLastName': response[i].userLastName,
-                                                            'body': response[i].body};
-
-                                            $scope.messages.push(object);
-                                        }
-
-                                    });
-
-                            });
-                    }
-                }
             }
+
+        }
         }
 
         $scope.setCalendar = function(){
