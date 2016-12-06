@@ -60,6 +60,8 @@ var app = angular.module("users")
         $scope.saveCountdown();
 
         //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
+        var newCountdown = {"countdownId":1,"newTime":"2016-01-01","newTitle":"Christmds"} 
+        studentService.setCountdown(newCountdown);
   }
 
 

@@ -15,9 +15,10 @@ var app = angular.module("users")
    $scope.sid;
 
    var email = firebase.auth().currentUser.email;
-
-   studentService.getID(email)
+   console.log("email es: "+email)
+   studentService.getID("'"+email+"'")
           .then(function(response) {
+               console.log("response: "+response);
                $scope.sid = response[0].studentId;
           })
           .then(function(){
