@@ -376,7 +376,6 @@ var app = angular.module("users")
 
    function removeCourse() {
            $scope.courseList.splice(courseToDelete,1);
-
       }
 
     $scope.toggleCourse = function(teidx){
@@ -811,18 +810,29 @@ var app = angular.module("users")
             })
           }
 
-          $scope.exit = function(){
+          $scope.exit = function(tutorId,courseId){
+            var data = {"courseId":courseId, "tutorId":tutorId}
             swal({
               title: 'Are you sure?',
               type: 'warning',
               showCancelButton: true,
               confirmButtonText: 'Yes, remove!'
             }).then(function () {
-              swal(
-                'Removed!',
-                'You are no longer teaching the course.',
-                'success'
+              tutorsService.removeCourse(data).then(
+                swal(
+                  'Removed!',
+                  'You are no longer teaching the course.',
+                  'success'
+                )
               )
+              .then(null, function(err){
+                swal(
+                  'Sorry!',
+                  'You have to teach this course forever... For now.',
+                  'error'
+                )
+              })
+
             })
           }
 

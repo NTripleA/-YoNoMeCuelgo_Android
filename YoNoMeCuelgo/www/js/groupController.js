@@ -191,25 +191,23 @@ var app = angular.module("users")
     }
 
     $scope.submitGroup = function(){
-        submit = true;
-        for (var i = 0; i < $scope.selectedItems.length; i++){
-            var objectList = $scope.myGroupsList;
-            var length3 = objectList.length;
-            var object = $scope.myGroupsList[length3-1];
-            $scope.selectedItems[i].id = object.id + 1;
-            $scope.myGroupsList.push($scope.selectedItems[i]);
-        }
-        //$location.path('#/groups');
-        if ($scope.createGroup == true) {
-            objectList = $scope.myGroupsList;
-            length4 = objectList.length;
-            object = $scope.myGroupsList[length4-1];
-            $scope.newObject.id = object.id + 1;
-            $scope.myGroupsList.push($scope.newObject);
-
-
-
-        }
+      console.log("");
+        // submit = true;
+        // for (var i = 0; i < $scope.selectedItems.length; i++){
+        //     var objectList = $scope.myGroupsList;
+        //     var length3 = objectList.length;
+        //     var object = $scope.myGroupsList[length3-1];
+        //     $scope.selectedItems[i].id = object.id + 1;
+        //     $scope.myGroupsList.push($scope.selectedItems[i]);
+        // }
+        // //$location.path('#/groups');
+        // if ($scope.createGroup == true) {
+        //     objectList = $scope.myGroupsList;
+        //     length4 = objectList.length;
+        //     object = $scope.myGroupsList[length4-1];
+        //     $scope.newObject.id = object.id + 1;
+        //     $scope.myGroupsList.push($scope.newObject);
+        // }
     }
 
     $scope.saveGroup = function(tempGroups) {
@@ -269,11 +267,20 @@ var app = angular.module("users")
 
          $scope.answer = function(answer,items) {
            if (answer==="useful"){
-             swal(
-               'Joined!',
-               'Group(s) added.',
-               'success'
-             )
+             items = {"courseId":2,"groupName":"'LosBorraoos'","groupCapacity":2,"studentId":1}
+             studentService.newGroup(items).then(
+               swal(
+                 'Joined!',
+                 'Group(s) added.',
+                 'success'
+               )
+             ).then(null,function(error){
+               swal(
+                 'Sorry',
+                 'You have no access to this group.. For now',
+                 'error'
+               )
+             })
 
              $mdDialog.hide(answer);
            }
@@ -303,22 +310,25 @@ var app = angular.module("users")
         showCancelButton: true,
         confirmButtonText: 'Yes, leave!'
       }).then(function () {
-        swal(
-          'Removed!',
-          'You are no longer in the group.',
-          'success'
-        )
-
         var groupToLeave = {"studentId": $scope.sid,
                         "groupsId": group.id}
 
-        console.log(groupToLeave);
         studentService.leaveGroup(groupToLeave)
               .then(function(){
-                    getGroupInfo();
+                swal(
+                  'Removed!',
+                  'You are no longer in the group.',
+                  'success'
+                )
+                getGroupInfo();
               })
-
-
+              .then(null, function(err){
+                swal(
+                  'Sorry!',
+                  'You are stuck in this group... For now',
+                  'error'
+                )
+              })
       })
     }
 
