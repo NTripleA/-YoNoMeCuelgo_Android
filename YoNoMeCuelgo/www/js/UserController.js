@@ -465,12 +465,12 @@ var app = angular.module("users")
     self.isDisabled    = false;
 
     /*Get all courses*/
-//    accountsService.allCourses()
-//        .then(function(response){
-//
-//            self.repos = loadAll(response);
-//
-//        });
+    accountsService.allCourses()
+        .then(function(response){
+
+            self.repos = loadAll(response);
+
+        });
 //    self.repos         = loadAll();
     self.querySearch   = querySearch;
     self.selectedItemChange = selectedItemChange;
@@ -509,12 +509,21 @@ var app = angular.module("users")
      */
     function loadAll(courses) {
       var repos = [];
-      for(var i = 0; i < courses.length; i++)
-      {
-        var object = {'Code': courses[i].courseCode,
-                        'Title': courses[i].courseName}
-        repos.push(object);
-      }
+//      for(var i = 0; i < courses.length; i++)
+//      {
+//        var object = {'Code': courses[i].courseCode,
+//                        'Title': courses[i].courseName}
+//        repos.push(object);
+//      }
+
+      repos = courses.map(function(course){
+          var object = {'Code': course.courseCode,
+                        'Title': course.courseName}
+
+          return object;
+
+      });
+
       return repos.map( function (repo) {
         repo.value = repo.Code.toLowerCase()+'-'+repo.Title.toLowerCase();
         return repo;
@@ -702,7 +711,7 @@ var app = angular.module("users")
                                                   var obj = {'id': course.courseId,
                                                              'code': course.courseCode,
                                                              'name': course.courseName,
-                                                             'availability': getAvailability(course.ava)
+                                                             'availability': getAvailability(course.available)
                                                             }
                                                   return obj;
 
