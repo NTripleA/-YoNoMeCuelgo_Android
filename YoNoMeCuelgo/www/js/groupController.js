@@ -15,7 +15,7 @@ var app = angular.module("users")
 
     var email = firebase.auth().currentUser.email;
 
-    studentService.getID(email)
+    studentService.getID("'"+email+"'")
           .then(function(response){
                 $scope.sid = response[0].studentId;
                 getGroupInfo();

@@ -5,6 +5,7 @@ function($http) {
 
   var host = "http://localhost:8080";
 //  var host = "https://glacial-journey-85518.herokuapp.com";
+  // var host = "https://fierce-forest-40729.herokuapp.com";
 	var studentService = {};
 	studentService.getStudents = function () {
 		return $http.get(host+"/allstudents")
@@ -91,8 +92,8 @@ function($http) {
         		});
         	}
     studentService.getID = function(email)
-    {
-            em = {"userEmail": '\''+email+'\''};
+    {       console.log("emailService: "+email);
+            em = {"email":email};
             return $http.post(host+"/getId", em)
             .then(function(response) {
                 return response.data;
@@ -125,7 +126,7 @@ function($http) {
      }
 
      studentService.setCountdown = function(data)
-     {
+     {        console.log(JSON.stringify(data));
               return $http.put(host+"/newCountdown", data)
                       .then(function(response) {
                           console.log(response);

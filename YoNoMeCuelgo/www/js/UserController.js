@@ -31,6 +31,7 @@ var app = angular.module("users")
         // GET User Information
         var id;
         var userRole;
+        console.log(firebase.auth().currentUser);
         if(firebase.auth().currentUser != null)
         {
             accountsService.getUsers()
@@ -635,10 +636,6 @@ var app = angular.module("users")
 
                                               studentService.getCountdown(id)
                                                     .then(function(response2){
-
-                                                          if($scope.countdown.length>0){
-                                                            $timeout(location.reload());
-                                                          }
                                                         $scope.countdown = response2[0].title;
                                                         $scope.setDate(new Date(response2[0].time));
                                                         $scope.saveCountdown();
@@ -748,7 +745,7 @@ var app = angular.module("users")
 
           $scope.saveCountdown = function(){
               $scope.showName = false;
-              $scope.newCountdown.newTitle = '\''+$scope.countdown+'\'';
+              $scope.newCountdown.newTitle = $scope.countdown;
               studentService.setCountdown($scope.newCountdown);
           }
 
@@ -793,9 +790,9 @@ var app = angular.module("users")
 
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
 
-                $scope.newCountdown = {'countdownId': '\''+$scope.countdownId+'\'',
-                                    'newTime': date,
-                                    'newTitle': '\''+$scope.countdown+'\''}
+                $scope.newCountdown = {'countdownId': $scope.countdownId,
+                                    'newTime': year.toString()+'-'+month.toString()+'-'+day.toString(),
+                                    'newTitle': $scope.countdown}
 
           }
 
