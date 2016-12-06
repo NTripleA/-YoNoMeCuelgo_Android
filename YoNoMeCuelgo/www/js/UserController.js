@@ -693,17 +693,20 @@ var app = angular.module("users")
                                           .then(function(response){
 
                                               $scope.courseList = response.map(function(course){
+
+                                                  function getAvailability(availability){
+                                                      if(availability === 0)
+                                                      {
+                                                          return 'Unavailable'
+                                                      }
+                                                      else
+                                                          return 'Available'
+                                                   }
+
                                                   var obj = {'id': course.courseId,
                                                              'code': course.courseCode,
                                                              'name': course.courseName,
-                                                             'availability': function(){
-                                                                                          if(course.available === 0)
-                                                                                          {
-                                                                                              return 'Unavailable'
-                                                                                          }
-                                                                                          else
-                                                                                              return 'Available'
-                                                                                       }
+                                                             'availability': getAvailability(course.ava)
                                                             }
                                                   return obj;
 

@@ -23,8 +23,8 @@
       <file leaf-file-name="UserController.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/js/UserController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="99">
-              <caret line="762" column="22" selection-start-line="762" selection-start-column="22" selection-end-line="762" selection-end-column="22" />
+            <state relative-caret-position="495">
+              <caret line="708" column="103" selection-start-line="708" selection-start-column="103" selection-end-line="708" selection-end-column="103" />
               <folding />
             </state>
           </provider>
@@ -33,7 +33,7 @@
       <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/src/home/view/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
+            <state relative-caret-position="738">
               <caret line="41" column="44" selection-start-line="41" selection-start-column="44" selection-end-line="41" selection-end-column="44" />
               <folding />
             </state>
@@ -65,7 +65,7 @@
       <file leaf-file-name="studentService.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/js/services/studentService.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
+            <state relative-caret-position="2304">
               <caret line="128" column="26" selection-start-line="128" selection-start-column="26" selection-end-line="128" selection-end-column="26" />
               <folding />
             </state>
@@ -144,8 +144,8 @@
         <option value="$PROJECT_DIR$/www/tabDialog.tmpl.html" />
         <option value="$PROJECT_DIR$/www/js/groupController.js" />
         <option value="$PROJECT_DIR$/www/src/home/view/home.html" />
-        <option value="$PROJECT_DIR$/www/js/UserController.js" />
         <option value="$PROJECT_DIR$/www/js/services/studentService.js" />
+        <option value="$PROJECT_DIR$/www/js/UserController.js" />
       </list>
     </option>
   </component>
@@ -180,9 +180,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -305,6 +303,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -1007,7 +1007,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/src/home/view/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
+        <state relative-caret-position="738">
           <caret line="41" column="44" selection-start-line="41" selection-start-column="44" selection-end-line="41" selection-end-column="44" />
           <folding />
         </state>
@@ -1015,7 +1015,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/js/services/studentService.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
+        <state relative-caret-position="2304">
           <caret line="128" column="26" selection-start-line="128" selection-start-column="26" selection-end-line="128" selection-end-column="26" />
           <folding />
         </state>
@@ -1023,8 +1023,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/www/js/UserController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="762" column="22" selection-start-line="762" selection-start-column="22" selection-end-line="762" selection-end-column="22" />
+        <state relative-caret-position="495">
+          <caret line="708" column="103" selection-start-line="708" selection-start-column="103" selection-end-line="708" selection-end-column="103" />
           <folding />
         </state>
       </provider>
