@@ -157,7 +157,9 @@ var app = angular.module("users")
                                               .then(function(response2){
                                                   $scope.countdown = response2[0].title;
                                                   $scope.setDate(new Date(response2[0].time));
-                                                  $scope.saveCountdown();
+                                                  // $scope.saveCountdown();
+                                                  $scope.showName = false;
+                                                  $scope.newCountdown.newTitle = $scope.countdown;
                                               });
                                         studentService.getDirectMessages($scope.userId)
                                              .then(function(response){
@@ -167,7 +169,8 @@ var app = angular.module("users")
                                                                                                'title': message.title,
                                                                                                'userFirstName': message.userFirstName,
                                                                                                'userLastName': message.userLastName,
-                                                                                               'body': message.body
+                                                                                               'body': message.body,
+                                                                                               'senderId':message.tutorId
                                                                                               }
                                                                                     return obj;
 
@@ -1118,7 +1121,7 @@ var app = angular.module("users")
                   });
               }, 5000);
           //
-          $scope.message = function(tutorId,tutorName,studentId,userId){
+          $scope.sendMessage = function(tutorId,tutorName,studentId,userId){
            swal({
              title: 'Contact '+tutorName,
              input: 'text',
