@@ -161,7 +161,7 @@ var app = angular.module("users")
                                         studentService.getDirectMessages($scope.userId)
                                              .then(function(response){
 
-                                                 $scope.messages = response.map(function(message){
+                                                 $scope.messages = response.reverse().map(function(message){
                                                                                     var obj = {'userImage': message.userImage,
                                                                                                'title': message.title,
                                                                                                'userFirstName': message.userFirstName,
