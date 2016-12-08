@@ -51,6 +51,7 @@ var app = angular.module("users")
 
     $scope.currentPage=1;
     $scope.pageSize=3;
+    $scope.coursesPageSize = 2;
     var self = this;
     $scope.statusMessage = 'El ser humano es vago por naturaleza';
     self.loggedIn = false;

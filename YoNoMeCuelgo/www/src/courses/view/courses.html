@@ -27,7 +27,7 @@
                 <md-divider ></md-divider>
               </md-list-item>
             </md-list>
-              <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
+              <div dir-paginate="tutor in course.tutors| itemsPerPage: coursesPageSize" current-page="currentPage" pagination-id="course.code">
                 <md-list-item layout="row">
                   <img flex="10" ng-src="{{tutor.image}}" class="md-avatar" />
                   <!--<div class="md-list-item-text" layout="row">-->
@@ -71,7 +71,7 @@
                 <md-divider ></md-divider>
               </md-list-item>
             </md-list>
-            <div dir-paginate="tutor in course.tutors| itemsPerPage: pageSize" current-page="currentPage" pagination-id="course.code">
+            <div dir-paginate="tutor in course.tutors| itemsPerPage: coursesPageSize" current-page="currentPage" pagination-id="course.code">
                 <md-list-item layout="row">
                   <img flex="10" ng-src="{{tutor.image}}" class="md-avatar" />
                   <!--<div class="md-list-item-text" layout="row">-->
