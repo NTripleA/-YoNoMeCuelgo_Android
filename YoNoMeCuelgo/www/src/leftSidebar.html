@@ -1,5 +1,5 @@
 
-<md-sidenav ng-show="isUserVerified()" id="sidenav" ng-click="user.toggleList()" md-component-id="left" class="md-whiteframe-z2" >
+<md-sidenav id="sidenav" ng-click="user.toggleList()" md-component-id="left" class="md-whiteframe-z2" >
     <md-list>
         <md-card style="margin:0px; margin-bottom:4%; background-image:url('https://cdn-images-2.medium.com/max/1920/1*zH86wd-3URNeM_MoeaBQuQ.jpeg');" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
             <md-card-title>
@@ -17,31 +17,31 @@
             </md-card-actions>
         </md-card>
 
-        <md-list-item ng-if="userRole=='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole=='tutors'" layout="row">
             <md-button ng-click="route('/tutors')" layout="row">
                 <p class="fa fa-home fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Home</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/home')" layout="row">
                 <p class="fa fa-home fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Home</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="toggleRightList()" layout="row">
                 <p class="fa fa-envelope fa-lg" flex="20"></p>
                 <p flex="80">Inbox</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/courses')" layout="row">
                 <p class="fa fa-book fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Courses</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/groups')" layout="row">
                 <p class="fa fa-users fa-lg" flex="20" data-toggle="modal" data-target='#'></p>
                 <p flex="80" data-toggle="modal" data-target='#'>Groups</p>

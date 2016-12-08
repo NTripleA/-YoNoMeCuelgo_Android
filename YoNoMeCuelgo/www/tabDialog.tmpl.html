@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)" ng-controller="groupController">
+<md-dialog ng-controller="groupController">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -45,9 +45,14 @@
                             <input ng-model="group.limit" type="text" ng-blur="update(group.limit, 'limit')">
                         </md-input-container>
                         <md-input-container class="md-icon-float md-block" style="margin-top: -2%;">
-                            <label>Course</label>
                             <md-icon class="fa fa-list-alt"></md-icon>
-                            <input ng-model="group.course" type="text" ng-blur="update(group.course, 'course')">
+                            <select class="form-control" ng-model="group.course" ng-change="update(group.course, 'course')">
+                                <option disabled selected value>Select a course</option>
+                                <option ng-repeat="course in courseList"> {{ course.code }}-{{ course.title }} </option>
+                            </select>
+                            <!-- <label>Course</label>
+                            <md-icon class="fa fa-list-alt"></md-icon>
+                            <input ng-model="group.course" type="text" ng-blur="update(group.course, 'course')"> -->
                         </md-input-container>
                     </md-content>
                 </md-tab>
