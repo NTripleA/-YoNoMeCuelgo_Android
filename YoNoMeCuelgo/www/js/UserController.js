@@ -1,7 +1,7 @@
 var app = angular.module("users")
     .controller('UserController',['userService', 'studentService', 'tutorsService','accountsService','$mdSidenav','$mdBottomSheet', '$timeout', '$log', '$scope', '$mdDialog', '$location', '$q', '$route', function(userService, studentService, tutorsService, accountsService, $mdSidenav, $mdBottomSheet, $timeout, $log, $scope, $mdDialog, $location, $q, $route)
     {
-
+      console.log("COntroller");
   /**
    * Main Controller for the Angular Material Starter App
    * @param $scope
@@ -9,7 +9,7 @@ var app = angular.module("users")
    * @param avatarsService
    * @constructor
    */
-
+   $scope.flag="Working...";
     $scope.authenticating = true;
     $scope.personalInfo = false;
     $scope.roleInfo = false;
@@ -91,6 +91,7 @@ var app = angular.module("users")
                                  .then(function(response){
                                       console.log(response);
                                        userRole = 'student';
+                                       $scope.userRole = userRole;
                                        $scope.statusMessage = response[0].userStatus;
                                        $scope.userName = response[0].userFirstName;
                                        $scope.lastName = response[0].userLastName;
@@ -108,7 +109,7 @@ var app = angular.module("users")
                                                   $scope.setDate(new Date(response2[0].time));
                                                   $scope.saveCountdown();
                                               });
-                                        studentService.getDirectMessages(id)
+                                        studentService.getDirectMessages($scope.userId)
                                              .then(function(response){
 
                                                  $scope.messages = response.map(function(message){
@@ -140,7 +141,7 @@ var app = angular.module("users")
                                             });
 
                                  })
-                        //
+                        $scope.route('/home');
                     }
 
                     //If is tutor
@@ -149,6 +150,7 @@ var app = angular.module("users")
                       tutorsService.getTutorInfo($scope.userId)
                                             .then(function(response){
                                                 userRole = 'tutors';
+                                                $scope.userRole = userRole;
                                                 $scope.statusMessage = response[0].userStatus;
                                                 $scope.profilePicture = response[0].userImage;
                                                 $scope.userName = response[0].userFirstName;
@@ -178,15 +180,16 @@ var app = angular.module("users")
 
                                                     });
 
-                                                tutorsService.getDirectMessages($scope.tutorID)
+                                                tutorsService.getDirectMessages($scope.userId)
                                                     .then(function(response){
 
-                                                        $scope.messages = response.map(function(message){
+                                                        $scope.messages = response.reverse().map(function(message){
                                                               var obj = {'userImage': message.userImage,
                                                                          'title': message.title,
                                                                          'userFirstName': message.userFirstName,
                                                                          'userLastName': message.userLastName,
-                                                                         'body': message.body
+                                                                         'body': message.body,
+                                                                         'senderId':message.studentId
                                                                         }
                                                               return obj;
 
@@ -195,25 +198,28 @@ var app = angular.module("users")
                                                     });
 
                                             });
-                      //
+                      $scope.route('/tutors');
                     }
 
                     // userRole = assignUserInfo(response);
-                })
-                .then(function(){
-                      if(userRole === 'tutors'){
-                        // id=1;
-                        $scope.route('/tutors');
-                  //        $route.reload();
-                      }
-                      else{
-
-                        // id=2;
-                        $scope.route('/home');
-                  //        $route.reload();
-                      }
-
                 });
+                // .then(function(userRole){
+                //     console.log(userRole);
+                //       if(userRole === 'tutors'){
+                //         // id=1;
+                //         console.log('going to tutors');
+                //         $scope.route('/tutors');
+                //   //        $route.reload();
+                //       }
+                //       else{
+                //
+                //         // id=2;
+                //         console.log('going home');
+                //         $scope.route('/home');
+                //   //        $route.reload();
+                //       }
+                //
+                // });
 
         }
     }
@@ -250,11 +256,9 @@ var app = angular.module("users")
   }
 });
 
-    $scope.logIn = function(){
+    $scope.logIn = function(email,password){
         console.log("");
             var validated = true;
-            var email = $scope.userEmail;
-            var password = $scope.userPassword;
             if (typeof email === 'undefined' || !email) {
               swal("Please type an email", "", "warning");
               validated = false;
@@ -976,11 +980,12 @@ var app = angular.module("users")
               showCancelButton: true,
               confirmButtonText: 'Send'
             }).then(function () {
-              swal(
-                'Sent!',
-                '',
-                'success'
-              )
+
+              // swal(
+              //   'Sent!',
+              //   '',
+              //   'success'
+              // )
             })
           }
 

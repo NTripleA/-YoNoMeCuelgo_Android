@@ -52,7 +52,9 @@
 <!-- Pen Title-->
 
 <div class="md-padding"></div>
-<div class="container" ng-controller="UserController">
+<!-- <div class="container" ng-controller="UserController"> -->
+<div class="container">
+  {{flag}}
   <div class="card"></div>
   <div class="card">
     <h1 class="title">#yonomecuelgo</h1>
@@ -68,7 +70,7 @@
         <div class="bar"></div>
       </div>
       <div class="button-container">
-        <button ng-click="logIn()"><span>LOG IN</span></button>
+        <button ng-click="logIn(userEmail,userPassword)"><span>LOG IN</span></button>
       </div>
       <div class="footer"><a ng-click="forgotPassword()">Forgot your password?</a></div>
     </form>

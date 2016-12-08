@@ -93,10 +93,9 @@ function($http) {
         			console.error(err);
         		});
         	}
-    studentService.getID = function(email)
-    {       console.log("emailService: "+email);
-            em = {"email":email};
-            return $http.post(host+"/getId", em)
+    studentService.getID = function(email){
+            var data = {"email":email}
+            return $http.post(host+"/getId", data)
             .then(function(response) {
                 return response.data;
             })
