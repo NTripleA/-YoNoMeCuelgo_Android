@@ -74,8 +74,8 @@ var app = angular.module("users")
         if(firebase.auth().currentUser != null)
         {
           $scope.loading=true;
-          // var email = firebase.auth().currentUser.email;
-          var email = 'tahiri.fuentes@upr.edu';
+          var email = firebase.auth().currentUser.email;
+          // var email = 'tahiri.fuentes@upr.edu';
           // email.email = $scope.userEmail;
           console.log(email);
             studentService.getID(email)
