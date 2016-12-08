@@ -13,19 +13,19 @@ var app = angular.module("users")
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
 
 
-
+  if($location.path() === '/groups'){
     var email = firebase.auth().currentUser.email;
 
-    studentService.getID(email)
+    studentService.getID('nelson.alemar@upr.edu')
           .then(function(response){
                 $scope.sid = response[0].studentId;
                 getGroupInfo();
           });
-
+    }
     function getGroupInfo()
     {
-        if($location.path() === '/groups')
-          {
+
+
               studentService.getStudentCourses($scope.sid)
                                   .then(function(response){
 
@@ -42,7 +42,7 @@ var app = angular.module("users")
                                       self.courseList = $scope.courseList;
 
                                   });
-          }
+
 
       studentService.getStudentGroups($scope.sid)
              .then(function(response) {
@@ -308,7 +308,7 @@ var app = angular.module("users")
 
              $scope.items = self.selectedItems;
              console.log(items);
-             
+
              if ($scope.addGroup.length > 0) {
                studentService.joinGroup($scope.items).then(
                  swal(

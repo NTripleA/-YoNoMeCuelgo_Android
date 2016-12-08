@@ -101,6 +101,55 @@ var app = angular.module("users")
                                        $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
                                        $scope.studentId = id;
                                  })
+                                 .then(function(){
+                                   studentService.getStudentCourses($scope.studentId)
+                                      .then(function(response){
+
+                                          $scope.courseList = response.map(function(course){
+                                               var obj = {'code': course.courseCode,
+                                                          'name': course.courseName,
+                                                          'tutors': course.tutors.map(function(tutor){
+                                                                           var tut = {'first': tutor.userFirstName,
+                                                                                      'last': tutor.userLastName,
+                                                                                      'image': tutor.userImage,
+                                                                                      'id':tutor.tutorId,
+                                                                                      'email':tutor.userEmail
+                                                                                     }
+                                                                           return tut;F
+                                                                     })
+                                                         }
+
+                                               return obj;
+                                          });
+                                      })
+                                      .then(function(){
+                                        studentService.getStudentGroups($scope.studentId)
+                                               .then(function(response) {
+
+                                               var groups = response;
+
+                                                    $scope.myGroupsList = groups.map(function(group){
+                                                                      var g = {'id': group.groupId,
+                                                                                   'idc': group.courseId,
+                                                                                   'name': group.groupName,
+                                                                                   'size': group.groupSize,
+                                                                                   'limit': group.groupCapacity,
+                                                                                   'members': group.members.map(function(member){
+                                                                                                                    var mem = {'first': member.userFirstName,
+                                                                                                                               'last': member.userLastName,
+                                                                                                                               'image': member.userImage
+                                                                                                                              }
+                                                                                                                    return mem;
+                                                                                                                })
+                                                                                  }
+                                                                      return g;
+
+                                                                });
+
+
+                                               });
+                                      });
+                                 })
                                  .then(function(response){
 
                                         studentService.getCountdown(id)
@@ -1068,5 +1117,59 @@ var app = angular.module("users")
                   });
               }, 5000);
           //
+          $scope.message = function(tutorId,tutorName,studentId,userId){
+           swal({
+             title: 'Contact '+tutorName,
+             input: 'text',
+             showCancelButton: true,
+             inputValidator: function (value) {
+               return new Promise(function (resolve, reject) {
+                 if (value) {
+                   resolve()
+                 } else {
+                   reject('You need to write something!')
+                 }
+               })
+             }
+           }).then(function (result) {
+             var data = {"message":"'"+result+"'","studentId":studentId,"tutorId":tutorId,"userId":userId}
+             studentService.sendMessage(data).then(
+               swal(
+                 'Sent!',
+                 'The tutor has been notified.',
+                 'success'
+               )
+             );
+           })
+         }
 
+          $scope.donate = function(sender){
+           //  swal({
+           //    title: 'Send gift card?',
+           //    imageUrl: 'https://cdn.shopify.com/s/files/1/0662/0785/products/e38bd83af578077b65a31424bd24d085_1024x1024.png?v=1412203835',
+           //    imageWidth: 400,
+           //    imageHeight: 200,
+           //    animation: false,
+           //    showCancelButton: true,
+           //    confirmButtonText: 'Yes'
+           //  }).then(function () {
+           //    swal(
+           //      'Sent!',
+           //      'The tutor will be greatful.',
+           //      'success'
+           //    )
+           //  })
+               var senderName = sender;
+               var recipientName = 'Israel';
+               var recipientPhone = '7875181788';
+               var recipientEmail = 'israel.figueroa1@upr.edu';
+               var demo = 'yifti';
+               var production = 'yiftee';
+               var page = 'http://app.'+demo+'.com/api/v1/gifts/send.html?api_token=1a461040ef067dea7f40fd8ef3b2663c4&sender_name='+senderName+'&recipient_name='+recipientName+'&recipient_email='+recipientEmail
+               swal({
+                 html:'<iframe style="border: 0px; height:300px; " src="' + page + '" width="100%" height="100%"></iframe>',
+                 showCancelButton : true,
+                 showConfirmButton : false
+               })
+          }
   }]);

@@ -13,42 +13,6 @@ var app = angular.module("users")
    //Get Student Courses
    $scope.sid;
 
-   var email = firebase.auth().currentUser.email;
-   console.log("email es: "+email)
-   studentService.getID(email)
-          .then(function(response) {
-               console.log("response: "+response);
-               $scope.sid = response[0].studentId;
-          })
-          .then(function(){
-               getStudentInfo($scope.sid);
-          });
-
-   function getStudentInfo(id)
-   {
-      studentService.getStudentCourses(id)
-         .then(function(response){
-
-             $scope.courseList = response.map(function(course){
-                  var obj = {'code': course.courseCode,
-                             'name': course.courseName,
-                             'tutors': course.tutors.map(function(tutor){
-                                              var tut = {'first': tutor.userFirstName,
-                                                         'last': tutor.userLastName,
-                                                         'image': tutor.userImage,
-                                                         'id':tutor.tutorId,
-                                                         'email':tutor.userEmail
-                                                        }
-                                              return tut;F
-                                        })
-                            }
-
-                  return obj;
-             });
-         });
-
-   }
-
    $scope.route = function(path){
        $location.path(path);
    }
