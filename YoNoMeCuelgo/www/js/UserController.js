@@ -97,7 +97,6 @@ var app = angular.module("users")
                                        $scope.userName = response[0].userFirstName;
                                        $scope.lastName = response[0].userLastName;
                                        $scope.profilePicture = response[0].userImage;
-                                       $scope.countdownId = response[0].countdownId;
                                        id = response[0].studentId;
                                        $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
                                        $scope.studentId = id;
@@ -1020,7 +1019,7 @@ var app = angular.module("users")
 
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
 
-                $scope.newCountdown = {'countdownId': $scope.countdownId,
+                $scope.newCountdown = {'studentId': $scope.studentId,
                                     'newTime': year.toString()+'-'+month.toString()+'-'+day.toString(),
                                     'newTitle': $scope.countdown}
 
