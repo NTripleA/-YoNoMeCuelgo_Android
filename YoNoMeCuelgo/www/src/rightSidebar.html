@@ -6,7 +6,7 @@
         <section>
           <md-subheader class="md-primary">Direct Messages</md-subheader>
           <md-list layout-padding>
-            <md-list-item class="md-3-line" ng-repeat="message in messages" ng-click="replyMessage()">
+            <md-list-item class="md-3-line" ng-repeat="message in messages" ng-click="sendMessage(message.senderId,message.userFirstName,studentId,userId)">
                 <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
                 <div class="md-list-item-text">
                   <h3>{{message.title}}</h3>

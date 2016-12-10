@@ -8,44 +8,10 @@ var app = angular.module("users")
    $scope.currentPage2=1;
    $scope.pageSize2=2;
 
-
    $scope.courseList = [];
 
    //Get Student Courses
    $scope.sid;
-
-   var email = firebase.auth().currentUser.email;
-
-   studentService.getID(email)
-          .then(function(response) {
-               $scope.sid = response[0].studentId;
-          })
-          .then(function(){
-               getStudentInfo($scope.sid);
-          });
-
-   function getStudentInfo(id)
-   {
-      studentService.getStudentCourses(id)
-         .then(function(response){
-
-             $scope.courseList = response.map(function(course){
-                  var obj = {'code': course.courseCode,
-                             'name': course.courseName,
-                             'tutors': course.tutors.map(function(tutor){
-                                              var tut = {'first': tutor.userFirstName,
-                                                         'last': tutor.userLastName,
-                                                         'image': tutor.userImage
-                                                        }
-                                              return tut;F
-                                        })
-                            }
-
-                  return obj;
-             });
-         });
-
-   }
 
    $scope.route = function(path){
        $location.path(path);
@@ -93,20 +59,31 @@ var app = angular.module("users")
      return tutors;
    }
 
-   $scope.message = function(){
-     swal({
-       title: 'Contact Tutor.',
-       input: 'text',
-       showCancelButton: true,
-       confirmButtonText: 'Send'
-     }).then(function () {
-       swal(
-         'Sent!',
-         'The tutor has been notified.',
-         'success'
-       )
-     })
-   }
+   $scope.message = function(tutorId,tutorName,studentId,userId){
+    swal({
+      title: 'Contact '+tutorName,
+      input: 'text',
+      showCancelButton: true,
+      inputValidator: function (value) {
+        return new Promise(function (resolve, reject) {
+          if (value) {
+            resolve()
+          } else {
+            reject('You need to write something!')
+          }
+        })
+      }
+    }).then(function (result) {
+      var data = {"message":"'"+result+"'","studentId":studentId,"tutorId":tutorId,"userId":userId}
+      studentService.sendMessage(data).then(
+        swal(
+          'Sent!',
+          'The tutor has been notified.',
+          'success'
+        )
+      );
+    })
+  }
 
    $scope.donate = function(sender){
     //  swal({

@@ -7,24 +7,25 @@ var app = angular.module("users")
 
     $scope.currentPage = 1;
     $scope.pageSize = 2;
-    $scope.sid;
+    self.courseList = [];
 
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
 
 
-
+  if($location.path() === '/groups'){
     var email = firebase.auth().currentUser.email;
 
-    studentService.getID(email)
+    studentService.getID('nelson.alemar@upr.edu')
           .then(function(response){
+
                 $scope.sid = response[0].studentId;
                 getGroupInfo();
           });
-
+    }
     function getGroupInfo()
     {
-        if($location.path() === '/groups')
-          {
+
+              console.log("get student courses for: "+$scope.sid);
               studentService.getStudentCourses($scope.sid)
                                   .then(function(response){
 
@@ -38,9 +39,10 @@ var app = angular.module("users")
                                             return obj;
 
                                       });
+                                      self.courseList = $scope.courseList;
 
                                   });
-          }
+
 
       studentService.getStudentGroups($scope.sid)
              .then(function(response) {
@@ -70,36 +72,36 @@ var app = angular.module("users")
              .then(function(){
                studentService.getAllGroups()
                     .then(function(response3) {
-
                     var allGroups = response3;
                     /*list of groups that the user is NOT part of */
 
                       /*verifies if the group is already on the personal groupList*/
 //                          function groupExist(group)
 //
-                        function isStudentCourse()
+                        function isStudentCourse(otherGroup)
                         {
                              return $scope.myGroupsList.some(function(group){
-                                     return group.groupsId === group.id;
+                                     return otherGroup.courseId === group.idc;
                              });
                         }
 
-                        for(var i = 0; i < allGroups.length; i++)
-                        {
+                         for(var i = 0; i < allGroups.length; i++){
+                           var otherGroup = allGroups[i];
                             $scope.myGroupsList.map(function(group)
                             {
                                 //If group id = a group id of a group the user is already in, if the group is full
                                 //or the group is not part of the
-                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
+                                if(group.id === otherGroup.groupsId || otherGroup.groupSize === otherGroup.groupCapacity)
                                 {
                                     allGroups.splice(i,1);
+                                    i--;
                                 }
 
                             });
-                        }
+                        };
 
                         allGroups.filter(isStudentCourse);
-
+                        console.log("All groups: "+JSON.stringify(allGroups));
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
                                            'idc': group.courseId,
@@ -130,16 +132,16 @@ var app = angular.module("users")
     $scope.myGroupsList = [];
 
 
-    $scope.selectedItems = [];
-    $scope.items = [];
+    self.selectedItems = [];
+    self.items = [];
     var list = [];
     $scope.submit = false;
     var submit = false;
-    $scope.newObject = {'id' : '', 'idc' : '1', 'members' : members, 'name' : '', 'size' : '3', 'limit' : '', 'arrowIcon' : arrowLeftIcon};
+    self.newObject = {'groupName' : '', 'groupCapacity' : '', 'courseId' : '', 'studentId' : 1};
     var nameSet = false;
     var limitSet = false;
     var courseSet = false;
-    $scope.createGroup = false;
+    self.createGroup = false;
 
 
     $scope.toggleGroups = function(i){
@@ -172,44 +174,43 @@ var app = angular.module("users")
             }
         }
 
+        console.log(self.items);
         $scope.items = items;
     }
 
     $scope.toggle = function (item, list) {
-      var idx = $scope.selectedItems.indexOf(item);
+      var idx = self.selectedItems.indexOf(item);
       if (idx > -1) {
-        $scope.selectedItems.splice(idx, 1);
+        self.selectedItems.splice(idx, 1);
       }
       else {
         //list.push(item);
-        $scope.selectedItems.push(item);
+        self.selectedItems.push(item);
       }
     }
 
     $scope.exists = function (item, list) {
-      return $scope.selectedItems.indexOf(item) > -1;
+      return self.selectedItems.indexOf(item) > -1;
     }
 
     $scope.submitGroup = function(){
-        submit = true;
-        for (var i = 0; i < $scope.selectedItems.length; i++){
-            var objectList = $scope.myGroupsList;
-            var length3 = objectList.length;
-            var object = $scope.myGroupsList[length3-1];
-            $scope.selectedItems[i].id = object.id + 1;
-            $scope.myGroupsList.push($scope.selectedItems[i]);
-        }
-        //$location.path('#/groups');
-        if ($scope.createGroup == true) {
-            objectList = $scope.myGroupsList;
-            length4 = objectList.length;
-            object = $scope.myGroupsList[length4-1];
-            $scope.newObject.id = object.id + 1;
-            $scope.myGroupsList.push($scope.newObject);
-
-
-
-        }
+      console.log("");
+        // submit = true;
+        // for (var i = 0; i < $scope.selectedItems.length; i++){
+        //     var objectList = $scope.myGroupsList;
+        //     var length3 = objectList.length;
+        //     var object = $scope.myGroupsList[length3-1];
+        //     $scope.selectedItems[i].id = object.id + 1;
+        //     $scope.myGroupsList.push($scope.selectedItems[i]);
+        // }
+        // //$location.path('#/groups');
+        // if ($scope.createGroup == true) {
+        //     objectList = $scope.myGroupsList;
+        //     length4 = objectList.length;
+        //     object = $scope.myGroupsList[length4-1];
+        //     $scope.newObject.id = object.id + 1;
+        //     $scope.myGroupsList.push($scope.newObject);
+        // }
     }
 
     $scope.saveGroup = function(tempGroups) {
@@ -227,18 +228,34 @@ var app = angular.module("users")
 
     $scope.update = function(data, key) {
         if (key == 'name') {
-            $scope.newObject.name = data;
-            nameSet = true;
+          self.newObject.groupName = "\'" + data + "\'";
+          console.log(self.newObject);
+          nameSet = true;
         }
         else if (key == 'limit') {
-            $scope.newObject.limit = data;
-            limitSet = true
+          self.newObject.groupCapacity = data;
+          console.log(self.newObject);
+          limitSet = true
         }
         else if (key == 'course') {
-            courseSet = true;
+          var d = data.split("-");
+          var d1 = d[0].split(" ").join();
+          var d2 = d1.replace(",", "");
+          // console.log(d2);
+          var id = 0;
+          self.courseList.map(function(course){
+            if (course.code == d2){
+              // console.log(course.idc);
+              id = course.idc;
+            }
+          })
+          // console.log(id);
+          self.newObject.courseId = id;
+          // console.log(self.newObject);
+          courseSet = true;
         }
         if (nameSet == true && limitSet == true && courseSet == true) {
-            $scope.createGroup = true;
+            self.createGroup = true;
         }
     }
 
@@ -248,7 +265,7 @@ var app = angular.module("users")
           templateUrl: 'tabDialog.tmpl.html',
           parent: angular.element(document.body),
           targetEvent: ev,
-          clickOutsideToClose:true
+          clickOutsideToClose:false
         })
          .then(function(answer) {
                   $scope.status = 'You said the information was "' + answer + '".';
@@ -267,13 +284,47 @@ var app = angular.module("users")
            $mdDialog.cancel();
          };
 
-         $scope.answer = function(answer) {
+         $scope.answer = function(answer,items) {
            if (answer==="useful"){
-             swal(
-               'Joined!',
-               'Group(s) added.',
-               'success'
-             )
+             $scope.createGroup = self.createGroup;
+
+             if ($scope.createGroup) {
+                $scope.newObject = self.newObject;
+             }
+
+             studentService.newGroup($scope.newObject).then(
+               swal(
+                 'Joined!',
+                 'Group(s) added.',
+                 'success'
+               )
+             ).then(null,function(error){
+               swal(
+                 'Sorry',
+                 'You have no access to this group.. For now',
+                 'error'
+               )
+             })
+
+             $scope.items = self.selectedItems;
+             console.log(items);
+
+             if ($scope.addGroup.length > 0) {
+               studentService.joinGroup($scope.items).then(
+                 swal(
+                   'Joined!',
+                   'Group(s) added.',
+                   'success'
+                 )
+               ).then(null, function(error){
+                 swal(
+                   'Sorry',
+                   'You have no access to this group... For now',
+                   'error'
+                 )
+               })
+             }
+
              $mdDialog.hide(answer);
            }
            else $mdDialog.hide(answer);
@@ -302,22 +353,25 @@ var app = angular.module("users")
         showCancelButton: true,
         confirmButtonText: 'Yes, leave!'
       }).then(function () {
-        swal(
-          'Removed!',
-          'You are no longer in the group.',
-          'success'
-        )
-
-        groupToLeave = {"studentId": $scope.sid,
+        var groupToLeave = {"studentId": $scope.sid,
                         "groupsId": group.id}
 
-        console.log(groupToLeave);
         studentService.leaveGroup(groupToLeave)
               .then(function(){
-                    getGroupInfo();
+                swal(
+                  'Removed!',
+                  'You are no longer in the group.',
+                  'success'
+                )
+                getGroupInfo();
               })
-
-
+              .then(null, function(err){
+                swal(
+                  'Sorry!',
+                  'You are stuck in this group... For now',
+                  'error'
+                )
+              })
       })
     }
 

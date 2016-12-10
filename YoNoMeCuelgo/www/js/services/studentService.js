@@ -5,6 +5,7 @@ function($http) {
 
   var host = "http://localhost:8080";
 //  var host = "https://glacial-journey-85518.herokuapp.com";
+  // var host = " https://sleepy-plains-69107.herokuapp.com";
 	var studentService = {};
 	studentService.getStudents = function () {
 		return $http.get(host+"/allstudents")
@@ -71,8 +72,10 @@ function($http) {
     }
 
     studentService.getStudentInfo = function(userID){
+        console.log("userId inside service:" + userID);
             return $http.get(host+"/studentInfo/"+userID)
                             .then(function(response) {
+                              console.log("response of getstudentinfo: " + response.data);
                                 return response.data;
                             })
                             .then(null, function(err) {
@@ -90,10 +93,9 @@ function($http) {
         			console.error(err);
         		});
         	}
-    studentService.getID = function(email)
-    {
-            em = {"userEmail": '\''+email+'\''};
-            return $http.post(host+"/getId", em)
+    studentService.getID = function(email){
+            var data = {"email":email}
+            return $http.post(host+"/getId", data)
             .then(function(response) {
                 return response.data;
             })
@@ -113,9 +115,20 @@ function($http) {
                 });
         }
 
+      studentService.joinGroup = function(data)
+         {
+                 return $http.post(host+"/joinGroup", data)
+                 .then(function(response) {
+                     return response.data;
+                 })
+                 .then(null, function(err) {
+                     console.error(err);
+                 });
+         }
+
      studentService.leaveGroup = function(data)
      {
-              return $http.delete(host+"/leave", data)
+              return $http.post(host+"/leave", data)
                      .then(function(response) {
                          return response.data;
                      })
@@ -124,6 +137,41 @@ function($http) {
                      });
      }
 
+     studentService.updateSettings = function(data)
+        {
+                return $http.put(host+"/updateSettings", data)
+                .then(function(response) {
+                    return response.data;
+                })
+                .then(null, function(err) {
+                    console.error(err);
+                });
+        }
+
+     studentService.setCountdown = function(data)
+     {        console.log(JSON.stringify(data));
+              return $http.put(host+"/newCountdown", data)
+                      .then(function(response) {
+                          console.log(response);
+                          return response.data;
+                      })
+                      .then(null, function(err) {
+                          console.error(err);
+                      });
+
+     }
+
+     studentService.sendMessage = function(data){
+              return $http.post(host+"/messageTutor", data)
+                      .then(function(response) {
+                          console.log(response);
+                          return response.data;
+                      })
+                      .then(null, function(err) {
+                          console.error(err);
+                      });
+
+     }
 
 	return studentService;
 }]);

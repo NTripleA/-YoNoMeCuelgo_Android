@@ -1,5 +1,5 @@
 
-<md-sidenav ng-show="isUserVerified()" id="sidenav" ng-click="user.toggleList()" md-component-id="left" class="md-whiteframe-z2" >
+<md-sidenav id="sidenav" ng-click="user.toggleList()" md-component-id="left" class="md-whiteframe-z2" >
     <md-list>
         <md-card style="margin:0px; margin-bottom:4%; background-image:url('https://cdn-images-2.medium.com/max/1920/1*zH86wd-3URNeM_MoeaBQuQ.jpeg');" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
             <md-card-title>
@@ -17,42 +17,42 @@
             </md-card-actions>
         </md-card>
 
-        <md-list-item ng-if="userRole=='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole=='tutors'" layout="row">
             <md-button ng-click="route('/tutors')" layout="row">
                 <p class="fa fa-home fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Home</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/home')" layout="row">
                 <p class="fa fa-home fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Home</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="toggleRightList()" layout="row">
                 <p class="fa fa-envelope fa-lg" flex="20"></p>
                 <p flex="80">Inbox</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/courses')" layout="row">
                 <p class="fa fa-book fa-lg" flex="20" data-toggle="modal"></p>
                 <p flex="80" data-toggle="modal">Courses</p>
             </md-button>
         </md-list-item>
-        <md-list-item ng-if="userRole!='tutors'" layout="row">
+        <md-list-item ng-show="isUserVerified()" ng-if="userRole!='tutors'" layout="row">
             <md-button ng-click="route('/groups')" layout="row">
                 <p class="fa fa-users fa-lg" flex="20" data-toggle="modal" data-target='#'></p>
                 <p flex="80" data-toggle="modal" data-target='#'>Groups</p>
             </md-button>
         </md-list-item>
-        <!-- <md-list-item layout="row">
-            <md-button ng-click="route('/settings')" layout="row">
+        <md-list-item layout="row">
+            <md-button ng-click="changeSettings($event)" layout="row">
                 <p class="fa fa-cog fa-lg" flex="20" data-toggle="modal" data-target='#'></p>
                 <p flex="80" data-toggle="modal" data-target='#'>Settings</p>
             </md-button>
-        </md-list-item> -->
+        </md-list-item>
         <md-list-item layout="row">
             <md-button ng-click="logOut()" layout="row">
                 <p class="fa fa-power-off fa-lg" flex="20"><img ng-src="" alt=""></p>
@@ -61,3 +61,57 @@
         </md-list-item>
     </md-list>
 </md-sidenav>
+
+<div>
+    <script type="text/ng-template" id="changeSettings.html">
+        <md-dialog aria-label="Add New Courses">
+            <form ng-cloak>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Change your settings</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="cancel()">
+                            <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+
+                <md-dialog-content>
+                    <div class="md-dialog-content">
+                        <md-input-container class="md-icon-float md-block col-xs-6">
+                            <label>Name</label>
+                            <md-icon style="font-size:20px;" class="fa fa-user"></md-icon>
+                            <input ng-model="userName" type="text">
+                        </md-input-container>
+                        <md-input-container class="md-icon-float md-block col-xs-6">
+                            <label>Last Name</label>
+                            <md-icon style="font-size:20px;" class="fa fa-user"></md-icon>
+                            <input ng-model="userName" type="text">
+                        </md-input-container>
+                        <md-input-container class="md-icon-float md-block col-xs-6">
+                            <label>Status Message</label>
+                            <md-icon style="font-size:20px;" class="fa fa-comment-o"></md-icon>
+                            <input ng-model="status" type="text">
+                        </md-input-container>
+
+                        <md-content class="col-xs-6">
+                            <h4 class="col-md-4 col-push-4" style="padding-left:5%;">Profile Image</h4>
+                            <input type="file" id="file" name="file"/>
+                            <!-- <button ng-click="add()">Add</button> -->
+                        </md-content>
+                    </div>
+                </md-dialog-content>
+
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="answer('Cancel')">
+                        Cancel
+                    </md-button>
+                    <md-button ng-click="answer('useful');">
+                        Submit
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </script>
+</div>

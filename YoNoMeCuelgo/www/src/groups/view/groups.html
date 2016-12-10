@@ -15,7 +15,7 @@
             </md-card-title>
             <md-card-title>
               <span flex="40" class="md-subhead">Capacity: {{group.size}} of {{group.limit}}</span>
-              <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="group.name"></dir-pagination-controls>
+              <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="group.name.split(' ').join('')"></dir-pagination-controls>
             </md-card-title>
             <md-card-content md-scroll-y style="height: 150px; overflow: hidden;">
               <md-list dir-paginate="members in group.members| itemsPerPage: pageSize" current-page="currentPage" pagination-id="group.name">
@@ -43,7 +43,7 @@
           </md-card-title>
           <md-card-title>
             <span flex="40" class="md-subhead">Capacity: {{group.size}} of {{group.limit}}</span>
-            <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="group.name"></dir-pagination-controls>
+            <dir-pagination-controls style="text-align: right; margin-top: -5%;" flex="60" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html" pagination-id="group.name.split(' ').join('')"></dir-pagination-controls>
           </md-card-title>
           <md-card-content md-scroll-y style="height: 150px; overflow: hidden;">
             <md-list dir-paginate="members in group.members| itemsPerPage: pageSize" current-page="currentPage" pagination-id="group.name">

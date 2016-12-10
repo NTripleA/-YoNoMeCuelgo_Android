@@ -11,6 +11,6 @@ function($http) {
 		.then(null, function (err) {
 			console.error(err);
 		});
-	};
+	};z
 	return CoursesService;
 }]);

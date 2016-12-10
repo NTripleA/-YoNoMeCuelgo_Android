@@ -6,7 +6,7 @@
     </md-content>
     <md-divider></md-divider>
 
-      <md-content class="md-padding" layout="row">
+      <md-content style="overflow-y:hidden" class="md-padding" layout="row">
        <md-list style="height:255px" flex>
        <!-- <md-subheader class="md-no-sticky">3 line item (with hover)</md-subheader> -->
        <div dir-paginate="message in messages| itemsPerPage: pageSize" current-page="currentPage" layout="column">
@@ -19,7 +19,7 @@
                <h4>{{ message.title }}</h4>
                <p>{{ message.body }}</p>
              </div>
-             <md-button ng-click="replyMessage()" class="md-secondary">Respond</md-button>
+             <md-button ng-click="messageReply(tutorID,message.userFirstName,message.senderId,userId)" class="md-secondary">Respond</md-button>
            </div>
          </md-list-item>
          <md-divider></md-divider>
@@ -53,12 +53,12 @@
             </md-card-title>
             <md-card-content class="row" md-scroll-y style="height: 70px;">
               <div class="col-xs-8" >
-                  <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
+                  <md-switch ng-model="course.availability" ng-change="updateAvailability(tutorID,course.id,course.availability)" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
                       {{course.availability}}
                   </md-switch>
               </div>
               <div class="col-xs-4">
-                <i ng-click="exit()" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
+                <i ng-click="exit(tutorID,course.id)" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
               </div>
 
           </md-card-content>
@@ -74,12 +74,12 @@
           </md-card-title>
           <md-card-content class="row" md-scroll-y style="height: 70px;">
             <div class="col-xs-8" >
-                <md-switch ng-model="course.availability" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
+                <md-switch ng-model="course.availability" ng-change="updateAvailability(tutorID,course.id,course.availability)" ng-true-value="'Available'" ng-false-value="'Unavailable'" style ="font-size:130%;" >
                     {{course.availability}}
                 </md-switch>
             </div>
             <div class="col-xs-4">
-              <i ng-click="exit()" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
+              <i ng-click="exit(tutorID,course.id)" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-trash pull-right"></i>
             </div>
 
         </md-card-content>
