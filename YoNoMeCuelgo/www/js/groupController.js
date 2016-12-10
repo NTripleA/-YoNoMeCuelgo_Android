@@ -7,7 +7,6 @@ var app = angular.module("users")
 
     $scope.currentPage = 1;
     $scope.pageSize = 2;
-    $scope.sid;
     self.courseList = [];
 
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
@@ -18,6 +17,7 @@ var app = angular.module("users")
 
     studentService.getID('nelson.alemar@upr.edu')
           .then(function(response){
+
                 $scope.sid = response[0].studentId;
                 getGroupInfo();
           });
@@ -25,7 +25,7 @@ var app = angular.module("users")
     function getGroupInfo()
     {
 
-
+              console.log("get student courses for: "+$scope.sid);
               studentService.getStudentCourses($scope.sid)
                                   .then(function(response){
 
@@ -72,36 +72,36 @@ var app = angular.module("users")
              .then(function(){
                studentService.getAllGroups()
                     .then(function(response3) {
-
                     var allGroups = response3;
                     /*list of groups that the user is NOT part of */
 
                       /*verifies if the group is already on the personal groupList*/
 //                          function groupExist(group)
 //
-                        function isStudentCourse()
+                        function isStudentCourse(otherGroup)
                         {
                              return $scope.myGroupsList.some(function(group){
-                                     return group.groupsId === group.id;
+                                     return otherGroup.courseId === group.idc;
                              });
                         }
 
-                        for(var i = 0; i < allGroups.length; i++)
-                        {
+                         for(var i = 0; i < allGroups.length; i++){
+                           var otherGroup = allGroups[i];
                             $scope.myGroupsList.map(function(group)
                             {
                                 //If group id = a group id of a group the user is already in, if the group is full
                                 //or the group is not part of the
-                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
+                                if(group.id === otherGroup.groupsId || otherGroup.groupSize === otherGroup.groupCapacity)
                                 {
                                     allGroups.splice(i,1);
+                                    i--;
                                 }
 
                             });
-                        }
+                        };
 
                         allGroups.filter(isStudentCourse);
-
+                        console.log("All groups: "+JSON.stringify(allGroups));
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
                                            'idc': group.courseId,
@@ -174,8 +174,8 @@ var app = angular.module("users")
             }
         }
 
-        self.items = items;
         console.log(self.items);
+        $scope.items = items;
     }
 
     $scope.toggle = function (item, list) {
