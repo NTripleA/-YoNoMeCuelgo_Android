@@ -1,23 +1,51 @@
 var app = angular.module("users")
-.controller('tutorsController',['$scope','$compile','studentService', 'accountsService', '$mdDialog', '$timeout', 'tutorsService', '$rootScope', function($scope, $compile,studentService, accountsService, $mdDialog, $timeout, tutorsService, $rootScope) {
+.controller('tutorsController',['$scope','$compile','studentService', 'accountsService', '$mdDialog', '$timeout', 'tutorsService', '$rootScope', 'accountsService', function($scope, $compile,studentService, accountsService, $mdDialog, $timeout, tutorsService, $rootScope, accountsService) {
 
-  console.log("ESTO HA EMPEXADO")
   var self = this;
 
-  $scope.exit = function(){
-    swal({
-      title: 'Are you sure?',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, leave!'
-    }).then(function () {
-      swal(
-        'Removed!',
-        'You are no longer teaching the course.',
-        'success'
-      )
-    })
+
+  $scope.$on('tid', function(event, response){
+      console.log(response);
+      $scope.tutorID = response.tid;
+      console.log($scope.tutorID)
+      getTutCourses();
+
+  });
+
+
+  $scope.test = function(id)
+  {
+      $scope.tutorID = id;
+      console.log('Hi');
   }
+
+  $scope.exit = function(tutorId,courseId){
+              var data = {"courseId":courseId, "tutorId":tutorId}
+              swal({
+                title: 'Are you sure?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove!'
+              }).then(function () {
+                tutorsService.removeCourse(data).then(function(){
+                  swal(
+                    'Removed!',
+                    'You are no longer teaching the course.',
+                    'success'
+                  )
+
+                  getTutCourses();
+                })
+                .then(null, function(err){
+                  swal(
+                    'Sorry!',
+                    'You have to teach this course forever... For now.',
+                    'error'
+                  )
+                })
+
+              })
+            }
 
   $scope.messageReply = function(tutorId,studentName,studentId,userId){
    swal({
@@ -51,9 +79,11 @@ var app = angular.module("users")
 
     function getTutCourses()
     {
+        console.log($scope.tutorID);
         tutorsService.getTutorCourses($scope.tutorID)
             .then(function(response){
 
+                console.log(response);
                 function getAvailability(availability)
                 {
                     if(availability === 0)
@@ -152,7 +182,7 @@ var app = angular.module("users")
             $scope.courseList.splice(courseToDelete,1);
        }
 
-     $scope.toggleCourse = function(teidx){
+     $scope.toggleCourse = function(idx){
         var selected = idx;
         for(var i = 0; i < $scope.courseList.length; i++){
           if(i==selected){
@@ -201,16 +231,40 @@ var app = angular.module("users")
            fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
          })
          .then(function(answer) {
- 	  if (answer === 'Done') {
+ 	        if (answer === 'Done') {
  	          console.log("IM IN");
  	                     console.log(courses);
 
-             swal(
+ 	          swal({
+                  title: 'Are you sure you want to tutor these courses?',
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, leave!'
+                }).then(function () {
+                   swal(
                          'The tutoring begins!',
                          'Course(s) added.',
                          'success'
                        )
-             saveCourses();
+                   saveCourses();
+                })
+
+           }
+           else{
+                swal({
+                      title: 'Are you sure you want to tutor these courses?',
+                      type: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes, leave!'
+                    }).then(function () {
+                       swal(
+                             'You just cancelled!',
+                             'Course(s) NOT added.',
+                             'success'
+                           )
+                       saveCourses();
+                    })
+
            }
            $scope.status = 'You said the information was "' + answer + '".';
          }, function() {
@@ -378,5 +432,6 @@ var app = angular.module("users")
             $mdDialog.hide(answer);
           };
         }
+
 
 }]);

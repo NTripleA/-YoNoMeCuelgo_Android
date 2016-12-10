@@ -6,6 +6,9 @@ function($http) {
   //  var host = "https://glacial-journey-85518.herokuapp.com";
   // var host = "https://sleepy-plains-69107.herokuapp.com";
 	var accountsService = {};
+	var sid;
+	var tid;
+	var userID;
 
   accountsService.newUser = function(data) {
     return $http.post(host+"/newUser", data)
@@ -45,5 +48,28 @@ function($http) {
             			console.error(err);
             		});
     };
+
+    accountsService.studentId = function(studentId)
+    {
+        sid = studentId;
+    }
+
+    accountsService.getSID = function()
+    {
+        return sid;
+    }
+
+    accountsService.tutorID = function(tutorID)
+    {
+        tid = tutorID;
+    }
+
+    accountsService.getTID = function()
+    {
+               console.log("EL TUTOR"+tid);
+
+       return tid;
+    }
+
 	return accountsService;
 }]);

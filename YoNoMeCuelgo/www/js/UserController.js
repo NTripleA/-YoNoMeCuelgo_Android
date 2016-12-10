@@ -1,5 +1,5 @@
 var app = angular.module("users")
-    .controller('UserController',['userService', 'studentService', 'tutorsService','accountsService','$mdSidenav','$mdBottomSheet', '$timeout', '$log', '$scope', '$mdDialog', '$location', '$q', '$route', function(userService, studentService, tutorsService, accountsService, $mdSidenav, $mdBottomSheet, $timeout, $log, $scope, $mdDialog, $location, $q, $route)
+    .controller('UserController',['userService', 'studentService', 'tutorsService','accountsService','$mdSidenav','$mdBottomSheet', '$timeout', '$log', '$scope', '$mdDialog', '$location', '$q', '$route', '$rootScope', function(userService, studentService, tutorsService, accountsService, $mdSidenav, $mdBottomSheet, $timeout, $log, $scope, $mdDialog, $location, $q, $route, $rootScope)
     {
       console.log("COntroller");
   /**
@@ -100,6 +100,7 @@ var app = angular.module("users")
                                        id = response[0].studentId;
                                        $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
                                        $scope.studentId = id;
+                                       accountsService.studentID($scope.studentId);
                                  })
                                  .then(function(){
                                    studentService.getStudentCourses($scope.studentId)
@@ -115,7 +116,7 @@ var app = angular.module("users")
                                                                                       'id':tutor.tutorId,
                                                                                       'email':tutor.userEmail
                                                                                      }
-                                                                           return tut;F
+                                                                           return tut;
                                                                      })
                                                          }
 
@@ -204,6 +205,10 @@ var app = angular.module("users")
                                                 $scope.profilePicture = response[0].userImage;
                                                 $scope.userName = response[0].userFirstName;
                                                 $scope.tutorID = response[0].tutorId;
+                                                accountsService.tutorID($scope.tutorID);
+                                               $scope.$broadcast('tid', {'tid': $scope.tutorID});
+
+
 
                                             })
                                             .then(function(){
@@ -599,7 +604,7 @@ var app = angular.module("users")
 //
 //              //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
 //        }
-        console.log("Before"+$scope.tempCourses);
+        console.log($scope.tempCourses);
 
 
 

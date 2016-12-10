@@ -44,119 +44,79 @@ var app = angular.module("users")
                                   });
 
 
-//      studentService.getStudentGroups($scope.sid)
-//             .then(function(response) {
-//
-//             var groups = response;
-//
-//                  $scope.myGroupsList = groups.map(function(group){
-//                                    var g = {'id': group.groupId,
-//                                                 'idc': group.courseId,
-//                                                 'name': group.groupName,
-//                                                 'size': group.groupSize,
-//                                                 'limit': group.groupCapacity,
-//                                                 'members': group.members.map(function(member){
-//                                                                                  var mem = {'first': member.userFirstName,
-//                                                                                             'last': member.userLastName,
-//                                                                                             'image': member.userImage
-//                                                                                            }
-//                                                                                  return mem;
-//                                                                              })
-//                                                }
-//                                    return g;
-//
-//                              });
-//
-//
-//             })
-//             .then(function(){
-//               studentService.getAllGroups()
-//                    .then(function(response3) {
-//
-//                    var allGroups = response3;
-//                    /*list of groups that the user is NOT part of */
-//
-//                      /*verifies if the group is already on the personal groupList*/
-////                          function groupExist(group)
-////
-//                        function isStudentCourse()
-//                        {
-//                             return $scope.myGroupsList.some(function(group){
-//                                     return group.groupsId === group.id;
-//                             });
-//                        }
-//
-//                        for(var i = 0; i < allGroups.length; i++)
-//                        {
-//                            $scope.myGroupsList.map(function(group)
-//                            {
-//                                //If group id = a group id of a group the user is already in, if the group is full
-//                                //or the group is not part of the
-//                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
-//                                {
-//                                    allGroups.splice(i,1);
-//                                }
-//
-//                            });
-//                        }
-//
-//                        allGroups.filter(isStudentCourse);
-//
-//                        $scope.groupList = allGroups.map(function(group){
-//                                var obj = {'id': group.groupsId,
-//                                           'idc': group.courseId,
-//                                           'name': group.groupName,
-//                                           'size': group.groupSize,
-//                                           'limit': group.groupCapacity,
-//                                          }
-//                                return obj;
-//                        });
-//
-//
-//
-//                    });
+      studentService.getStudentGroups($scope.sid)
+             .then(function(response) {
 
-                studentService.getAllGroups()
-                                    .then(function(response3) {
+             var groups = response;
 
-                                    var allGroups = response3;
-                                    /*list of groups that the user is NOT part of */
-
-                                      /*verifies if the group is already on the personal groupList*/
-                //                          function groupExist(group)
-                //
-                                        function isStudentCourse()
-                                        {
-                                             return $scope.myGroupsList.some(function(group){
-                                                     return group.groupsId === group.id;
-                                             });
-                                        }
-
-                                        for(var i = 0; i < allGroups.length; i++)
-                                        {
-                                            $scope.myGroupsList.map(function(group)
-                                            {
-                                                //If group id = a group id of a group the user is already in, if the group is full
-                                                //or the group is not part of the
-                                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
-                                                {
-                                                    allGroups.splice(i,1);
+                  $scope.myGroupsList = groups.map(function(group){
+                                    var g = {'id': group.groupId,
+                                                 'idc': group.courseId,
+                                                 'name': group.groupName,
+                                                 'size': group.groupSize,
+                                                 'limit': group.groupCapacity,
+                                                 'members': group.members.map(function(member){
+                                                                                  var mem = {'first': member.userFirstName,
+                                                                                             'last': member.userLastName,
+                                                                                             'image': member.userImage
+                                                                                            }
+                                                                                  return mem;
+                                                                              })
                                                 }
+                                    return g;
 
-                                            });
-                                        }
+                              });
 
-                                        allGroups.filter(isStudentCourse);
 
-                                        $scope.groupList = allGroups.map(function(group){
-                                                var obj = {'id': group.groupsId,
-                                                           'idc': group.courseId,
-                                                           'name': group.groupName,
-                                                           'size': group.groupSize,
-                                                           'limit': group.groupCapacity,
-                                                          }
-                                                return obj;
-                                        });
+             })
+             .then(function(){
+               studentService.getAllGroups()
+                    .then(function(response3) {
+
+                    var allGroups = response3;
+                    /*list of groups that the user is NOT part of */
+
+                      /*verifies if the group is already on the personal groupList*/
+//                          function groupExist(group)
+//
+                        function isStudentCourse()
+                        {
+                             return $scope.myGroupsList.some(function(group){
+                                     return group.groupsId === group.id;
+                             });
+                        }
+
+                        for(var i = 0; i < allGroups.length; i++)
+                        {
+                            $scope.myGroupsList.map(function(group)
+                            {
+                                //If group id = a group id of a group the user is already in, if the group is full
+                                //or the group is not part of the
+                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
+                                {
+                                    allGroups.splice(i,1);
+                                }
+
+                            });
+                        }
+
+                        allGroups.filter(isStudentCourse);
+
+                        $scope.groupList = allGroups.map(function(group){
+                                var obj = {'id': group.groupsId,
+                                           'idc': group.courseId,
+                                           'name': group.groupName,
+                                           'size': group.groupSize,
+                                           'limit': group.groupCapacity,
+                                          }
+                                return obj;
+                        });
+
+
+
+                    });
+
+
 
 
 
