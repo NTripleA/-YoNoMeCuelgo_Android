@@ -75,5 +75,18 @@ function($http) {
         			console.error(err);
         		});
         	};
+
+    tutorsService.addCourses = function(data)
+    {
+        console.log(data);
+        return $http.post(host+"/newCourses",data)
+        .then(function(response){
+            return response.data;
+        })
+        .then(null, function (err) {
+            console.error(err);
+        });
+    };
+
 	return tutorsService;
 }]);

@@ -207,28 +207,8 @@ var app = angular.module("users")
 
                                             })
                                             .then(function(){
-                                                tutorsService.getTutorCourses($scope.tutorID)
-                                                    .then(function(response){
 
-                                                        $scope.courseList = response.map(function(course){
-                                                            var obj = {'id': course.courseId,
-                                                                       'code': course.courseCode,
-                                                                       'name': course.courseName,
-                                                                       'availability': function(){
-                                                                                                    if(course.available === 0)
-                                                                                                    {
-                                                                                                        return 'Unavailable'
-                                                                                                    }
-                                                                                                    else
-                                                                                                        return 'Available'
-                                                                                                 }
-                                                                      }
-                                                            return obj;
-
-                                                        });
-
-                                                    });
-
+                                                getTutCourses();
                                                 tutorsService.getDirectMessages($scope.userId)
                                                     .then(function(response){
 
@@ -542,7 +522,36 @@ var app = angular.module("users")
 
 
    /* All of the following pertains to tutors*/
+//
+//   function that gets all the tutor courses
 
+   function getTutCourses()
+   {
+       tutorsService.getTutorCourses($scope.tutorID)
+           .then(function(response){
+
+               function getAvailability(availability)
+               {
+                   if(availability === 0)
+                   {
+                       return 'Unavailable'
+                   }
+                   else
+                       return 'Available'
+               }
+               $scope.courseList = response.map(function(course){
+                   var obj = {'id': course.courseId,
+                              'code': course.courseCode,
+                              'name': course.courseName,
+                              'availability': getAvailability(course.available)
+                             }
+                   return obj;
+
+               });
+
+           });
+
+   }
    var arrowDownIcon = "fa fa-chevron-down";
    var arrowLeftIcon = "fa fa-chevron-left";
    $scope.availability = "Available";
@@ -567,27 +576,49 @@ var app = angular.module("users")
         {'code' : 'ICOM4035','arrowIcon': arrowLeftIcon}
    ]
 
-   //$scope.newObject = {'code' : '','arrowIcon': arrowLeftIcon};
 
    function selectedItemChange(item) {
          $scope.isFire=true;
          $scope.item = item;
-         $scope.tempCourses.push({'code': $scope.item.Code, 'arrowIcon': arrowLeftIcon});
-         //$scope.currentCourses.push({'code': $scope.item.Code, 'arrowIcon': arrowLeftIcon});
+         $scope.tempCourses.push({'idc':$scope.item.Id, 'code': $scope.item.Code});
+         console.log($scope.tempCourses);
 
 
-   //      $scope.tempCourses.push(item);
         $timeout(function() {
-            $scope.isb = false;
+            $scope.isFire = false;
         });
    }
 
    function saveCourses() {
-        var length = $scope.tempCourses.length;
-        for (var i = 0; i < length; i++) {
-            $scope.courseList.push($scope.tempCourses[i]);
-            //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
-        }
+//        var length = $scope.tempCourses.length;
+//        for (var i = 0; i < length; i++) {
+//            $scope.courseList.push($scope.tempCourses[i]);
+//
+//            $scope.tempCourses
+//
+//
+//              //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
+//        }
+        console.log("Before"+$scope.tempCourses);
+
+
+
+        var coursesToPost = $scope.tempCourses.map(function(course){
+                var object = {'tutorId': $scope.tutorID,
+                              'courseId': course.idc}
+
+                return object;
+
+        });
+
+
+        $scope.tempCourses = [];
+
+        tutorsService.addCourses(coursesToPost)
+                       .then(function(){
+                            getTutCourses();
+                       });
+
 
 //
 //        while(tempCourses.length > 0)
@@ -651,11 +682,13 @@ var app = angular.module("users")
           fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
-	  if (answer == 'Done') {
+	  if (answer === 'Done') {
+	          console.log("IM IN");
             saveCourses();
+            console.log($scope.tempCourses);
           }
           $scope.status = 'You said the information was "' + answer + '".';
-          //console.log(self.tempCourses);
+          console.log($scope.tempCourses);
         }, function() {
           $scope.status = 'You cancelled the dialog.';
         });
@@ -671,7 +704,8 @@ var app = angular.module("users")
       };
 
       $scope.answer = function(answer) {
-        if (answer==="useful"){
+        if (answer==="Done"){
+        console.log($scope.tempCourses);
           swal(
             'Joined!',
             'Course(s) added.',
@@ -690,12 +724,12 @@ var app = angular.module("users")
     self.isDisabled    = false;
 
     /*Get all courses*/
-//    accountsService.allCourses()
-//        .then(function(response){
-//
-//            self.repos = loadAll(response);
-//
-//        });
+    accountsService.allCourses()
+        .then(function(response){
+
+            self.repos = loadAll(response);
+
+        });
 //    self.repos         = loadAll();
     self.querySearch   = querySearch;
     self.selectedItemChange = selectedItemChange;
@@ -734,12 +768,22 @@ var app = angular.module("users")
      */
     function loadAll(courses) {
       var repos = [];
-      for(var i = 0; i < courses.length; i++)
+
+      repos = courses.map(function(course){
+             var object = {'Code': course.courseCode,
+                          'Title': course.courseName,
+                          'Id': course.courseId}
+             return object;
+      });
+
+      for(var i = 0; i < repos.length; i++)
       {
-        var object = {'Code': courses[i].courseCode,
-                        'Title': courses[i].courseName}
-        repos.push(object);
+         $scope.courseList.map(function(course){
+              if(course.id === repos[i].Id)
+                   repos.splice(i,1);
+         });
       }
+
       return repos.map( function (repo) {
         repo.value = repo.Code.toLowerCase()+'-'+repo.Title.toLowerCase();
         return repo;
@@ -779,6 +823,15 @@ var app = angular.module("users")
     function removeChip(chip) {
 //        var data = JSON.parse($scope.tempCourses);
 //        var index = data.map(function(d) { return d['Code']; }).indexOf(chip.Code);
+          $scope.tempCourses = $scope.tempCourses.map(function(course){
+                if(course.idc != chip.Id)
+                {
+                  return course;
+                }
+          });
+
+          console.log($scope.tempCourses);
+
     }
 
     function requestInfo(ev) {
@@ -1046,13 +1099,15 @@ var app = angular.module("users")
               showCancelButton: true,
               confirmButtonText: 'Yes, remove!'
             }).then(function () {
-              tutorsService.removeCourse(data).then(
+              tutorsService.removeCourse(data).then(function(){
                 swal(
                   'Removed!',
                   'You are no longer teaching the course.',
                   'success'
                 )
-              )
+
+                getTutCourses();
+              })
               .then(null, function(err){
                 swal(
                   'Sorry!',

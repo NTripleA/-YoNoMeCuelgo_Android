@@ -34,7 +34,7 @@
 </md-content>
 </div>
 
-<div>
+<div ng-controller="tutorsController">
   <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
       <h1>My Courses
         <md-button ng-click="showAdvanced($event,tempCourses)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
@@ -89,7 +89,7 @@
     </md-content>
 </div>
 
-<div ng-controller="UserController">
+<div>
     <script type="text/ng-template" id="addCourses.html">
         <md-dialog aria-label="Add New Courses">
             <form ng-cloak>
@@ -102,9 +102,9 @@
                         </md-button>
                     </div>
                 </md-toolbar>
-
                 <md-dialog-content>
                     <div class="md-dialog-content">
+                      {{tempCourses}}
                         <searchbar></searchbar>
                     </div>
                 </md-dialog-content>
@@ -114,7 +114,7 @@
                     <md-button ng-click="answer('Cancel')">
                         Cancel
                     </md-button>
-                    <md-button ng-click="answer('useful'); saveCourses();">
+                    <md-button ng-click="answer('Done')">
                         Submit
                     </md-button>
                 </md-dialog-actions>
