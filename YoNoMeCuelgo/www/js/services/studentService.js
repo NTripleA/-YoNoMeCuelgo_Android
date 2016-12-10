@@ -137,6 +137,17 @@ function($http) {
                      });
      }
 
+     studentService.updateSettings = function(data)
+        {
+                return $http.put(host+"/updateSettings", data)
+                .then(function(response) {
+                    return response.data;
+                })
+                .then(null, function(err) {
+                    console.error(err);
+                });
+        }
+
      studentService.setCountdown = function(data)
      {        console.log(JSON.stringify(data));
               return $http.put(host+"/newCountdown", data)
