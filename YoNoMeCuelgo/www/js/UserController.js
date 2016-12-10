@@ -104,7 +104,6 @@ var app = angular.module("users")
                                  .then(function(){
                                    studentService.getStudentCourses($scope.studentId)
                                       .then(function(response){
-
                                           $scope.courseList = response.map(function(course){
                                                var obj = {'code': course.courseCode,
                                                           'name': course.courseName,
@@ -121,6 +120,7 @@ var app = angular.module("users")
 
                                                return obj;
                                           });
+
                                       })
                                       .then(function(){
                                         studentService.getStudentGroups($scope.studentId)
@@ -644,19 +644,16 @@ var app = angular.module("users")
         });
       };
 
-    $scope.showAdvanced = function(ev) {
+    $scope.changeSettings = function(ev) {
         $mdDialog.show({
           controller: DialogController,
-          templateUrl: 'addCourses.html',
+          templateUrl: 'changeSettings.html',
           parent: angular.element(document.body),
           targetEvent: ev,
-          clickOutsideToClose:true,
+          clickOutsideToClose:false,
           fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
         })
         .then(function(answer) {
-	  if (answer == 'Done') {
-            saveCourses();
-          }
           $scope.status = 'You said the information was "' + answer + '".';
           //console.log(self.tempCourses);
         }, function() {
