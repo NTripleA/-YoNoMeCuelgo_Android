@@ -49,8 +49,8 @@ var app = angular.module("users")
 
       studentService.getStudentGroups($scope.sid)
              .then(function(response) {
-
-             var groups = response;
+              $scope.groupFlag = response.slice();
+             var groups = response.slice();
 
                   $scope.myGroupsList = groups.map(function(group){
                                     var g = {'id': group.groupId,
