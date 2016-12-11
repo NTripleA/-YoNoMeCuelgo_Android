@@ -1,7 +1,15 @@
 <div>
   <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
-      <h1>My Courses</h1>
+      <h1>My Courses
+        <md-button ng-if="courseList.length<1" ng-click="" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Courses">
+            <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
+        </md-button>
+      </h1>
+
       <md-divider></md-divider>
+      <md-content ng-if="courseList.length<1">
+        <h2 class="text-center" style="margin-top:80px;">You have no courses yet.<h2> 
+      </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
           <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2==0">
