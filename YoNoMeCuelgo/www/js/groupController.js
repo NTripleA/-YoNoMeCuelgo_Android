@@ -70,45 +70,9 @@ var app = angular.module("users")
 
              })
              .then(function(){
-               studentService.getAllGroups()
+               studentService.getOtherGroups($scope.sid)
                     .then(function(response3) {
                     var allGroups = response3;
-                    /*list of groups that the user is NOT part of */
-
-                      /*verifies if the group is already on the personal groupList*/
-//                          function groupExist(group)
-//
-                        function isStudentCourse(otherGroup)
-                        {
-                             return $scope.myGroupsList.some(function(group){
-                                     return otherGroup.courseId === group.idc;
-                             });
-                        }
-
-                        function deleteObject(object, array){
-                          for(var i = 0; i < array.length; i++){
-                            if(object.groupsId === array[i].groupsId){
-                              array.splice(i,1);
-                              break;
-                            }
-                          }
-                        }
-
-                         allGroups.map(function(otherGroup){
-                            $scope.myGroupsList.map(function(group)
-                            {
-                                //If group id = a group id of a group the user is already in, if the group is full
-                                //or the group is not part of the
-                                if(group.id === otherGroup.groupsId || otherGroup.groupSize === otherGroup.groupCapacity)
-                                {
-                                  deleteObject(otherGroup, allGroups);
-                                }
-
-                            });
-                        });
-
-                        allGroups = allGroups.filter(isStudentCourse);
-                        console.log("All groups: "+JSON.stringify(allGroups));
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
                                            'idc': group.courseId,
