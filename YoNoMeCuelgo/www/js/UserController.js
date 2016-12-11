@@ -190,6 +190,34 @@ var app = angular.module("users")
 
                                                                                     });
                                               $scope.loading=false;
+                                            }).then(function(response){
+                                              var push = PushNotification.init({
+                                                     android: {
+                                                         senderID: "552117664338",
+                                                         vibrate: "true",
+                                                         sound: 'true'
+                                                     },
+                                                     browser: {
+                                                         pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+                                                     },
+                                                     windows: {}
+                                                     });
+                                                     push.on('registration', function(data) {
+                                                    console.log(data.registrationId);
+                                                    var token = {'userToken' : data.registrationId, 'userId' : $scope.userId};
+
+                                                      accountsService.updateToken(token);
+                                                    // alert('registered');
+                                                    });
+
+                                                    push.on('notification', function(data) {
+                                                      console.log(data);
+                                                      // storeNotification(response);
+                                                      // push.rx.notification()
+                                                      // .subscribe((data) => {
+                                                      //   alert('hey' + ': ' + 'hey');
+                                                      // });
+                                                    });
                                             });
 
                                  })
@@ -247,6 +275,33 @@ var app = angular.module("users")
 
                                                         });
                                                         $scope.loading=false;
+                                                    }).then(function(response){
+                                                      var push = PushNotification.init({
+                                                             android: {
+                                                                 senderID: "552117664338",
+                                                                 vibrate: "true",
+                                                                 sound: 'true'
+                                                             },
+                                                             browser: {
+                                                                 pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+                                                             },
+                                                             windows: {}
+                                                             });
+                                                             push.on('registration', function(data) {
+                                                            console.log(data.registrationId);
+                                                              var token = {'userToken' : data.registrationId, 'userId' : $scope.userId};
+                                                              accountsService.updateToken(token);
+                                                            // alert('registered');
+                                                            });
+
+                                                            push.on('notification', function(data) {
+                                                              console.log(data);
+                                                              // storeNotification(response);
+                                                              // push.rx.notification()
+                                                              // .subscribe((data) => {
+                                                              //   alert('hey' + ': ' + 'hey');
+                                                              // });
+                                                            });
                                                     });
 
                                             });
@@ -1091,30 +1146,30 @@ var app = angular.module("users")
           }
           //PUSHHHHH
           setTimeout(function(){
-            var push = PushNotification.init({
-                   android: {
-                       senderID: "552117664338",
-                       vibrate: "true",
-                       sound: 'true'
-                   },
-                   browser: {
-                       pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-                   },
-                   windows: {}
-                   });
-                   push.on('registration', function(data) {
-                  console.log(data.registrationId);
-                  // alert('registered');
-                  });
-
-                  push.on('notification', function(data) {
-                    console.log(data);
-                    // storeNotification(response);
-                    // push.rx.notification()
-                    // .subscribe((data) => {
-                    //   alert('hey' + ': ' + 'hey');
-                    // });
-                  });
+            // var push = PushNotification.init({
+            //        android: {
+            //            senderID: "552117664338",
+            //            vibrate: "true",
+            //            sound: 'true'
+            //        },
+            //        browser: {
+            //            pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+            //        },
+            //        windows: {}
+            //        });
+            //        push.on('registration', function(data) {
+            //       console.log(data.registrationId);
+            //       // alert('registered');
+            //       });
+            //
+            //       push.on('notification', function(data) {
+            //         console.log(data);
+            //         // storeNotification(response);
+            //         // push.rx.notification()
+            //         // .subscribe((data) => {
+            //         //   alert('hey' + ': ' + 'hey');
+            //         // });
+            //       });
               }, 5000);
           //
           $scope.sendMessage = function(tutorId,tutorName,studentId,userId){

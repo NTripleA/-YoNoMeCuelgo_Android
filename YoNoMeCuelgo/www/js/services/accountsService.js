@@ -5,6 +5,7 @@ function($http) {
     var host = "http://localhost:8080";
   //  var host = "https://glacial-journey-85518.herokuapp.com";
   // var host = "https://sleepy-plains-69107.herokuapp.com";
+  // var host = "https://afternoon-beach-13945.herokuapp.com";
 	var accountsService = {};
 
   accountsService.newUser = function(data) {
@@ -45,5 +46,15 @@ function($http) {
             			console.error(err);
             		});
     };
+
+    accountsService.updateToken = function (data) {
+          return $http.put(host+"/updateToken", data)
+          .then(function (response) {
+            return response.data;
+          })
+          .then(null, function (err) {
+            console.error(err);
+          });
+        };
 	return accountsService;
 }]);
