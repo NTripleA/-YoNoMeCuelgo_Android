@@ -7,8 +7,8 @@ var app = angular.module("users")
 
     $scope.currentPage = 1;
     $scope.pageSize = 2;
-    $scope.sid;
     self.courseList = [];
+    self.studentId = null;
 
 //    var members = [{'name' : 'Tahiri Ciquitraque'}, {'name' : 'Nelson Triple A'}, {'name' : 'Israel La Bestia'}]
 
@@ -16,16 +16,19 @@ var app = angular.module("users")
   if($location.path() === '/groups'){
     var email = firebase.auth().currentUser.email;
 
-    studentService.getID('nelson.alemar@upr.edu')
+    studentService.getID(email)
           .then(function(response){
+
                 $scope.sid = response[0].studentId;
+                self.studentId = $scope.sid;
+                console.log(self.studentId);
                 getGroupInfo();
           });
     }
     function getGroupInfo()
     {
 
-
+              console.log("get student courses for: "+$scope.sid);
               studentService.getStudentCourses($scope.sid)
                                   .then(function(response){
 
@@ -70,38 +73,9 @@ var app = angular.module("users")
 
              })
              .then(function(){
-               studentService.getAllGroups()
+               studentService.getOtherGroups($scope.sid)
                     .then(function(response3) {
-
                     var allGroups = response3;
-                    /*list of groups that the user is NOT part of */
-
-                      /*verifies if the group is already on the personal groupList*/
-//                          function groupExist(group)
-//
-                        function isStudentCourse()
-                        {
-                             return $scope.myGroupsList.some(function(group){
-                                     return group.groupsId === group.id;
-                             });
-                        }
-
-                        for(var i = 0; i < allGroups.length; i++)
-                        {
-                            $scope.myGroupsList.map(function(group)
-                            {
-                                //If group id = a group id of a group the user is already in, if the group is full
-                                //or the group is not part of the
-                                if(group.id === allGroups[i].groupsId || group.groupSize === group.groupCapacity)
-                                {
-                                    allGroups.splice(i,1);
-                                }
-
-                            });
-                        }
-
-                        allGroups.filter(isStudentCourse);
-
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
                                            'idc': group.courseId,
@@ -137,12 +111,11 @@ var app = angular.module("users")
     var list = [];
     $scope.submit = false;
     var submit = false;
-    self.newObject = {'groupName' : '', 'groupCapacity' : '', 'courseId' : '', 'studentId' : 1};
+    self.newObject = {'groupName' : '', 'groupCapacity' : '', 'courseId' : '', 'studentId' : $scope.sid};
     var nameSet = false;
     var limitSet = false;
     var courseSet = false;
     self.createGroup = false;
-
 
     $scope.toggleGroups = function(i){
         if ($scope.myGroupsList[i].arrowIcon.search(arrowDownIcon)>-1){
@@ -174,8 +147,8 @@ var app = angular.module("users")
             }
         }
 
-        self.items = items;
         console.log(self.items);
+        $scope.items = items;
     }
 
     $scope.toggle = function (item, list) {
@@ -256,6 +229,7 @@ var app = angular.module("users")
         }
         if (nameSet == true && limitSet == true && courseSet == true) {
             self.createGroup = true;
+            self.newObject.studentId = $scope.sid;
         }
     }
 
@@ -288,29 +262,36 @@ var app = angular.module("users")
            if (answer==="useful"){
              $scope.createGroup = self.createGroup;
 
-             if ($scope.createGroup) {
+             console.log($scope.sid);
+
+             if ($scope.createGroup && (self.selectedItems.length==0)) {
                 $scope.newObject = self.newObject;
+                console.log($scope.newObject);
+
+                studentService.newGroup($scope.newObject).then(function(response) {
+                  swal(
+                    'Joined!',
+                    'Group(s) added.',
+                    'success'
+                  )
+                }).then(null,function(error){
+                     swal(
+                       'Sorry',
+                       'You have no access to this group.. For now',
+                       'error'
+                     )
+                 })
              }
 
-             studentService.newGroup($scope.newObject).then(
-               swal(
-                 'Joined!',
-                 'Group(s) added.',
-                 'success'
-               )
-             ).then(null,function(error){
-               swal(
-                 'Sorry',
-                 'You have no access to this group.. For now',
-                 'error'
-               )
-             })
+             else if ((self.selectedItems.length >= 1) && !$scope.createGroup) {
+               $scope.items = {'studentId' : null, 'groups' : self.selectedItems};
+               console.log(self.studentId);
+               $scope.items.studentId = self.studentId;
+               // $scope.items.push(self.selectedItems);
+               console.log($scope.items);
 
-             $scope.items = self.selectedItems;
-             console.log(items);
-
-             if ($scope.addGroup.length > 0) {
-               studentService.joinGroup($scope.items).then(
+               studentService.joinGroup($scope.items)
+               .then(
                  swal(
                    'Joined!',
                    'Group(s) added.',
@@ -323,6 +304,33 @@ var app = angular.module("users")
                    'error'
                  )
                })
+             }
+
+            else if ((self.selectedItems.length >= 1) && $scope.createGroup){
+               $scope.newObject = self.newObject;
+               console.log($scope.newObject);
+
+               studentService.newGroup($scope.newObject).then(function(response) {
+                 $scope.items = {'studentId' : null, 'groups' : self.selectedItems};
+                 console.log($scope.newObject.studentId);
+                 $scope.items.studentId = $scope.newObject.studentId;
+                 // $scope.items.push(self.selectedItems);
+                 console.log($scope.items);
+
+                 studentService.joinGroup($scope.items).then(
+                     swal(
+                       'Joined!',
+                       'Group(s) added.',
+                       'success'
+                     )
+                   ).then(null, function(error){
+                     swal(
+                       'Sorry',
+                       'You have no access to this group... For now',
+                       'error'
+                     )
+                   })
+                })
              }
 
              $mdDialog.hide(answer);

@@ -3,9 +3,11 @@ angular.module('users')
 '$http',
 function($http) {
 	var tutorsService = {};
-	  var host = "http://localhost:8080";
+	var host = "http://localhost:8080";
   //  var host = "https://glacial-journey-85518.herokuapp.com";
 	// var host = " https://sleepy-plains-69107.herokuapp.com";
+	// var host = "https://afternoon-beach-13945.herokuapp.com";
+
 	tutorsService.getTutors = function () {
 		return $http.get(host+"/alltutors")
 		.then(function (response) {

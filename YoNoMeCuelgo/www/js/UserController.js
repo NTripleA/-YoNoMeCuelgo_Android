@@ -52,6 +52,7 @@ var app = angular.module("users")
 
     $scope.currentPage=1;
     $scope.pageSize=3;
+    $scope.coursesPageSize = 2;
     var self = this;
     $scope.statusMessage = 'El ser humano es vago por naturaleza';
     self.loggedIn = false;
@@ -97,7 +98,6 @@ var app = angular.module("users")
                                        $scope.userName = response[0].userFirstName;
                                        $scope.lastName = response[0].userLastName;
                                        $scope.profilePicture = response[0].userImage;
-                                       $scope.countdownId = response[0].countdownId;
                                        id = response[0].studentId;
                                        $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
                                        $scope.studentId = id;
@@ -114,7 +114,6 @@ var app = angular.module("users")
 
                                    studentService.getStudentCourses($scope.studentId)
                                       .then(function(response){
-
                                           $scope.courseList = response.map(function(course){
                                                var obj = {'code': course.courseCode,
                                                           'name': course.courseName,
@@ -131,6 +130,7 @@ var app = angular.module("users")
 
                                                return obj;
                                           });
+
                                       })
                                       .then(function(){
                                         studentService.getStudentGroups($scope.studentId)
@@ -166,17 +166,20 @@ var app = angular.module("users")
                                               .then(function(response2){
                                                   $scope.countdown = response2[0].title;
                                                   $scope.setDate(new Date(response2[0].time));
-                                                  $scope.saveCountdown();
+                                                  // $scope.saveCountdown();
+                                                  $scope.showName = false;
+                                                  $scope.newCountdown.newTitle = $scope.countdown;
                                               });
-                                        studentService.getDirectMessages($scope.userId)
+                                        studentService.getDirectMessages($scope.studentId)
                                              .then(function(response){
 
-                                                 $scope.messages = response.map(function(message){
+                                                 $scope.messages = response.reverse().map(function(message){
                                                                                     var obj = {'userImage': message.userImage,
                                                                                                'title': message.title,
                                                                                                'userFirstName': message.userFirstName,
                                                                                                'userLastName': message.userLastName,
-                                                                                               'body': message.body
+                                                                                               'body': message.body,
+                                                                                               'senderId':message.tutorId
                                                                                               }
                                                                                     return obj;
 
@@ -197,6 +200,34 @@ var app = angular.module("users")
 
                                                                                     });
                                               $scope.loading=false;
+                                            }).then(function(response){
+                                              var push = PushNotification.init({
+                                                     android: {
+                                                         senderID: "552117664338",
+                                                         vibrate: "true",
+                                                         sound: 'true'
+                                                     },
+                                                     browser: {
+                                                         pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+                                                     },
+                                                     windows: {}
+                                                     });
+                                                     push.on('registration', function(data) {
+                                                    console.log(data.registrationId);
+                                                    var token = {'userToken' : data.registrationId, 'userId' : $scope.userId};
+
+                                                      accountsService.updateToken(token);
+                                                    // alert('registered');
+                                                    });
+
+                                                    push.on('notification', function(data) {
+                                                      console.log(data);
+                                                      // storeNotification(response);
+                                                      // push.rx.notification()
+                                                      // .subscribe((data) => {
+                                                      //   alert('hey' + ': ' + 'hey');
+                                                      // });
+                                                    });
                                             });
 
                                  })
@@ -221,8 +252,9 @@ var app = angular.module("users")
                                             })
                                             .then(function(){
 
+
                                                 getTutCourses();
-                                                tutorsService.getDirectMessages($scope.userId)
+                                                tutorsService.getDirectMessages($scope.tutorID)
                                                     .then(function(response){
 
                                                         $scope.messages = response.reverse().map(function(message){
@@ -237,6 +269,33 @@ var app = angular.module("users")
 
                                                         });
                                                         $scope.loading=false;
+                                                    }).then(function(response){
+                                                      var push = PushNotification.init({
+                                                             android: {
+                                                                 senderID: "552117664338",
+                                                                 vibrate: "true",
+                                                                 sound: 'true'
+                                                             },
+                                                             browser: {
+                                                                 pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+                                                             },
+                                                             windows: {}
+                                                             });
+                                                             push.on('registration', function(data) {
+                                                            console.log(data.registrationId);
+                                                              var token = {'userToken' : data.registrationId, 'userId' : $scope.userId};
+                                                              accountsService.updateToken(token);
+                                                            // alert('registered');
+                                                            });
+
+                                                            push.on('notification', function(data) {
+                                                              console.log(data);
+                                                              // storeNotification(response);
+                                                              // push.rx.notification()
+                                                              // .subscribe((data) => {
+                                                              //   alert('hey' + ': ' + 'hey');
+                                                              // });
+                                                            });
                                                     });
 
                                                     tutorsService.otherCourses($scope.tutorID)
@@ -651,13 +710,6 @@ var app = angular.module("users")
         courseToDelete = index;
     }
 
-
-    function deleteCourse(course){
-             var index = $scope.courseList.indexOf(course);
-             courseToDelete = index;
-         }
-
-
          $scope.showConfirm = function(ev, course) {
              // Appending dialog to document.body to cover sidenav in docs app
              var confirm = $mdDialog.confirm()
@@ -725,6 +777,22 @@ var app = angular.module("users")
                $scope.status = 'You cancelled the dialog.';
              });
            };
+    $scope.changeSettings = function(ev) {
+        $mdDialog.show({
+          controller: DialogController,
+          templateUrl: 'changeSettings.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose:false,
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+          $scope.status = 'You said the information was "' + answer + '".';
+          //console.log(self.tempCourses);
+        }, function() {
+          $scope.status = 'You cancelled the dialog.';
+        });
+      };
 
   function DialogController($scope, $mdDialog) {
       $scope.hide = function() {
@@ -1122,7 +1190,7 @@ var app = angular.module("users")
 
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
 
-                $scope.newCountdown = {'countdownId': $scope.countdownId,
+                $scope.newCountdown = {'studentId': $scope.studentId,
                                     'newTime': year.toString()+'-'+month.toString()+'-'+day.toString(),
                                     'newTitle': $scope.countdown}
 
@@ -1199,33 +1267,33 @@ var app = angular.module("users")
           }
           //PUSHHHHH
           setTimeout(function(){
-            var push = PushNotification.init({
-                   android: {
-                       senderID: "552117664338",
-                       vibrate: "true",
-                       sound: 'true'
-                   },
-                   browser: {
-                       pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-                   },
-                   windows: {}
-                   });
-                   push.on('registration', function(data) {
-                  console.log(data.registrationId);
-                  // alert('registered');
-                  });
-
-                  push.on('notification', function(data) {
-                    console.log(data);
-                    // storeNotification(response);
-                    // push.rx.notification()
-                    // .subscribe((data) => {
-                    //   alert('hey' + ': ' + 'hey');
-                    // });
-                  });
+            // var push = PushNotification.init({
+            //        android: {
+            //            senderID: "552117664338",
+            //            vibrate: "true",
+            //            sound: 'true'
+            //        },
+            //        browser: {
+            //            pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+            //        },
+            //        windows: {}
+            //        });
+            //        push.on('registration', function(data) {
+            //       console.log(data.registrationId);
+            //       // alert('registered');
+            //       });
+            //
+            //       push.on('notification', function(data) {
+            //         console.log(data);
+            //         // storeNotification(response);
+            //         // push.rx.notification()
+            //         // .subscribe((data) => {
+            //         //   alert('hey' + ': ' + 'hey');
+            //         // });
+            //       });
               }, 5000);
           //
-          $scope.message = function(tutorId,tutorName,studentId,userId){
+          $scope.sendMessage = function(tutorId,tutorName,studentId,userId){
            swal({
              title: 'Contact '+tutorName,
              input: 'text',

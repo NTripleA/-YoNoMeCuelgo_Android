@@ -6,6 +6,8 @@ function($http) {
   var host = "http://localhost:8080";
 //  var host = "https://glacial-journey-85518.herokuapp.com";
   // var host = " https://sleepy-plains-69107.herokuapp.com";
+  // var host = "https://afternoon-beach-13945.herokuapp.com";
+
 	var studentService = {};
 	studentService.getStudents = function () {
 		return $http.get(host+"/allstudents")
@@ -49,6 +51,17 @@ function($http) {
         	    })
 
         }
+
+        studentService.getOtherGroups = function(id){
+            	    return $http.get(host+"/otherGroups/"+id)
+            	    .then(function(response) {
+            	        return response.data;
+            	    })
+            	    .then(null, function(err) {
+            	        console.error(err);
+            	    })
+
+            }
 
     studentService.getDirectMessages = function (id) {
     		return $http.get(host+"/studentMessages/"+id)
@@ -136,6 +149,17 @@ function($http) {
                          console.error(err);
                      });
      }
+
+     studentService.updateSettings = function(data)
+        {
+                return $http.put(host+"/updateSettings", data)
+                .then(function(response) {
+                    return response.data;
+                })
+                .then(null, function(err) {
+                    console.error(err);
+                });
+        }
 
      studentService.setCountdown = function(data)
      {        console.log(JSON.stringify(data));
