@@ -88,6 +88,17 @@
                 <md-divider ></md-divider>
             </md-list-item>
         </md-list>
+        <md-list style="padding:20px;" ng-if="myGroupsList.length<1 && courseList.length<1">
+          <h4>You are part of anything... yet.</h4>
+        </md-list>
+        <md-list style="padding:20px;" ng-if="myGroupsList.length<1 && courseList.length>0">
+          <div layout="row">
+            <h4 flex="70">Start Adding Groups!</h4>
+            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-controller="groupController" ng-click="showTabDialog($event)" class="md-fab md-mini md-secondary" aria-label="New Group">
+                <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
+            </md-button>
+          </div>
+        </md-list>
     </md-card>
     <md-card flex="40" style="margin-top:5%; margin-bottom:4%;" md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
         <md-card-title style="max-height:100px; background-color: #00BF96">
@@ -102,6 +113,14 @@
                 </div>
                 <md-divider ></md-divider>
             </md-list-item>
+        </md-list>
+        <md-list style="padding:20px;" ng-if="courseList.length<1">
+          <div layout="row">
+            <h4 flex="70">Start Adding Courses!</h4>
+            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-click="showTabDialog($event)" class="md-fab md-mini md-secondary" aria-label="New Courses">
+                <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
+            </md-button>
+          </div>
         </md-list>
     </md-card>
 </md-content>
