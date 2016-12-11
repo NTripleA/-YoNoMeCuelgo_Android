@@ -85,22 +85,29 @@ var app = angular.module("users")
                              });
                         }
 
-                         for(var i = 0; i < allGroups.length; i++){
-                           var otherGroup = allGroups[i];
+                        function deleteObject(object, array){
+                          for(var i = 0; i < array.length; i++){
+                            if(object.groupsId === array[i].groupsId){
+                              array.splice(i,1);
+                              break;
+                            }
+                          }
+                        }
+
+                         allGroups.map(function(otherGroup){
                             $scope.myGroupsList.map(function(group)
                             {
                                 //If group id = a group id of a group the user is already in, if the group is full
                                 //or the group is not part of the
                                 if(group.id === otherGroup.groupsId || otherGroup.groupSize === otherGroup.groupCapacity)
                                 {
-                                    allGroups.splice(i,1);
-                                    i--;
+                                  deleteObject(otherGroup, allGroups);
                                 }
 
                             });
-                        };
+                        });
 
-                        allGroups.filter(isStudentCourse);
+                        allGroups = allGroups.filter(isStudentCourse);
                         console.log("All groups: "+JSON.stringify(allGroups));
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
