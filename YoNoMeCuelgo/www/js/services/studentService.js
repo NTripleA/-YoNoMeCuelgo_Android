@@ -52,6 +52,17 @@ function($http) {
 
         }
 
+        studentService.getOtherGroups = function(id){
+            	    return $http.get(host+"/otherGroups/"+id)
+            	    .then(function(response) {
+            	        return response.data;
+            	    })
+            	    .then(null, function(err) {
+            	        console.error(err);
+            	    })
+
+            }
+
     studentService.getDirectMessages = function (id) {
     		return $http.get(host+"/studentMessages/"+id)
     		.then(function (response) {
