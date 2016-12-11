@@ -68,10 +68,13 @@
         <label for="Password">Password</label>
         <div class="bar"></div>
       </div>
-      <div class="button-container">
+      <div class="footer" style="margin-top: -5%;"><a ng-click="forgotPassword()">Forgot your password?</a></div>
+      <div class="button-container" style="margin-top: 5%;">
         <button ng-click="logIn(userEmail,userPassword)"><span>LOG IN</span></button>
       </div>
-      <div class="footer"><a ng-click="forgotPassword()">Forgot your password?</a></div>
+      <div class="button-container">
+        <button onclick="window.location='https://console.firebase.google.com/project/yonomecuelgo/authentication/users';" style="margin-top: 5%;"><span>Admin<i class="fa fa-lock" style="padding-left: 3%;"></i></span></button>
+      </div>
     </form>
   </div>
   <div class="card alt">

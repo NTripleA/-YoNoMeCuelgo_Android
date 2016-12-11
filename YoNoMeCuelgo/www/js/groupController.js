@@ -355,6 +355,7 @@ var app = angular.module("users")
     }
 
     $scope.exit = function(group){
+      console.log(group);
       swal({
         title: 'Are you sure?',
         type: 'warning',
@@ -362,7 +363,7 @@ var app = angular.module("users")
         confirmButtonText: 'Yes, leave!'
       }).then(function () {
         var groupToLeave = {"studentId": $scope.sid,
-                        "groupsId": group.id}
+                            "groupsId": group.id};
 
         studentService.leaveGroup(groupToLeave)
               .then(function(){
