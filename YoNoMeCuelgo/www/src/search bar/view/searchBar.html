@@ -36,12 +36,12 @@
     <!--</md-content>-->
 <!--</div>-->
 
-<div ng-controller="tutorsController as ctrl" layout="column" ng-cloak="" class="chipsdemoContactChips" ng-app="MyApp">
+<div ng-controller="UserController as ctrl" layout="column" ng-cloak="" class="chipsdemoContactChips" ng-app="MyApp">
 
     <md-content style="background-color: #fff;min-height: 0;" class="md-padding autocomplete" layout="column">
         <br>
         <h2 class="md-title">{{ message }}</h2>
-        <md-chips ng-model="ctrl.tempCourses" readonly="ctrl.readonly" md-removable="ctrl.removable" md-transform-chip="ctrl.newCourse($chip)" md-require-match="true" md-on-remove="ctrl.removeChip(item)">
+        <md-chips ng-model="ctrl.tempCourses" readonly="ctrl.readonly" md-removable="ctrl.removable" md-transform-chip="ctrl.newCourse($chip)" md-require-match="true" md-on-remove="ctrl.removeChip($chip)">
             <md-autocomplete
                     ng-disabled="ctrl.isDisabled"
                     md-no-cache="true"

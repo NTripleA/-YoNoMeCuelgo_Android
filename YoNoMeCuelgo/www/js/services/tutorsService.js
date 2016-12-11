@@ -88,5 +88,16 @@ function($http) {
         });
     };
 
+    tutorsService.otherCourses = function(id)
+    {
+      return $http.get(host+"/otherCourses/"+id)
+          		.then(function (response) {
+          			return response.data;
+          		})
+          		.then(null, function (err) {
+          			console.error(err);
+          		});
+    }
+
 	return tutorsService;
 }]);

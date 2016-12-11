@@ -49,27 +49,6 @@ function($http) {
             		});
     };
 
-    accountsService.studentId = function(studentId)
-    {
-        sid = studentId;
-    }
-
-    accountsService.getSID = function()
-    {
-        return sid;
-    }
-
-    accountsService.tutorID = function(tutorID)
-    {
-        tid = tutorID;
-    }
-
-    accountsService.getTID = function()
-    {
-               console.log("EL TUTOR"+tid);
-
-       return tid;
-    }
 
 	return accountsService;
 }]);

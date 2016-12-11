@@ -13,6 +13,7 @@ var app = angular.module("users")
     $scope.authenticating = true;
     $scope.personalInfo = false;
     $scope.roleInfo = false;
+    $scope.otherCourses = [];
 
     $scope.newuser = {'userFirstName' : '', 'userLastName' : '', 'userEmail' : '', 'userPassword' : '', 'isTutor' : '', 'userStatus' : ''}
 
@@ -100,9 +101,17 @@ var app = angular.module("users")
                                        id = response[0].studentId;
                                        $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
                                        $scope.studentId = id;
-                                       accountsService.studentID($scope.studentId);
                                  })
                                  .then(function(){
+
+                                   accountsService.allCourses()
+                                        .then(function(response){
+
+                                            $scope.otherCourses = response;
+                                            DOET();
+
+                                        });
+
                                    studentService.getStudentCourses($scope.studentId)
                                       .then(function(response){
 
@@ -205,7 +214,6 @@ var app = angular.module("users")
                                                 $scope.profilePicture = response[0].userImage;
                                                 $scope.userName = response[0].userFirstName;
                                                 $scope.tutorID = response[0].tutorId;
-                                                accountsService.tutorID($scope.tutorID);
                                                $scope.$broadcast('tid', {'tid': $scope.tutorID});
 
 
@@ -230,6 +238,15 @@ var app = angular.module("users")
                                                         });
                                                         $scope.loading=false;
                                                     });
+
+                                                    tutorsService.otherCourses($scope.tutorID)
+                                                         .then(function(response){
+
+                                                             $scope.otherCourses = response;
+                                                             console.log($scope.otherCourses);
+                                                             DOET();
+
+                                                         });
 
                                             });
                       $scope.route('/tutors');
@@ -531,34 +548,34 @@ var app = angular.module("users")
 //   function that gets all the tutor courses
 
    function getTutCourses()
-   {
-       tutorsService.getTutorCourses($scope.tutorID)
-           .then(function(response){
+       {
+           tutorsService.getTutorCourses($scope.tutorID)
+               .then(function(response){
 
-               function getAvailability(availability)
-               {
-                   if(availability === 0)
+                   function getAvailability(availability)
                    {
-                       return 'Unavailable'
+                       if(availability === 0)
+                       {
+                           return 'Unavailable'
+                       }
+                       else
+                           return 'Available'
                    }
-                   else
-                       return 'Available'
-               }
-               $scope.courseList = response.map(function(course){
-                   var obj = {'id': course.courseId,
-                              'code': course.courseCode,
-                              'name': course.courseName,
-                              'availability': getAvailability(course.available)
-                             }
-                   return obj;
+                   $scope.courseList = response.map(function(course){
+                       var obj = {'id': course.courseId,
+                                  'code': course.courseCode,
+                                  'name': course.courseName,
+                                  'availability': getAvailability(course.available)
+                                 }
+                       return obj;
+
+                   });
+
 
                });
 
-           });
+       }
 
-   }
-   var arrowDownIcon = "fa fa-chevron-down";
-   var arrowLeftIcon = "fa fa-chevron-left";
    $scope.availability = "Available";
    self.deleteCourse = deleteCourse;
 
@@ -568,7 +585,7 @@ var app = angular.module("users")
    self.removeCourse = removeCourse;
    self.tempCourses = [];
 
-   $scope.tempCourses = [];
+   $rootScope.tempCourses = [];
 
 
    $scope.courseList = [];
@@ -576,81 +593,58 @@ var app = angular.module("users")
 
    $scope.selectedCourse = $scope.courseList[0];
 
-   $scope.currentCourses = [
-        {'code' : 'ICOM5016','arrowIcon': arrowLeftIcon},
-        {'code' : 'ICOM4035','arrowIcon': arrowLeftIcon}
-   ]
-
-
    function selectedItemChange(item) {
-         $scope.isFire=true;
-         $scope.item = item;
-         $scope.tempCourses.push({'idc':$scope.item.Id, 'code': $scope.item.Code});
-         console.log($scope.tempCourses);
+             $scope.isFire=true;
+             $scope.item = item;
+             $rootScope.tempCourses.push({'idc':$scope.item.Id, 'code': $scope.item.Code});
 
 
-        $timeout(function() {
-            $scope.isFire = false;
-        });
-   }
+            $timeout(function() {
+                $scope.isFire = false;
+            });
+       }
+
 
    function saveCourses() {
-//        var length = $scope.tempCourses.length;
-//        for (var i = 0; i < length; i++) {
-//            $scope.courseList.push($scope.tempCourses[i]);
-//
-//            $scope.tempCourses
-//
-//
-//              //POST AQUI SOBRE LOS CURSOS NUEVOS DEL TUTOR
-//        }
-        console.log($scope.tempCourses);
 
 
 
-        var coursesToPost = $scope.tempCourses.map(function(course){
-                var object = {'tutorId': $scope.tutorID,
-                              'courseId': course.idc}
+            var coursesToPost = $rootScope.tempCourses.map(function(course){
+                    var object = {'tutorId': $scope.tutorID,
+                                  'courseId': course.idc}
 
-                return object;
+                    return object;
 
-        });
-
-
-        $scope.tempCourses = [];
-
-        tutorsService.addCourses(coursesToPost)
-                       .then(function(){
-                            getTutCourses();
-                       });
+            });
 
 
-//
-//        while(tempCourses.length > 0)
-//        {
-//           $scope.currentCourses.push({'code': tempCourses[1], 'arrowIcon': arrowLeftIcon});
-//           self.tempCourses.splice(0,1);
-//           console.log($scope.currentCourses);
-//        }
+            $rootScope.tempCourses = [];
 
-     }
+            tutorsService.addCourses(coursesToPost)
+                           .then(function(){
+                                getTutCourses();
+                           });
 
-   function removeCourse() {
-           $scope.courseList.splice(courseToDelete,1);
-      }
 
-    $scope.toggleCourse = function(teidx){
-       var selected = idx;
-       for(var i = 0; i < $scope.courseList.length; i++){
-         if(i==selected){
-           $scope.courseList[i].class = 'selectedButton';
-           $scope.selectedCourse=$scope.courseList[i];
+
          }
-         else{
-           $scope.courseList[i].class = 'unselectedButton';
-         }
-       }
-    }
+
+       function removeCourse() {
+               $scope.courseList.splice(courseToDelete,1);
+          }
+
+        $scope.toggleCourse = function(idx){
+           var selected = idx;
+           for(var i = 0; i < $scope.courseList.length; i++){
+             if(i==selected){
+               $scope.courseList[i].class = 'selectedButton';
+               $scope.selectedCourse=$scope.courseList[i];
+             }
+             else{
+               $scope.courseList[i].class = 'unselectedButton';
+             }
+           }
+        }
 
     function deleteCourse(course){
         var index = $scope.courseList.indexOf(course);
@@ -658,46 +652,79 @@ var app = angular.module("users")
     }
 
 
-    $scope.showConfirm = function(ev, course) {
-        // Appending dialog to document.body to cover sidenav in docs app
-        var confirm = $mdDialog.confirm()
-              .title('Are you sure you want to delete this course?')
-              .textContent('You can re-add the course later on.')
-              .ariaLabel('Lucky day')
-              .targetEvent(ev)
-              .ok('Yes')
-              .cancel('Cancel');
+    function deleteCourse(course){
+             var index = $scope.courseList.indexOf(course);
+             courseToDelete = index;
+         }
 
-        $mdDialog.show(confirm).then(function() {
-          $scope.status = 'You decided to get rid of your debt.';
-          deleteCourse(course);
-          removeCourse();
-        }, function() {
-          $scope.status = 'You decided to keep your debt.';
-        });
-      };
 
-    $scope.showAdvanced = function(ev) {
-        $mdDialog.show({
-          controller: DialogController,
-          templateUrl: 'addCourses.html',
-          parent: angular.element(document.body),
-          targetEvent: ev,
-          clickOutsideToClose:true,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-        })
-        .then(function(answer) {
-	  if (answer === 'Done') {
-	          console.log("IM IN");
-            saveCourses();
-            console.log($scope.tempCourses);
-          }
-          $scope.status = 'You said the information was "' + answer + '".';
-          console.log($scope.tempCourses);
-        }, function() {
-          $scope.status = 'You cancelled the dialog.';
-        });
-      };
+         $scope.showConfirm = function(ev, course) {
+             // Appending dialog to document.body to cover sidenav in docs app
+             var confirm = $mdDialog.confirm()
+                   .title('Are you sure you want to delete this course?')
+                   .textContent('You can re-add the course later on.')
+                   .ariaLabel('Lucky day')
+                   .targetEvent(ev)
+                   .ok('Yes')
+                   .cancel('Cancel');
+
+             $mdDialog.show(confirm).then(function() {
+               $scope.status = 'You decided to get rid of your debt.';
+               deleteCourse(course);
+               removeCourse();
+             }, function() {
+               $scope.status = 'You decided to keep your debt.';
+             });
+           };
+
+         $scope.showAdvanced = function(ev,courses) {
+             $mdDialog.show({
+               controller: DialogController,
+               templateUrl: 'addCourses.html',
+               parent: angular.element(document.body),
+               targetEvent: ev,
+               clickOutsideToClose:false,
+               fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+             })
+             .then(function(answer) {
+     	        if (answer === 'Done') {
+
+     	          swal({
+                      title: 'Are you sure you want to tutor these courses?',
+                      type: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes, leave!'
+                    }).then(function () {
+                       swal(
+                             'The tutoring begins!',
+                             'Course(s) added.',
+                             'success'
+                           )
+                       saveCourses();
+                    })
+
+               }
+               else{
+                    swal({
+                          title: 'Are you sure you want to cancel?',
+                          type: 'warning',
+                          showCancelButton: true,
+                          confirmButtonText: 'Yes, leave!'
+                        }).then(function () {
+                           swal(
+                                 'You just cancelled!',
+                                 'Course(s) NOT added. You can add them later on.',
+                                 'error'
+                               )
+                           $rootScope.tempCourses.length = 0;
+                        })
+
+               }
+               $scope.status = 'You said the information was "' + answer + '".';
+             }, function() {
+               $scope.status = 'You cancelled the dialog.';
+             });
+           };
 
   function DialogController($scope, $mdDialog) {
       $scope.hide = function() {
@@ -726,22 +753,44 @@ var app = angular.module("users")
 /* searchBarCtrl */
 
     self.simulateQuery = false;
-    self.isDisabled    = false;
+         self.isDisabled    = false;
 
-    /*Get all courses*/
-    accountsService.allCourses()
-        .then(function(response){
+         /*Get all courses*/
 
-            self.repos = loadAll(response);
 
-        });
-//    self.repos         = loadAll();
-    self.querySearch   = querySearch;
-    self.selectedItemChange = selectedItemChange;
-    self.searchTextChange   = searchTextChange;
-    self.removeChip = removeChip;
+          //if($scope.otherCourses.length > 0)
+         // {
 
-    //self.tempCourses=[];
+            function DOET(){
+
+                    console.log($scope.otherCourses);
+                       self.repos = loadAll($scope.otherCourses);
+
+            }
+
+
+
+
+          //}
+//         if($scope.userRole === 'student')
+//         {
+//
+//         }
+
+//         else if($scope.userRole === 'tutors')
+//         {
+//
+//
+//         }
+
+
+     //    self.repos         = loadAll();
+         self.querySearch   = querySearch;
+         self.selectedItemChange = selectedItemChange;
+         self.searchTextChange   = searchTextChange;
+         self.removeChip = removeChip;
+
+    self.tempCourses=[];
 
     // ******************************
     // Internal methods
@@ -752,92 +801,91 @@ var app = angular.module("users")
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
-          deferred;
-      if (self.simulateQuery) {
-        deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
-        return deferred.promise;
-      } else {
-        return results;
-      }
-    }
+           var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+               deferred;
+           if (self.simulateQuery) {
+             deferred = $q.defer();
+             $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+             return deferred.promise;
+           } else {
+             return results;
+           }
+         }
 
-    function searchTextChange(text) {
-    }
+         function searchTextChange(text) {
+         }
 
 
 
-    /**
-     * Build `components` list of key/value pairs
-     */
-    function loadAll(courses) {
-      var repos = [];
+         /**
+          * Build `components` list of key/value pairs
+          */
 
-      repos = courses.map(function(course){
-             var object = {'Code': course.courseCode,
-                          'Title': course.courseName,
-                          'Id': course.courseId}
-             return object;
-      });
 
-      for(var i = 0; i < repos.length; i++)
-      {
-         $scope.courseList.map(function(course){
-              if(course.id === repos[i].Id)
-                   repos.splice(i,1);
-         });
-      }
+         function loadAll(courses) {
+           var repos = [];
 
-      return repos.map( function (repo) {
-        repo.value = repo.Code.toLowerCase()+'-'+repo.Title.toLowerCase();
-        return repo;
-      });
-    }
+          console.log("courses: " + JSON.stringify(courses));
+
+           repos = courses.map(function(course){
+                  var object = {'Code': course.courseCode,
+                               'Title': course.courseName,
+                               'Id': course.courseId}
+                  return object;
+           });
+
+           return repos.map( function (repo) {
+                              repo.value = repo.Code.toLowerCase()+'-'+repo.Title.toLowerCase();
+                              return repo;
+                            });
+
+           }
 
     /**
-     * Create filter function for a query string
-     */
-    function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+          * Create filter function for a query string
+          */
+         function createFilterFor(query) {
+           var lowercaseQuery = angular.lowercase(query);
 
-      return function filterFn(item) {
-        return (item.value.indexOf(lowercaseQuery) != -1);
-      };
+           return function filterFn(item) {
+             return (item.value.indexOf(lowercaseQuery) != -1);
+           };
 
-    }
+         }
 
-    //Contact chips implementation
-    self.readonly = false;
+         //Contact chips implementation
+         self.readonly = false;
 
-    // Lists of fruit names and Vegetable objects
-    self.roCourseNames = angular.copy(self.repos);
-    self.editableCourseNames = angular.copy(self.repos);
+         // Lists of fruit names and Vegetable objects
+         self.roCourseNames = angular.copy(self.repos);
+         self.editableCourseNames = angular.copy(self.repos);
 
-    self.tags = [];
+         self.tags = [];
 
-    self.newCourse = function(chip) {
-      return {
-        Code: chip.Code,
-        Title: chip.Title
-      };
-    };
+         self.newCourse = function(chip) {
+           return {
+             Code: chip.Code,
+             Title: chip.Title,
+             Id: chip.Id
+           };
+         };
 
 
 
-    function removeChip(chip) {
-//        var data = JSON.parse($scope.tempCourses);
-//        var index = data.map(function(d) { return d['Code']; }).indexOf(chip.Code);
-          $scope.tempCourses = $scope.tempCourses.map(function(course){
-                if(course.idc != chip.Id)
-                {
-                  return course;
-                }
-          });
+         function removeChip(chip) {
 
-          console.log($scope.tempCourses);
+               for(var i = 0; i < $rootScope.tempCourses.length; i++)
+               {
+                  if($rootScope.tempCourses[i].idc === chip.Id)
+                  {
+                      $rootScope.tempCourses.splice(i,1);
+                  }
+               }
 
-    }
+
+
+         }
+
 
     function requestInfo(ev) {
         $mdDialog.show({
