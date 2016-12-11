@@ -160,7 +160,7 @@ var app = angular.module("users")
                                                   $scope.showName = false;
                                                   $scope.newCountdown.newTitle = $scope.countdown;
                                               });
-                                        studentService.getDirectMessages($scope.userId)
+                                        studentService.getDirectMessages($scope.studentId)
                                              .then(function(response){
 
                                                  $scope.messages = response.reverse().map(function(message){
@@ -260,7 +260,7 @@ var app = angular.module("users")
 
                                                     });
 
-                                                tutorsService.getDirectMessages($scope.userId)
+                                                tutorsService.getDirectMessages($scope.tutorID)
                                                     .then(function(response){
 
                                                         $scope.messages = response.reverse().map(function(message){
