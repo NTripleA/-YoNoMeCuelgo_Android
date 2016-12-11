@@ -88,12 +88,8 @@ var app = angular.module("users")
                              });
                         }
 
-                         console.log("allGroups.length: " + allGroups.length);
-                         console.log("allGroups: " + JSON.stringify(allGroups));
-
                          for(var i = 0; i < allGroups.length; i++){
                            var otherGroup = allGroups[i];
-                           console.log("iteration: " + i + ", " + "otherGroup: " + JSON.stringify(otherGroup));
                             $scope.myGroupsList.map(function(group)
                             {
                                 //If group id = a group id of a group the user is already in, if the group is full
@@ -108,7 +104,7 @@ var app = angular.module("users")
                         };
 
                         allGroups.filter(isStudentCourse);
-                        // console.log("All groups: "+JSON.stringify(allGroups));
+                        console.log("All groups: "+JSON.stringify(allGroups));
                         $scope.groupList = allGroups.map(function(group){
                                 var obj = {'id': group.groupsId,
                                            'idc': group.courseId,
