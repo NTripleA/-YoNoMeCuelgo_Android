@@ -7,6 +7,9 @@ function($http) {
   // var host = "https://sleepy-plains-69107.herokuapp.com";
   // var host = "https://afternoon-beach-13945.herokuapp.com";
 	var accountsService = {};
+	var sid;
+	var tid;
+	var userID;
 
   accountsService.newUser = function(data) {
     return $http.post(host+"/newUser", data)
