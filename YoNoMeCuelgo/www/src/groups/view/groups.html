@@ -9,7 +9,7 @@
       <md-content ng-show="groupFlag.length<1">
         <h2 class="text-center" style="margin-top:80px;">Choose your courses first.</h2>
       </md-content>
-      <md-content ng-hide="groupFlag.length<1">
+      <md-content ng-if="!myGroupsList[0].name && groupFlag.length>01">
         <h2 class="text-center" style="margin-top:80px;">You have no groups yet.</h2>
       </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
