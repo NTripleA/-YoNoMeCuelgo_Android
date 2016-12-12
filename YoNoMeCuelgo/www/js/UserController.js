@@ -1,7 +1,7 @@
 var app = angular.module("users")
     .controller('UserController',['userService', 'studentService', 'tutorsService','accountsService','$mdSidenav','$mdBottomSheet', '$timeout', '$log', '$scope', '$mdDialog', '$location', '$q', '$route', '$rootScope', function(userService, studentService, tutorsService, accountsService, $mdSidenav, $mdBottomSheet, $timeout, $log, $scope, $mdDialog, $location, $q, $route, $rootScope)
     {
-      console.log("COntroller");
+      // console.log("COntroller");
   /**
    * Main Controller for the Angular Material Starter App
    * @param $scope
@@ -41,7 +41,7 @@ var app = angular.module("users")
       }
       $scope.newuser.userStatus = newStatus;
 
-      console.log($scope.newuser);
+      // console.log($scope.newuser);
 
       $scope.signUp($scope.newuser);
 
@@ -72,26 +72,26 @@ var app = angular.module("users")
         // GET User Information
         // var id;
         var userRole;
-        console.log(firebase.auth().currentUser);
+        // console.log(firebase.auth().currentUser);
         if(firebase.auth().currentUser != null)
         {
           $scope.loading=true;
           var email = firebase.auth().currentUser.email;
           // var email = 'tahiri.fuentes@upr.edu';
           // email.email = $scope.userEmail;
-          console.log(email);
+          // console.log(email);
             studentService.getID(email)
                 .then(function(response){
 
-                    console.log(JSON.stringify(response));
+                    // console.log(JSON.stringify(response));
                     $scope.userId = response[0].userId;
                     var isTutor = response[0].isTutor;
                     if (isTutor==0){
                         //Get all info of the student
-                        console.log($scope.userId);
+                        // console.log($scope.userId);
                         studentService.getStudentInfo($scope.userId)
                                  .then(function(response){
-                                      console.log(response);
+                                      // console.log(response);
                                        userRole = 'student';
                                        $scope.userRole = userRole;
                                        $scope.statusMessage = response[0].userStatus;
@@ -302,7 +302,7 @@ var app = angular.module("users")
                                                          .then(function(response){
 
                                                              $scope.otherCourses = response;
-                                                             console.log($scope.otherCourses);
+                                                            //  console.log($scope.otherCourses);
                                                              DOET();
 
                                                          });
@@ -418,7 +418,7 @@ var app = angular.module("users")
                 swal('Type a upr student email. ¯\_(ツ)_/¯', "", "warning");
             }
             else{
-              console.log("funcionaaaaaaa");
+              // console.log("funcionaaaaaaa");
               firebase.auth().createUserWithEmailAndPassword(newUser.userEmail, newUser.userPassword)
                .then(function(onResolve){
                  firebase.auth().currentUser.sendEmailVerification();
@@ -546,7 +546,7 @@ var app = angular.module("users")
      * Hide or Show the 'left' sideNav area
      */
     function toggleUsersList() {
-      console.log("side bar");
+      // console.log("side bar");
       $mdSidenav('left').toggle();
     }
 
@@ -805,7 +805,7 @@ var app = angular.module("users")
 
       $scope.answer = function(answer) {
         if (answer==="Done"){
-        console.log($scope.tempCourses);
+        // console.log($scope.tempCourses);
           swal(
             'Joined!',
             'Course(s) added.',
@@ -831,7 +831,7 @@ var app = angular.module("users")
 
             function DOET(){
 
-                    console.log($scope.otherCourses);
+                    // console.log($scope.otherCourses);
                        self.repos = loadAll($scope.otherCourses);
 
             }
@@ -893,7 +893,7 @@ var app = angular.module("users")
          function loadAll(courses) {
            var repos = [];
 
-          console.log("courses: " + JSON.stringify(courses));
+          // console.log("courses: " + JSON.stringify(courses));
 
            repos = courses.map(function(course){
                   var object = {'Code': course.courseCode,
@@ -1158,7 +1158,7 @@ var app = angular.module("users")
               var day = date.getDate();
               var year = date.getFullYear();
               var date = year.toString()+'/'+month.toString()+'/'+day.toString();
-
+              // console.log(date)
               $("#day")
                 .countdown(date, function(event) {
                   $(this).text(
@@ -1191,7 +1191,7 @@ var app = angular.module("users")
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
 
                 $scope.newCountdown = {'studentId': $scope.studentId,
-                                    'newTime': year.toString()+'-'+month.toString()+'-'+day.toString(),
+                                    'newTime': year.toString()+'/'+month.toString()+'/'+day.toString(),
                                     'newTitle': $scope.countdown}
 
           }
