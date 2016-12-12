@@ -199,5 +199,28 @@ function($http) {
 
      }
 
+     studentService.otherCourses = function(id)
+     {
+       return $http.get(host+"/otherStudentCourses/"+id)
+           		.then(function (response) {
+           			return response.data;
+           		})
+           		.then(null, function (err) {
+           			console.error(err);
+           		});
+     }
+
+     studentService.addCourses = function(data)
+     {
+         console.log(data);
+         return $http.post(host+"/newStudentCourses",data)
+         .then(function(response){
+             return response.data;
+         })
+         .then(null, function (err) {
+             console.error(err);
+         });
+     };
+
 	return studentService;
 }]);

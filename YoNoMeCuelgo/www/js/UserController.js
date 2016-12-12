@@ -103,10 +103,11 @@ var app = angular.module("users")
                                  })
                                  .then(function(){
 
-                                   accountsService.allCourses()
+                                   studentService.otherCourses($scope.studentId)
                                         .then(function(response){
 
                                             $scope.otherCourses = response;
+                                           //  console.log($scope.otherCourses);
                                             DOET();
 
                                         });
@@ -664,27 +665,90 @@ var app = angular.module("users")
 
    function saveCourses() {
 
+            if($scope.userRole==='tutors'){
+              var coursesToPost = $rootScope.tempCourses.map(function(course){
+                      var object = {'tutorId': $scope.tutorID,
+                                    'courseId': course.idc}
+
+                      return object;
+
+              });
 
 
-            var coursesToPost = $rootScope.tempCourses.map(function(course){
-                    var object = {'tutorId': $scope.tutorID,
-                                  'courseId': course.idc}
+              $rootScope.tempCourses = [];
+              tutorsService.addCourses(coursesToPost)
+                             .then(function(){
+                                  getTutCourses();
+                             });
+            }
 
-                    return object;
+            else{
+              var coursesToPost = $rootScope.tempCourses.map(function(course){
+                      var object = {'studentId': $scope.studentId,
+                                    'courseId': course.idc}
 
-            });
+                      return object;
+
+              });
 
 
-            $rootScope.tempCourses = [];
+              $rootScope.tempCourses = [];
+              studentService.addCourses(coursesToPost)
+                             .then(function(){
+                               studentService.getStudentCourses($scope.studentId)
+                                  .then(function(response){
+                                      $scope.courseList = response.map(function(course){
+                                           var obj = {'code': course.courseCode,
+                                                      'name': course.courseName,
+                                                      'tutors': course.tutors.map(function(tutor){
+                                                                       var tut = {'first': tutor.userFirstName,
+                                                                                  'last': tutor.userLastName,
+                                                                                  'image': tutor.userImage,
+                                                                                  'id':tutor.tutorId,
+                                                                                  'email':tutor.userEmail
+                                                                                 }
+                                                                       return tut;
+                                                                 })
+                                                     }
 
-            tutorsService.addCourses(coursesToPost)
-                           .then(function(){
-                                getTutCourses();
-                           });
+                                           return obj;
+                                      });
+
+                                  })
+                                  .then(function(){
+                                    studentService.getStudentGroups($scope.studentId)
+                                           .then(function(response) {
+
+                                           var groups = response;
+
+                                                $scope.myGroupsList = groups.map(function(group){
+                                                                  var g = {'id': group.groupId,
+                                                                               'idc': group.courseId,
+                                                                               'name': group.groupName,
+                                                                               'size': group.groupSize,
+                                                                               'limit': group.groupCapacity,
+                                                                               'members': group.members.map(function(member){
+                                                                                                                var mem = {'first': member.userFirstName,
+                                                                                                                           'last': member.userLastName,
+                                                                                                                           'image': member.userImage
+                                                                                                                          }
+                                                                                                                return mem;
+                                                                                                            })
+                                                                              }
+                                                                  return g;
+
+                                                            });
+
+
+                                           });
+                             });
+            })
+
 
 
 
          }
+       }
 
        function removeCourse() {
                $scope.courseList.splice(courseToDelete,1);
@@ -743,7 +807,7 @@ var app = angular.module("users")
                       title: 'Are you sure you want to tutor these courses?',
                       type: 'warning',
                       showCancelButton: true,
-                      confirmButtonText: 'Yes, leave!'
+                      confirmButtonText: 'Yes, I am sure!'
                     }).then(function () {
                        swal(
                              'The tutoring begins!',
@@ -755,19 +819,13 @@ var app = angular.module("users")
 
                }
                else{
-                    swal({
-                          title: 'Are you sure you want to cancel?',
-                          type: 'warning',
-                          showCancelButton: true,
-                          confirmButtonText: 'Yes, leave!'
-                        }).then(function () {
                            swal(
                                  'You just cancelled!',
                                  'Course(s) NOT added. You can add them later on.',
                                  'error'
                                )
                            $rootScope.tempCourses.length = 0;
-                        })
+
 
                }
                $scope.status = 'You said the information was "' + answer + '".';
