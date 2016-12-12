@@ -8,7 +8,7 @@
 
       <md-divider></md-divider>
       <md-content ng-if="!courseList[0].code">
-        <h2 class="text-center" style="margin-top:80px;">You have no courses yet.<h2>
+        <h2 class="text-center" style="margin-top:80px;">You have no courses yet.</h2>
       </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
@@ -42,7 +42,7 @@
                   <p flex="40">{{tutor.first}} {{tutor.last}}</p>
                   <!-- </div> -->
                   <md-icon flex="20" ng-click="sendMessage(tutor.id,tutor.first,studentId,userId)" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
-                  <md-icon flex="20" ng-click="donate(userName)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="donate(userName,tutor.first,tutor.email)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
                   <md-divider ></md-divider>
               </md-list-item>
             </div>

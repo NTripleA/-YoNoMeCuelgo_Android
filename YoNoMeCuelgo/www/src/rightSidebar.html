@@ -23,7 +23,7 @@
         <section ng-if="userRole!='tutors'">
           <md-subheader class="md-warn">Group Messages</md-subheader>
           <md-list layout="column" layout-padding>
-            <md-list-item class="md-3-line" ng-repeat="message in groupMessages" ng-click="replyMessage()">
+            <md-list-item class="md-3-line" ng-repeat="message in groupMessages" ng-click="replyMessage(message.name,message.id,userId)">
               <img ng-src="{{message.userImage}}" class="md-avatar" alt="{{message.userFirstName}} {{message.userLastName}}">
               <div class="md-list-item-text">
                 <h3>{{message.title}}</h3>

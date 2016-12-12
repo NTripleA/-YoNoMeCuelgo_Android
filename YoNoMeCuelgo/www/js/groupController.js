@@ -18,7 +18,7 @@ var app = angular.module("users")
 
     studentService.getID(email)
           .then(function(response){
-
+                $scope.loading=true;
                 $scope.sid = response[0].studentId;
                 self.studentId = $scope.sid;
                 console.log(self.studentId);
@@ -87,7 +87,7 @@ var app = angular.module("users")
                         });
 
 
-
+                        $scope.loading=false;
                     });
 
 
@@ -317,12 +317,14 @@ var app = angular.module("users")
                  // $scope.items.push(self.selectedItems);
                  console.log($scope.items);
 
-                 studentService.joinGroup($scope.items).then(
+                 studentService.joinGroup($scope.items).then(function(){
                      swal(
                        'Joined!',
                        'Group(s) added.',
                        'success'
                      )
+                     getGroupInfo();
+                   }
                    ).then(null, function(error){
                      swal(
                        'Sorry',
@@ -339,18 +341,29 @@ var app = angular.module("users")
          };
        }
 
-    $scope.message = function(){
+    $scope.message = function(groupName, groupsId, userId){
       swal({
-        title: 'Group Post',
+        title: 'Send messages to '+groupName+" members",
         input: 'text',
         showCancelButton: true,
-        confirmButtonText: 'Send'
-      }).then(function () {
-        swal(
-          'Sent!',
-          'Your group has been notified.',
-          'success'
-        )
+        inputValidator: function (value) {
+          return new Promise(function (resolve, reject) {
+            if (value) {
+              resolve()
+            } else {
+              reject('You need to write something!')
+            }
+          })
+        }
+      }).then(function (result) {
+        var data = {"message":result,"senderId":userId, "groupsId":groupsId}
+        studentService.sendGroupMessage(data).then(function(){
+          swal(
+            'Sent!',
+            groupName+' members has been notified.',
+            'success'
+          )}
+        );
       })
     }
 

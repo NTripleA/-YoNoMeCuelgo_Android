@@ -186,5 +186,18 @@ function($http) {
 
      }
 
+
+     studentService.sendGroupMessage = function(data){
+              return $http.post(host+"/messageGroup", data)
+                      .then(function(response) {
+                          console.log(response);
+                          return response.data;
+                      })
+                      .then(null, function(err) {
+                          console.error(err);
+                      });
+
+     }
+
 	return studentService;
 }]);

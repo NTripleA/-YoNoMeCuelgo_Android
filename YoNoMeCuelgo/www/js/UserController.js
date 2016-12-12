@@ -75,7 +75,6 @@ var app = angular.module("users")
         // console.log(firebase.auth().currentUser);
         if(firebase.auth().currentUser != null)
         {
-          $scope.loading=true;
           var email = firebase.auth().currentUser.email;
           // var email = 'tahiri.fuentes@upr.edu';
           // email.email = $scope.userEmail;
@@ -188,13 +187,15 @@ var app = angular.module("users")
                                              });
                                           studentService.getGroupMessages(id)
                                             .then(function(response){
-
+                                              console.log(JSON.stringify(response))
                                                 $scope.groupMessages = response.map(function(message){
+
                                                                                         var obj = {'userImage': message.userImage,
-                                                                                                   'title': message.title,
                                                                                                    'userFirstName': message.userFirstName,
                                                                                                    'userLastName': message.userLastName,
-                                                                                                   'body': message.body
+                                                                                                   'body': message.body,
+                                                                                                   'name':message.groupName,
+                                                                                                   'id':message.groupsId
                                                                                                   }
                                                                                         return obj;
 
@@ -378,11 +379,9 @@ var app = angular.module("users")
               validated = false;
             }
             if(validated){
-              $scope.loading=true;
               firebase.auth().signInWithEmailAndPassword(email, password)
               .then(function(onResolve){
                 // $scope.route('home')
-                $scope.loading=false;
               }).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -392,7 +391,6 @@ var app = angular.module("users")
                 } else {
                   swal(errorMessage, "", "error");
                 }
-                $scope.loading=false;
                 $timeout($scope.$apply());
             });
           }
@@ -1196,19 +1194,29 @@ var app = angular.module("users")
 
           }
 
-          $scope.replyMessage = function(){
+          $scope.replyMessage = function(groupName,groupsId,userId){
             swal({
-              title: 'Reply',
+              title: 'Send messages to '+groupName+" members",
               input: 'text',
               showCancelButton: true,
-              confirmButtonText: 'Send'
-            }).then(function () {
-
-              // swal(
-              //   'Sent!',
-              //   '',
-              //   'success'
-              // )
+              inputValidator: function (value) {
+                return new Promise(function (resolve, reject) {
+                  if (value) {
+                    resolve()
+                  } else {
+                    reject('You need to write something!')
+                  }
+                })
+              }
+            }).then(function (result) {
+              var data = {"message":result,"senderId":userId, "groupsId":groupsId}
+              studentService.sendGroupMessage(data).then(function(){
+                swal(
+                  'Sent!',
+                  groupName+' members has been notified.',
+                  'success'
+                )}
+              );
             })
           }
 
@@ -1319,7 +1327,7 @@ var app = angular.module("users")
            })
          }
 
-          $scope.donate = function(sender){
+          $scope.donate = function(sender,tutorName,tutorEmail){
            //  swal({
            //    title: 'Send gift card?',
            //    imageUrl: 'https://cdn.shopify.com/s/files/1/0662/0785/products/e38bd83af578077b65a31424bd24d085_1024x1024.png?v=1412203835',
@@ -1336,9 +1344,8 @@ var app = angular.module("users")
            //    )
            //  })
                var senderName = sender;
-               var recipientName = 'Israel';
-               var recipientPhone = '7875181788';
-               var recipientEmail = 'israel.figueroa1@upr.edu';
+               var recipientName = tutorName;
+               var recipientEmail = tutorEmail;
                var demo = 'yifti';
                var production = 'yiftee';
                var page = 'http://app.'+demo+'.com/api/v1/gifts/send.html?api_token=1a461040ef067dea7f40fd8ef3b2663c4&sender_name='+senderName+'&recipient_name='+recipientName+'&recipient_email='+recipientEmail
