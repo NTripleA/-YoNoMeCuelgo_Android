@@ -426,77 +426,6 @@ var app = angular.module("users")
                 //  $route.reload();
                  accountsService.newUser(newUser);
                })
-
-                //DO NOT DELETE FOLLOWING CODE
-                // swal.setDefaults({
-                //   title: 'Set Up your info.',
-                //   confirmButtonText: 'Next &rarr;',
-                //   showCancelButton: false,
-                //   animation: false,
-                //   progressSteps: ['1', '2', '3', '4'],
-                //   allowOutsideClick: false,
-                //   allowEscapeKey: false
-                // })
-                //
-                // var steps = [
-                //   {
-                //     input:'text',
-                //     inputPlaceholder:'Your Name Here',
-                //     text: 'What is your firstname?'
-                //   },
-                //   {
-                //     input:'text',
-                //     inputPlaceholder:'Your Lastname Here',
-                //     text:'What is your lastname?'
-                //   },
-                //   {
-                //     input: 'checkbox',
-                //     inputValue: 0,
-                //     inputPlaceholder:'Are you a tutor?',
-                //   },
-                //   {
-                //     input: 'file',
-                //     inputAttributes: {
-                //       accept: 'image/*'
-                //     }
-                //   }
-                // ]
-
-                // swal.queue(steps).then(function (result) {
-                //   $scope.url = [];
-                //   var reader = new FileReader
-                //   reader.onload = function (e) {
-                //     $scope.url.push(e);
-                //     $scope.url.push(e.target.result);
-                //     $scope.settings= result.slice();
-                //     if($scope.url.length>1){
-                //         $scope.settings[2] = $scope.url[1];
-                //     }
-                //
-                //     swal({
-                //       imageUrl: e.target.result
-                //
-                //     })
-                //   }
-                //   reader.readAsDataURL(result[2]);
-                //   swal.resetDefaults()
-                //   swal({
-                //     title: 'All done!',
-                //     html:'Welcome: <h4>' + JSON.stringify(result) + '</h4>',
-                //     confirmButtonText: 'Lovely!',
-                //     showCancelButton: false
-                //   })
-                // }, function () {
-                //   swal.resetDefaults()
-                // })
-
-                //
-            //   }).catch(function(error) {
-            //     // Handle Errors here.
-            //     var errorCode = error.code;
-            //     var errorMessage = error.message;
-            //     swal(errorMessage, "", "error");
-            // });
             }
           }
           else{
@@ -778,20 +707,92 @@ var app = angular.module("users")
              });
            };
     $scope.changeSettings = function(ev) {
-        $mdDialog.show({
-          controller: DialogController,
-          templateUrl: 'changeSettings.html',
-          parent: angular.element(document.body),
-          targetEvent: ev,
-          clickOutsideToClose:false,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        // $mdDialog.show({
+        //   controller: DialogController,
+        //   templateUrl: 'changeSettings.html',
+        //   parent: angular.element(document.body),
+        //   targetEvent: ev,
+        //   clickOutsideToClose:false,
+        //   fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        // })
+        // .then(function(answer) {
+        //   $scope.status = 'You said the information was "' + answer + '".';
+        //   //console.log(self.tempCourses);
+        // }, function() {
+        //   $scope.status = 'You cancelled the dialog.';
+        // });
+
+        //DO NOT DELETE FOLLOWING CODE
+        swal.setDefaults({
+          title: 'Change your profile.',
+          confirmButtonText: 'Next &rarr;',
+          showCancelButton: true,
+          animation: false,
+          // progressSteps: ['1', '2', '3', '4'],
+          progressSteps: ['1', '2', '3'],
+          allowOutsideClick: false,
+          allowEscapeKey: false
         })
-        .then(function(answer) {
-          $scope.status = 'You said the information was "' + answer + '".';
-          //console.log(self.tempCourses);
-        }, function() {
-          $scope.status = 'You cancelled the dialog.';
-        });
+
+        var steps = [
+          {
+            input:'text',
+            inputPlaceholder:$scope.userName,
+            text: 'What is your firstname?'
+          },
+          {
+            input:'text',
+            inputPlaceholder:$scope.lastname,
+            text:'What is your lastname?'
+          },
+          // {
+          //   input: 'checkbox',
+          //   inputValue: 0,
+          //   inputPlaceholder:'Are you a tutor?',
+          // },
+          {
+            input: 'file',
+            inputAttributes: {
+              accept: 'image/*'
+            }
+          }
+        ]
+
+        swal.queue(steps).then(function (result) {
+          $scope.url = [];
+          var reader = new FileReader
+          reader.onload = function (e) {
+            $scope.url.push(e);
+            $scope.url.push(e.target.result);
+            $scope.settings= result.slice();
+            if($scope.url.length>1){
+                $scope.settings[2] = $scope.url[1];
+            }
+
+            swal({
+              imageUrl: e.target.result
+
+            })
+          }
+          reader.readAsDataURL(result[2]);
+          swal.resetDefaults()
+          swal({
+            title: 'All done!',
+            //html:'Welcome: <h4>' + JSON.stringify(result) + '</h4>',
+            confirmButtonText: 'Lovely!',
+            showCancelButton: true
+          })
+        }, function () {
+          swal.resetDefaults()
+        })
+
+    //
+    //   }).catch(function(error) {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     swal(errorMessage, "", "error");
+    // });
       };
 
   function DialogController($scope, $mdDialog) {
