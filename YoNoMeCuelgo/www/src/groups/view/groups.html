@@ -2,15 +2,15 @@
   <span ng-show="loading" us-spinner="{radius:30, width:8, length: 16}"></span>
   <md-content ng-show="!loading" style="overflow:hidden;" flex="80" flex-offset="10">
       <h1>My Groups
-        <md-button ng-hide="groupFlag.length<1" ng-controller="groupController" ng-click="showTabDialog($event)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
+        <md-button ng-show="courseList.length>0" ng-controller="groupController" ng-click="showTabDialog($event)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
             <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
         </md-button>
       </h1>
       <md-divider></md-divider>
-      <md-content ng-show="groupFlag.length<1">
+      <md-content ng-show="courseList.length<1">
         <h2 class="text-center" style="margin-top:80px;">Choose your courses first.</h2>
       </md-content>
-      <md-content ng-if="!myGroupsList[0].name && groupFlag.length>01">
+      <md-content ng-if="!myGroupsList[0].name && courseList.length>0">
         <h2 class="text-center" style="margin-top:80px;">You have no groups yet.</h2>
       </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
