@@ -1,7 +1,15 @@
 <div>
   <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
-      <h1>My Courses</h1>
+      <h1>My Courses
+        <md-button ng-if="!courseList[0].code" ng-click="" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Courses">
+            <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
+        </md-button>
+      </h1>
+
       <md-divider></md-divider>
+      <md-content ng-if="!courseList[0].code">
+        <h2 class="text-center" style="margin-top:80px;">You have no courses yet.</h2>
+      </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
           <md-card md-theme="default" ng-repeat="course in courseList" ng-if="$index%2==0">
@@ -34,7 +42,7 @@
                   <p flex="40">{{tutor.first}} {{tutor.last}}</p>
                   <!-- </div> -->
                   <md-icon flex="20" ng-click="sendMessage(tutor.id,tutor.first,studentId,userId)" class="md-secondary md-hue-3 fa fa-comments fa-lg" ></md-icon>
-                  <md-icon flex="20" ng-click="donate(userName)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
+                  <md-icon flex="20" ng-click="donate(userName,tutor.first,tutor.email)" class="md-secondary md-hue-3 fa fa-gift fa-lg" ></md-icon>
                   <md-divider ></md-divider>
               </md-list-item>
             </div>

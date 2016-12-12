@@ -1,7 +1,7 @@
 var app = angular.module("users")
     .controller('UserController',['userService', 'studentService', 'tutorsService','accountsService','$mdSidenav','$mdBottomSheet', '$timeout', '$log', '$scope', '$mdDialog', '$location', '$q', '$route', '$rootScope', function(userService, studentService, tutorsService, accountsService, $mdSidenav, $mdBottomSheet, $timeout, $log, $scope, $mdDialog, $location, $q, $route, $rootScope)
     {
-      console.log("COntroller");
+      // console.log("COntroller");
   /**
    * Main Controller for the Angular Material Starter App
    * @param $scope
@@ -41,7 +41,7 @@ var app = angular.module("users")
       }
       $scope.newuser.userStatus = newStatus;
 
-      console.log($scope.newuser);
+      // console.log($scope.newuser);
 
       $scope.signUp($scope.newuser);
 
@@ -72,26 +72,25 @@ var app = angular.module("users")
         // GET User Information
         // var id;
         var userRole;
-        console.log(firebase.auth().currentUser);
+        // console.log(firebase.auth().currentUser);
         if(firebase.auth().currentUser != null)
         {
-          $scope.loading=true;
           var email = firebase.auth().currentUser.email;
           // var email = 'tahiri.fuentes@upr.edu';
           // email.email = $scope.userEmail;
-          console.log(email);
+          // console.log(email);
             studentService.getID(email)
                 .then(function(response){
 
-                    console.log(JSON.stringify(response));
+                    // console.log(JSON.stringify(response));
                     $scope.userId = response[0].userId;
                     var isTutor = response[0].isTutor;
                     if (isTutor==0){
                         //Get all info of the student
-                        console.log($scope.userId);
+                        // console.log($scope.userId);
                         studentService.getStudentInfo($scope.userId)
                                  .then(function(response){
-                                      console.log(response);
+                                      // console.log(response);
                                        userRole = 'student';
                                        $scope.userRole = userRole;
                                        $scope.statusMessage = response[0].userStatus;
@@ -104,10 +103,11 @@ var app = angular.module("users")
                                  })
                                  .then(function(){
 
-                                   accountsService.allCourses()
+                                   studentService.otherCourses($scope.studentId)
                                         .then(function(response){
 
                                             $scope.otherCourses = response;
+                                           //  console.log($scope.otherCourses);
                                             DOET();
 
                                         });
@@ -188,13 +188,15 @@ var app = angular.module("users")
                                              });
                                           studentService.getGroupMessages(id)
                                             .then(function(response){
+                                              console.log(JSON.stringify(response))
+                                                $scope.groupMessages = response.reverse().map(function(message){
 
-                                                $scope.groupMessages = response.map(function(message){
                                                                                         var obj = {'userImage': message.userImage,
-                                                                                                   'title': message.title,
                                                                                                    'userFirstName': message.userFirstName,
                                                                                                    'userLastName': message.userLastName,
-                                                                                                   'body': message.body
+                                                                                                   'body': message.body,
+                                                                                                   'name':message.groupName,
+                                                                                                   'id':message.groupsId
                                                                                                   }
                                                                                         return obj;
 
@@ -302,7 +304,7 @@ var app = angular.module("users")
                                                          .then(function(response){
 
                                                              $scope.otherCourses = response;
-                                                             console.log($scope.otherCourses);
+                                                            //  console.log($scope.otherCourses);
                                                              DOET();
 
                                                          });
@@ -378,11 +380,9 @@ var app = angular.module("users")
               validated = false;
             }
             if(validated){
-              $scope.loading=true;
               firebase.auth().signInWithEmailAndPassword(email, password)
               .then(function(onResolve){
                 // $scope.route('home')
-                $scope.loading=false;
               }).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -392,7 +392,6 @@ var app = angular.module("users")
                 } else {
                   swal(errorMessage, "", "error");
                 }
-                $scope.loading=false;
                 $timeout($scope.$apply());
             });
           }
@@ -418,7 +417,7 @@ var app = angular.module("users")
                 swal('Type a upr student email. ¯\_(ツ)_/¯', "", "warning");
             }
             else{
-              console.log("funcionaaaaaaa");
+              // console.log("funcionaaaaaaa");
               firebase.auth().createUserWithEmailAndPassword(newUser.userEmail, newUser.userPassword)
                .then(function(onResolve){
                  firebase.auth().currentUser.sendEmailVerification();
@@ -475,7 +474,7 @@ var app = angular.module("users")
      * Hide or Show the 'left' sideNav area
      */
     function toggleUsersList() {
-      console.log("side bar");
+      // console.log("side bar");
       $mdSidenav('left').toggle();
     }
 
@@ -595,27 +594,90 @@ var app = angular.module("users")
 
    function saveCourses() {
 
+            if($scope.userRole==='tutors'){
+              var coursesToPost = $rootScope.tempCourses.map(function(course){
+                      var object = {'tutorId': $scope.tutorID,
+                                    'courseId': course.idc}
+
+                      return object;
+
+              });
 
 
-            var coursesToPost = $rootScope.tempCourses.map(function(course){
-                    var object = {'tutorId': $scope.tutorID,
-                                  'courseId': course.idc}
+              $rootScope.tempCourses = [];
+              tutorsService.addCourses(coursesToPost)
+                             .then(function(){
+                                  getTutCourses();
+                             });
+            }
 
-                    return object;
+            else{
+              var coursesToPost = $rootScope.tempCourses.map(function(course){
+                      var object = {'studentId': $scope.studentId,
+                                    'courseId': course.idc}
 
-            });
+                      return object;
+
+              });
 
 
-            $rootScope.tempCourses = [];
+              $rootScope.tempCourses = [];
+              studentService.addCourses(coursesToPost)
+                             .then(function(){
+                               studentService.getStudentCourses($scope.studentId)
+                                  .then(function(response){
+                                      $scope.courseList = response.map(function(course){
+                                           var obj = {'code': course.courseCode,
+                                                      'name': course.courseName,
+                                                      'tutors': course.tutors.map(function(tutor){
+                                                                       var tut = {'first': tutor.userFirstName,
+                                                                                  'last': tutor.userLastName,
+                                                                                  'image': tutor.userImage,
+                                                                                  'id':tutor.tutorId,
+                                                                                  'email':tutor.userEmail
+                                                                                 }
+                                                                       return tut;
+                                                                 })
+                                                     }
 
-            tutorsService.addCourses(coursesToPost)
-                           .then(function(){
-                                getTutCourses();
-                           });
+                                           return obj;
+                                      });
+
+                                  })
+                                  .then(function(){
+                                    studentService.getStudentGroups($scope.studentId)
+                                           .then(function(response) {
+
+                                           var groups = response;
+
+                                                $scope.myGroupsList = groups.map(function(group){
+                                                                  var g = {'id': group.groupId,
+                                                                               'idc': group.courseId,
+                                                                               'name': group.groupName,
+                                                                               'size': group.groupSize,
+                                                                               'limit': group.groupCapacity,
+                                                                               'members': group.members.map(function(member){
+                                                                                                                var mem = {'first': member.userFirstName,
+                                                                                                                           'last': member.userLastName,
+                                                                                                                           'image': member.userImage
+                                                                                                                          }
+                                                                                                                return mem;
+                                                                                                            })
+                                                                              }
+                                                                  return g;
+
+                                                            });
+
+
+                                           });
+                             });
+            })
+
 
 
 
          }
+       }
 
        function removeCourse() {
                $scope.courseList.splice(courseToDelete,1);
@@ -674,7 +736,7 @@ var app = angular.module("users")
                       title: 'Are you sure you want to tutor these courses?',
                       type: 'warning',
                       showCancelButton: true,
-                      confirmButtonText: 'Yes, leave!'
+                      confirmButtonText: 'Yes, I am sure!'
                     }).then(function () {
                        swal(
                              'The tutoring begins!',
@@ -686,19 +748,13 @@ var app = angular.module("users")
 
                }
                else{
-                    swal({
-                          title: 'Are you sure you want to cancel?',
-                          type: 'warning',
-                          showCancelButton: true,
-                          confirmButtonText: 'Yes, leave!'
-                        }).then(function () {
                            swal(
                                  'You just cancelled!',
                                  'Course(s) NOT added. You can add them later on.',
                                  'error'
                                )
                            $rootScope.tempCourses.length = 0;
-                        })
+
 
                }
                $scope.status = 'You said the information was "' + answer + '".';
@@ -806,7 +862,7 @@ var app = angular.module("users")
 
       $scope.answer = function(answer) {
         if (answer==="Done"){
-        console.log($scope.tempCourses);
+        // console.log($scope.tempCourses);
           swal(
             'Joined!',
             'Course(s) added.',
@@ -832,7 +888,7 @@ var app = angular.module("users")
 
             function DOET(){
 
-                    console.log($scope.otherCourses);
+                    // console.log($scope.otherCourses);
                        self.repos = loadAll($scope.otherCourses);
 
             }
@@ -894,7 +950,7 @@ var app = angular.module("users")
          function loadAll(courses) {
            var repos = [];
 
-          console.log("courses: " + JSON.stringify(courses));
+          // console.log("courses: " + JSON.stringify(courses));
 
            repos = courses.map(function(course){
                   var object = {'Code': course.courseCode,
@@ -1159,7 +1215,7 @@ var app = angular.module("users")
               var day = date.getDate();
               var year = date.getFullYear();
               var date = year.toString()+'/'+month.toString()+'/'+day.toString();
-
+              // console.log(date)
               $("#day")
                 .countdown(date, function(event) {
                   $(this).text(
@@ -1192,24 +1248,34 @@ var app = angular.module("users")
                 //MAKE POST TO ENDPOINT HERE Params: title = $scope.countdown, time = date
 
                 $scope.newCountdown = {'studentId': $scope.studentId,
-                                    'newTime': year.toString()+'-'+month.toString()+'-'+day.toString(),
+                                    'newTime': year.toString()+'/'+month.toString()+'/'+day.toString(),
                                     'newTitle': $scope.countdown}
 
           }
 
-          $scope.replyMessage = function(){
+          $scope.replyMessage = function(groupName,groupsId,userId){
             swal({
-              title: 'Reply',
+              title: 'Send messages to '+groupName+" members",
               input: 'text',
               showCancelButton: true,
-              confirmButtonText: 'Send'
-            }).then(function () {
-
-              // swal(
-              //   'Sent!',
-              //   '',
-              //   'success'
-              // )
+              inputValidator: function (value) {
+                return new Promise(function (resolve, reject) {
+                  if (value) {
+                    resolve()
+                  } else {
+                    reject('You need to write something!')
+                  }
+                })
+              }
+            }).then(function (result) {
+              var data = {"message":result,"senderId":userId, "groupsId":groupsId}
+              studentService.sendGroupMessage(data).then(function(){
+                swal(
+                  'Sent!',
+                  groupName+' members has been notified.',
+                  'success'
+                )}
+              );
             })
           }
 
@@ -1320,7 +1386,7 @@ var app = angular.module("users")
            })
          }
 
-          $scope.donate = function(sender){
+          $scope.donate = function(sender,tutorName,tutorEmail){
            //  swal({
            //    title: 'Send gift card?',
            //    imageUrl: 'https://cdn.shopify.com/s/files/1/0662/0785/products/e38bd83af578077b65a31424bd24d085_1024x1024.png?v=1412203835',
@@ -1337,9 +1403,8 @@ var app = angular.module("users")
            //    )
            //  })
                var senderName = sender;
-               var recipientName = 'Israel';
-               var recipientPhone = '7875181788';
-               var recipientEmail = 'israel.figueroa1@upr.edu';
+               var recipientName = tutorName;
+               var recipientEmail = tutorEmail;
                var demo = 'yifti';
                var production = 'yiftee';
                var page = 'http://app.'+demo+'.com/api/v1/gifts/send.html?api_token=1a461040ef067dea7f40fd8ef3b2663c4&sender_name='+senderName+'&recipient_name='+recipientName+'&recipient_email='+recipientEmail

@@ -1,12 +1,18 @@
 <div ng-controller="groupController as groups">
-  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
+  <span ng-show="loading" us-spinner="{radius:30, width:8, length: 16}"></span>
+  <md-content ng-show="!loading" style="overflow:hidden;" flex="80" flex-offset="10">
       <h1>My Groups
-        <md-button ng-controller="groupController" ng-click="showTabDialog($event)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
+        <md-button ng-show="courseList.length>0" ng-controller="groupController" ng-click="showTabDialog($event)" style="position: absolute; right: 0;" class="md-fab md-mini md-secondary" aria-label="New Group">
             <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
         </md-button>
       </h1>
       <md-divider></md-divider>
-
+      <md-content ng-show="courseList.length<1">
+        <h2 class="text-center" style="margin-top:80px;">Choose your courses first.</h2>
+      </md-content>
+      <md-content ng-if="!myGroupsList[0].name && courseList.length>0">
+        <h2 class="text-center" style="margin-top:80px;">You have no groups yet.</h2>
+      </md-content>
       <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
           <md-card md-theme="default" ng-repeat="group in myGroupsList" ng-if="$index%2==0">
@@ -30,7 +36,7 @@
           </md-card-content>
 
           <md-card-actions layout="row" layout-align="end center">
-            <md-button ng-click="message()">Message</md-button>
+            <md-button ng-click="message(group.name,group.id,userId)">Message</md-button>
             <md-button ng-click="exit(group)">Leave</md-button>
           </md-card-actions>
         </md-card>
@@ -58,7 +64,7 @@
             </md-card-content>
 
             <md-card-actions layout="row" layout-align="end center">
-              <md-button ng-click="message()">Message</md-button>
+              <md-button ng-click="message(group.name,group.id,userId)">Message</md-button>
               <md-button ng-click="exit(group)">Leave</md-button>
             </md-card-actions>
           </md-card>

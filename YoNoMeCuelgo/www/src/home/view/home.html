@@ -1,6 +1,7 @@
 <div ng-controller="UserController" class="row" style="margin-top:5%;">
     <div ng-show="!loading" class="col-xs-10 col-xs-push-1" id="clockdiv">
-        <h2 style="margin-bottom:3%;color:rgb(33,150,243);">Countdown to {{countdown}}</h2>
+        <h2 ng-show="countdown.length>0" style="margin-bottom:3%;color:rgb(33,150,243);">Countdown to {{countdown}}</h2>
+        <h2 ng-hide="countdown.length>0" ng-click="setCalendar()" style="margin-bottom:3%;color:rgb(33,150,243);">Set your countdown!</h2>
         <div class="row">
           <div class="col-xs-3">
               <span class="days"><div id="day"></div></span>
@@ -91,10 +92,10 @@
         <md-list style="padding:20px;" ng-if="myGroupsList.length<1 && courseList.length<1">
           <h4>You are part of anything... yet.</h4>
         </md-list>
-        <md-list style="padding:20px;" ng-if="myGroupsList.length<1 && courseList.length>0">
+        <md-list style="padding:20px;" ng-show="myGroupsList.length<1 && courseList.length>0">
           <div layout="row">
             <h4 flex="70">Start Adding Groups!</h4>
-            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-controller="groupController" ng-click="showTabDialog($event)" class="md-fab md-mini md-secondary" aria-label="New Group">
+            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-click="route('/groups')" class="md-fab md-mini md-secondary" aria-label="New Group">
                 <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
             </md-button>
           </div>
@@ -117,10 +118,44 @@
         <md-list style="padding:20px;" ng-if="courseList.length<1">
           <div layout="row">
             <h4 flex="70">Start Adding Courses!</h4>
-            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-click="showTabDialog($event)" class="md-fab md-mini md-secondary" aria-label="New Courses">
+            <md-button flex="20" style="position:absolute; margin-top:0px;" ng-click="showAdvanced($event,tempCourses)" class="md-fab md-mini md-secondary" aria-label="New Courses">
                 <md-icon class="fa fa-plus fa-lg" style="margin-top: 45%; color: white;"></md-icon>
             </md-button>
           </div>
         </md-list>
     </md-card>
 </md-content>
+
+<div>
+    <script type="text/ng-template" id="addCourses.html">
+        <md-dialog aria-label="Add New Courses">
+            <form ng-cloak>
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <h2>Please search for the courses you wish to add</h2>
+                        <span flex></span>
+                        <md-button class="md-icon-button" ng-click="cancel()">
+                            <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content>
+                    <div class="md-dialog-content">
+                      {{tempCourses}}
+                        <searchbar></searchbar>
+                    </div>
+                </md-dialog-content>
+
+                <md-dialog-actions layout="row">
+                    <span flex></span>
+                    <md-button ng-click="answer('Cancel')">
+                        Cancel
+                    </md-button>
+                    <md-button ng-click="answer('Done')">
+                        Submit
+                    </md-button>
+                </md-dialog-actions>
+            </form>
+        </md-dialog>
+    </script>
+</div>
