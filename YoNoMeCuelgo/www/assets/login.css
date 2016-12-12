@@ -325,7 +325,7 @@ body {
   transition: .3s ease;
 }
 .card .footer a:hover {
-  color: #bababa;
+  color: #000000;
 }
 .card.alt {
   position: absolute;
