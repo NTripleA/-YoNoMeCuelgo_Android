@@ -274,6 +274,31 @@ var app = angular.module("users")
                     'Group(s) added.',
                     'success'
                   )
+                  studentService.getStudentGroups($scope.sid)
+                         .then(function(response) {
+
+                         var groups = response;
+
+                              $scope.myGroupsList = groups.map(function(group){
+                                                var g = {'id': group.groupId,
+                                                             'idc': group.courseId,
+                                                             'name': group.groupName,
+                                                             'size': group.groupSize,
+                                                             'limit': group.groupCapacity,
+                                                             'members': group.members.map(function(member){
+                                                                                              var mem = {'first': member.userFirstName,
+                                                                                                         'last': member.userLastName,
+                                                                                                         'image': member.userImage
+                                                                                                        }
+                                                                                              return mem;
+                                                                                          })
+                                                            }
+                                                return g;
+
+                                          });
+
+
+                         });
                 }).then(null,function(error){
                      swal(
                        'Sorry',

@@ -188,7 +188,7 @@ var app = angular.module("users")
                                           studentService.getGroupMessages(id)
                                             .then(function(response){
                                               console.log(JSON.stringify(response))
-                                                $scope.groupMessages = response.map(function(message){
+                                                $scope.groupMessages = response.reverse().map(function(message){
 
                                                                                         var obj = {'userImage': message.userImage,
                                                                                                    'userFirstName': message.userFirstName,
