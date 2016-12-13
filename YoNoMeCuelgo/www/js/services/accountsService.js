@@ -2,10 +2,10 @@ angular.module('users')
 .factory('accountsService', [
 '$http',
 function($http) {
-    var host = "http://localhost:8080";
+    // var host = "http://localhost:8080";
   //  var host = "https://glacial-journey-85518.herokuapp.com";
   // var host = "https://sleepy-plains-69107.herokuapp.com";
-  // var host = "https://afternoon-beach-13945.herokuapp.com";
+  var host = "https://afternoon-beach-13945.herokuapp.com";
 	var accountsService = {};
 	var sid;
 	var tid;
