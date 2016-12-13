@@ -68,19 +68,16 @@
         <label for="Password">Password</label>
         <div class="bar"></div>
       </div>
-      <div class="footer" style="margin-top: -5%;"><a ng-click="forgotPassword()">Forgot your password?</a></div>
       <div class="button-container" style="margin-top: 5%;">
         <button ng-click="logIn(userEmail,userPassword)"><span>LOG IN</span></button>
       </div>
-      <div class="button-container">
-        <button onclick="window.location='https://console.firebase.google.com/project/yonomecuelgo/authentication/users';" style="margin-top: 5%;"><span>Admin<i class="fa fa-lock" style="padding-left: 3%;"></i></span></button>
-      </div>
+      <div class="footer"><a ng-click="forgotPassword()">Forgot your password?</a></div>
     </form>
   </div>
   <div class="card alt">
     <div class="toggle"></div>
     <h1 class="title">Register
-      <div class="close"></div>
+      <div class="close" ng-click="close()" ng-show="authenticating && !personalInfo && !roleInfo && !cantClose"></div>
     </h1>
 
     <div ng-show="authenticating && !personalInfo && !roleInfo">
@@ -104,17 +101,20 @@
     <div ng-show="authenticating && personalInfo && !roleInfo">
       <form>
         <div class="input-container">
-          <input ng-model="newFirstName" type="text" id="First"/>
+          <input ng-model="newFirstName" type="text" id="First" required="true"/>
           <label for="Firstname">First Name</label>
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input ng-model="newLastName" type="text" id="Last"/>
+          <input ng-model="newLastName" type="text" id="Last" required="true"/>
           <label for="Lastname">Last Name</label>
           <div class="bar"></div>
         </div>
         <div class="button-container">
-          <button ng-click="info(newFirstName, newLastName)"><span>Next</span></button>
+          <button ng-click="info(newFirstName, newLastName, true)"><span>Next</span></button>
+        </div>
+        <div class="button-container" style="margin-top: 5%">
+          <button ng-click="info(newFirstName, newLastName, false)"><span>Back</span></button>
         </div>
       </form>
     </div>
@@ -122,18 +122,22 @@
     <div ng-show="authenticating && personalInfo && roleInfo">
       <form>
         <div class="input-container">
-          <input ng-model="newIsTutor" type="text" id="First"/>
+          <input ng-model="newIsTutor" type="text" id="IsTutor" required="true"/>
           <label for="IsTutor">Are you a tutor? (Yes/No)</label>
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input ng-model="newStatus" type="text" id="Last"/>
+          <input ng-model="newStatus" type="text" id="Status" required="true"/>
           <label for="Status">Status Message</label>
           <div class="bar"></div>
         </div>
         <div class="button-container">
-          <button ng-click="role(newIsTutor, newStatus)"><span>Finish</span></button>
+          <button ng-click="role(newIsTutor, newStatus, true)"><span>Finish</span></button>
         </div>
+        <div class="button-container" style="margin-top: 5%">
+          <button ng-click="role(newIsTutor, newStatus, false)"><span>Back</span></button>
+        </div>
+
       </form>
     </div>
 

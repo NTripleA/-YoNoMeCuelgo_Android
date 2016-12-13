@@ -70,7 +70,6 @@ var app = angular.module("users")
             .then(function(response){
 
             });
-        var
 //        accountsService.deleteUser(userToDelete)
 //              .then(function(){
 //                swal(
@@ -86,7 +85,7 @@ var app = angular.module("users")
 //                  'error'
 //                )
 //              });
-      })
+      });
     }
 
     getAllUsers();
