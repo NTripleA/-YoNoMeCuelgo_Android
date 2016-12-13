@@ -59,5 +59,16 @@ function($http) {
             console.error(err);
           });
         };
+
+    accountsService.deleteUser = function(data) {
+          return $http.put(host+"/deleteUser",data)
+                    .then(function(response){
+                        return response.data;
+                    })
+                    .then(null, function(err){
+                        console.log(err);
+                    });
+
+    }
 	return accountsService;
 }]);

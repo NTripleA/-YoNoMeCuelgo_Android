@@ -25,6 +25,10 @@ var app = angular.module("users")
     {
           templateUrl:    'src/tutors/view/tutors.html'
     });
+    $routeProvider.when('/admin',
+    {
+          templateUrl: 'src/admin/view/admin.html'
+    });
     $routeProvider.when('/settings',
     {
           templateUrl:    'src/settings/view/settings.html'
@@ -40,8 +44,7 @@ var app = angular.module("users")
     $routeProvider.otherwise(
     {
       redirectTo:     '/login'
-    }
-  );
+    });
 });
 
 app.controller('NavCtrl',

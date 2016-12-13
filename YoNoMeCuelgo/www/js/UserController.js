@@ -98,7 +98,7 @@ var app = angular.module("users")
                                        $scope.lastName = response[0].userLastName;
                                        $scope.profilePicture = response[0].userImage;
                                        id = response[0].studentId;
-                                       $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'?
+                                       $scope.uid = id; // Nel, Este es el id de estudiante, why 'uid'? //Porque soy cool
                                        $scope.studentId = id;
                                  })
                                  .then(function(){
