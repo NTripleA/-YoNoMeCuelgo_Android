@@ -834,20 +834,112 @@ var app = angular.module("users")
              });
            };
     $scope.changeSettings = function(ev) {
-        $mdDialog.show({
-          controller: DialogController,
-          templateUrl: 'changeSettings.html',
-          parent: angular.element(document.body),
-          targetEvent: ev,
-          clickOutsideToClose:false,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+      //DO NOT DELETE FOLLOWING CODE
+     swal.setDefaults({
+       title: 'Change your profile.',
+       confirmButtonText: 'Next &rarr;',
+       showCancelButton: true,
+       animation: false,
+       // progressSteps: ['1', '2', '3', '4'],
+       progressSteps: ['1', '2'],
+       allowOutsideClick: false,
+       allowEscapeKey: false
+     })
+
+     var steps = [
+       {
+         input:'text',
+         inputPlaceholder:$scope.statusMessage,
+         text: 'What is your status message?'
+       },
+       // {
+       //   input: 'checkbox',
+       //   inputValue: 0,
+       //   inputPlaceholder:'Are you a tutor?',
+       // },
+       {
+         input: 'file',
+         inputAttributes: {
+           accept: 'image/*'
+         }
+       }
+     ]
+
+     swal.queue(steps).then(function (result) {
+       console.log(JSON.stringify(result));
+       if(result[0]===''){
+         result[0]=$scope.statusMessage;
+       }
+       if(result[1]==null){
+         console.log('nulllll');
+         $scope.settings=result.slice();
+         $scope.settings[1]=$scope.profilePicture;
+         console.log(JSON.stringify($scope.settings))
+         swal({
+           imageUrl: $scope.settings[1]
+         }).then(function(){
+           console.log($scope.settings);
+          //  save settings here
+           var data = {"statusMessage":$scope.settings[0], "imageUrl": $scope.settings[1]}
+           console.log(JSON.stringify(data));
+          //  studentService.updateSettings()
         })
-        .then(function(answer) {
-          $scope.status = 'You said the information was "' + answer + '".';
-          //console.log(self.tempCourses);
-        }, function() {
-          $scope.status = 'You cancelled the dialog.';
-        });
+       }
+       else{
+         $scope.url = [];
+         var reader = new FileReader
+         reader.onload = function (e) {
+           $scope.url.push(e);
+           $scope.url.push(e.target.result);
+           $scope.settings= result.slice();
+           if($scope.url.length>1){
+               $scope.settings[1] = $scope.url[1];
+               console.log(JSON.stringify($scope.settings))
+           }
+
+           swal({
+             title:$scope.settings[0],
+             imageUrl: e.target.result
+
+           }).then(function(){
+             console.log($scope.settings);
+            //  save settings here
+            var data = {'userStatus':$scope.settings[0],'userImage':$scope.settings[1], 'userId': $scope.userId}
+            studentService.updateSettings(data).then(function(){
+              swal(
+                'Updated!',
+                'You rock! ',
+                'success'
+              )
+            });
+          }).then(null,function(err){
+            console.log($scope.settings)
+          })
+         }
+         if(result.length>1){
+          reader.readAsDataURL(result[1]);
+         }
+       }
+
+
+       swal.resetDefaults()
+       swal({
+         title:$scope.settings[0],
+         imageUrl: $scope.settings[1]
+       }).then(function(){
+         console.log('saving...')
+         var data = {'userStatus':$scope.settings[0],'userImage':$scope.settings[1], 'userId': $scope.userId}
+         studentService.updateSettings(data).then(function(){
+           swal(
+             'Updated!',
+             'You rock! ',
+             'success'
+           )
+         });
+       })
+     }, function () {
+       swal.resetDefaults()
+     })
       };
 
   function DialogController($scope, $mdDialog) {
