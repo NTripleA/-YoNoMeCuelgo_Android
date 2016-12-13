@@ -121,7 +121,7 @@ var app = angular.module("users")
 //                  'error'
 //                )
 //              });
-      })
+      });
     }
 
     getAllUsers();
