@@ -67,10 +67,45 @@ var app = angular.module("users")
         var fbuser;
 
         firebase.auth().signInWithEmailAndPassword(user.email,user.password)
-            .then(function(response){
+            .then(function(user){
+              user.delete().then(function(){
+                accountsService.deleteUser(userToDelete).then(function(){
+                  firebase.auth().signInWithEmailAndPassword('admin@admin.com','Enlavidahayqueleerporquelodiceisrael').then(
+                    function(){
+                      accountsService.getUsers()
+                             .then(function(response){
 
+                                  $scope.userList = response.map(function(user){
+                                          function getRole(isTutor)
+                                          {
+                                            if(isTutor === 1)
+                                            {
+                                                return 'Tutor';
+                                            }
+                                            else
+                                                return 'Student';
+                                          }
+
+                                          var object = {'userId': user.userId,
+                                                        'first': user.userFirstName,
+                                                        'last': user.userLastName,
+                                                        'image': user.userImage,
+                                                        'email': user.userEmail,
+                                                        'role':getRole(user.isTutor),
+                                                        'password': user.userPassword
+                                                       }
+
+                                          return object;
+
+                                  });
+
+                             });
+                    }
+                  )
+                })
+
+              })
             });
-        var
 //        accountsService.deleteUser(userToDelete)
 //              .then(function(){
 //                swal(
@@ -86,7 +121,7 @@ var app = angular.module("users")
 //                  'error'
 //                )
 //              });
-      })
+      });
     }
 
     getAllUsers();

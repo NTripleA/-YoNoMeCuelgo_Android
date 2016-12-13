@@ -61,7 +61,7 @@ function($http) {
         };
 
     accountsService.deleteUser = function(data) {
-          return $http.put(host+"/deleteUser",data)
+          return $http.post(host+"/deleteUser",data)
                     .then(function(response){
                         return response.data;
                     })

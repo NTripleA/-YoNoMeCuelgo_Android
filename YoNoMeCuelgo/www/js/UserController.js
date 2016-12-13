@@ -13,41 +13,90 @@ var app = angular.module("users")
     $scope.authenticating = true;
     $scope.personalInfo = false;
     $scope.roleInfo = false;
+    $scope.cantClose = false;
     $scope.otherCourses = [];
 
     $scope.newuser = {'userFirstName' : '', 'userLastName' : '', 'userEmail' : '', 'userPassword' : '', 'isTutor' : '', 'userStatus' : ''}
 
+    $scope.close = function() {
+        $scope.newuser = {'userFirstName' : '', 'userLastName' : '', 'userEmail' : '', 'userPassword' : '', 'isTutor' : '', 'userStatus' : ''}
+        $scope.authenticating = true;
+        $scope.personalInfo = false;
+        $scope.roleInfo = false;
+    }
+
     $scope.auth = function(newEmail, newPassword) {
       // $scope.authenticating = false;
-      $scope.newuser.userEmail = newEmail;
-      $scope.newuser.userPassword = newPassword;
-      $scope.personalInfo = true;
+      if (typeof(newEmail)==='undefined' || typeof(newPassword)==='undefined') {
+        console.log("email y password.. daleeee");
+      }
+      else {
+        $scope.newuser.userEmail = newEmail;
+        $scope.newuser.userPassword = newPassword;
+        $scope.personalInfo = true;
+        $scope.cantClose = true;
+      }
+
     }
 
-    $scope.info = function(newFirstName, newLastName) {
+    $scope.info = function(newFirstName, newLastName, next) {
       // $scope.personalInfo = false;
-      $scope.newuser.userFirstName = newFirstName;
-      $scope.newuser.userLastName = newLastName;
-      $scope.roleInfo = true;
+
+      if((typeof(newFirstName)==='undefined' || typeof(newLastName)==='undefined') && next===false) {
+        $scope.roleInfo = false;
+      }
+      else if ((typeof(newFirstName)==='undefined' || typeof(newLastName)==='undefined') && next===true){
+        console.log("llena la info");
+      }
+      else {
+          $scope.newuser.userFirstName = newFirstName;
+          $scope.newuser.userLastName = newLastName;
+
+          if(next===false) {
+            $scope.personalInfo = false;
+          }
+          else if (next===true) {
+            $scope.roleInfo = true;
+
+          }
+       }
     }
 
-    $scope.role = function(newIsTutor, newStatus) {
+    $scope.role = function(newIsTutor, newStatus, next) {
 
-      if (newIsTutor.toLowerCase()==="yes") {
-        $scope.newuser.isTutor = 1;
+      if((typeof(newIsTutor)==='undefined' || typeof(newStatus)==='undefined') && next===false) {
+        $scope.roleInfo = false;
       }
-      else if (newIsTutor.toLowerCase()==="no"){
-        $scope.newuser.isTutor = 0;
+      else if ((typeof(newIsTutor)==='undefined' || typeof(newStatus)==='undefined') && next===true){
+        console.log("llena la info");
       }
-      $scope.newuser.userStatus = newStatus;
+      else {
 
-      // console.log($scope.newuser);
+        if (newIsTutor.toLowerCase()==="yes") {
+           $scope.newuser.isTutor = 1;
+           $scope.newuser.userStatus = newStatus;
+        }
+        else if (newIsTutor.toLowerCase()==="no"){
+            $scope.newuser.isTutor = 0;
+            $scope.newuser.userStatus = newStatus;
+        }
+        else {
+          $scope.valid = false;
+        }
 
-      $scope.signUp($scope.newuser);
+        if (next===false) {
+            $scope.roleInfo = false;
+        }
+        else if (next===true && $scope.valid===true) {
+           $scope.personalInfo = false;
+           $scope.roleInfo = false;
+           $scope.authenticating = true;
+           $scope.cantClose = false;
+           $scope.signUp($scope.newuser);
+        }
 
-      // $scope.personalInfo = false;
-      // $scope.roleInfo = false;
-      // $scope.authenticating = true;
+      }
+
     }
 
     $scope.currentPage=1;
@@ -189,6 +238,7 @@ var app = angular.module("users")
                                           studentService.getGroupMessages(id)
                                             .then(function(response){
                                               console.log(JSON.stringify(response))
+                                              if(response.length>0){
                                                 $scope.groupMessages = response.reverse().map(function(message){
 
                                                                                         var obj = {'userImage': message.userImage,
@@ -201,6 +251,7 @@ var app = angular.module("users")
                                                                                         return obj;
 
                                                                                     });
+                                                                                  }
                                               $scope.loading=false;
                                             }).then(function(response){
                                               var push = PushNotification.init({
@@ -356,12 +407,18 @@ var app = angular.module("users")
 
     firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    if(user.emailVerified){
-      getSettings();
+    if(user.email === 'admin@admin.com'){
+      $scope.route('/admin');
     }
     else{
-      $scope.route('/verify');
+      if(user.emailVerified){
+        getSettings();
+      }
+      else{
+        $scope.route('/verify');
+      }
     }
+
   }
   else {
     $scope.route('/login');
@@ -370,31 +427,39 @@ var app = angular.module("users")
 
     $scope.logIn = function(email,password){
         console.log("");
-            var validated = true;
-            if (typeof email === 'undefined' || !email) {
-              swal("Please type an email", "", "warning");
-              validated = false;
+            if(email === "admin@admin.com" && password ==="Enlavidahayqueleerporqueisraellodice")
+            {
+               $scope.route('/admin');
             }
-            else if (typeof password === 'undefined' || !password) {
-              swal("Please type a password", "", "warning");
-              validated = false;
-            }
-            if(validated){
-              firebase.auth().signInWithEmailAndPassword(email, password)
-              .then(function(onResolve){
-                // $scope.route('home')
-              }).catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                if (errorCode === 'auth/wrong-password') {
-                  swal("Wrong Password", "", "error");
-                } else {
-                  swal(errorMessage, "", "error");
+            else
+            {
+                 var validated = true;
+                  if (typeof email === 'undefined' || !email) {
+                    swal("Please type an email", "", "warning");
+                    validated = false;
+                  }
+                  else if (typeof password === 'undefined' || !password) {
+                    swal("Please type a password", "", "warning");
+                    validated = false;
+                  }
+                  if(validated){
+                    firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then(function(onResolve){
+                      // $scope.route('home')
+                    }).catch(function(error) {
+                      // Handle Errors here.
+                      var errorCode = error.code;
+                      var errorMessage = error.message;
+                      if (errorCode === 'auth/wrong-password') {
+                        swal("Wrong Password", "", "error");
+                      } else {
+                        swal(errorMessage, "", "error");
+                      }
+                      $timeout($scope.$apply());
+                  });
                 }
-                $timeout($scope.$apply());
-            });
-          }
+            }
+
         }
 
         $scope.resend = function(){
