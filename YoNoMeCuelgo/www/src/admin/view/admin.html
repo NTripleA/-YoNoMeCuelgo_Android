@@ -1,0 +1,52 @@
+<div ng-controller="adminController">
+  <md-content style="overflow-x:hidden;" flex="80" flex-offset="10">
+    <h1>Users</h1>
+    <md-divider></md-divider>
+
+    <md-content class="md-padding" layout-xs="column" layout="row">
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-theme="default" ng-repeat="user in userList" ng-if="$index%2==0">
+          <md-card-title style="background-color: #00BF96">
+              <span class="md-headline" style="color: white;">{{user.role}}</span>
+          </md-card-title>
+          <md-card-content class="row" md-scroll-y style="height: 70px;">
+            <div class="col-xs-8" >
+              <md-list-item>
+                <span>
+                  <img ng-src="{{user.image}}" class="md-avatar"/>
+                   {{user.first}} {{user.last}}
+                </span>
+              </md-list-item>
+            </div>
+            <div class="col-xs-4 col-xs-push-3">
+              <i ng-click="del(user)" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-times"></i>
+            </div>
+
+          </md-card-content>
+        </md-card>
+      </div>
+
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-theme="default" ng-repeat="user in userList" ng-if="$index%2!=0">
+          <md-card-title style="background-color: #00BF96">
+            <span class="md-headline" style="color: white;">{{user.role}}</span>
+          </md-card-title>
+          <md-card-content class="row" md-scroll-y style="height: 70px;">
+            <div class="col-xs-8" >
+              <md-list-item>
+                <span>
+                  <img ng-src="{{user.image}}" class="md-avatar"/>
+                   {{user.first}} {{user.last}}
+                </span>
+              </md-list-item>
+            </div>
+            <div class="col-xs-4 col-xs-push-3">
+              <i ng-click="del(user)" style="font-size: 25px;color: rgb(255,82,82);line-height: 50px; cursor:pointer;" class="fa fa-times"></i>
+            </div>
+
+          </md-card-content>
+
+      </div>
+    </md-content>
+  </md-content>
+</div>
