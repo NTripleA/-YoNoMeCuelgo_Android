@@ -189,6 +189,7 @@ var app = angular.module("users")
                                           studentService.getGroupMessages(id)
                                             .then(function(response){
                                               console.log(JSON.stringify(response))
+                                              if(response.length>0){
                                                 $scope.groupMessages = response.reverse().map(function(message){
 
                                                                                         var obj = {'userImage': message.userImage,
@@ -201,6 +202,7 @@ var app = angular.module("users")
                                                                                         return obj;
 
                                                                                     });
+                                                                                  }
                                               $scope.loading=false;
                                             }).then(function(response){
                                               var push = PushNotification.init({
