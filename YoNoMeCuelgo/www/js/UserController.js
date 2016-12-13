@@ -356,12 +356,18 @@ var app = angular.module("users")
 
     firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    if(user.emailVerified){
-      getSettings();
+    if(user.email === 'admin@admin.com'){
+      $scope.route('/admin');
     }
     else{
-      $scope.route('/verify');
+      if(user.emailVerified){
+        getSettings();
+      }
+      else{
+        $scope.route('/verify');
+      }
     }
+
   }
   else {
     $scope.route('/login');
